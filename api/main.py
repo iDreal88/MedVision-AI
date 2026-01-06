@@ -48,9 +48,16 @@ def get_model(model_name: str):
     if model_name not in loaded_models:
         base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         model_path = os.path.join(base_dir, MODEL_MAP[model_name]["path"])
+        print(f"--- Attempting to load {model_name} from {model_path} ---")
         if not os.path.exists(model_path):
+            print(f"CRITICAL: Model file not found at {model_path}")
             raise HTTPException(status_code=404, detail=f"Model file not found at {model_path}")
-        loaded_models[model_name] = load_model(model_path)
+        try:
+            loaded_models[model_name] = load_model(model_path)
+            print(f"SUCCESS: {model_name} loaded into memory.")
+        except Exception as e:
+            print(f"ERROR loading {model_name}: {e}")
+            raise HTTPException(status_code=500, detail=f"Internal model load error: {e}")
     
     return loaded_models[model_name]
 

@@ -150,8 +150,8 @@ cython_debug/
 # VS Code
 .vscode/
 
-# Local data and models
-*.keras
+# Local data and models (Allow production models)
+!*.keras
 *.h5
 dataset/
 output/
