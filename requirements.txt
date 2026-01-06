@@ -6,3 +6,5 @@ numpy
 tensorflow-cpu
 fpdf
 jinja2
+faiss-cpu
+sentence-transformers
