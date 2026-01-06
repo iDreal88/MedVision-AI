@@ -1,0 +1,12 @@
+streamlit
+tensorflow-macos==2.12.0
+tensorflow-metal==1.0.0
+opencv-python
+numpy
+matplotlib
+seaborn
+faiss-cpu
+sentence-transformers
+scikit-learn
+protobuf==3.20.3
+fpdf2

@@ -1,0 +1,7 @@
+opencv-python
+tensorflow-macos
+tensorflow-metal
+scikit-learn
+matplotlib
+seaborn
+numpy
