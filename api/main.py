@@ -16,7 +16,13 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from rag_engine import RAGEngine
 from report_generator import ReportGenerator
 
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'  # Suppress TF logging to save some memory/noise
+
 app = FastAPI(title="Thesis ML API")
+
+@app.get("/")
+def read_root():
+    return {"status": "MedVision API is running", "models": list(MODEL_MAP.keys())}
 
 # CORS Setup for React frontend
 allowed_origins = os.getenv("ALLOWED_ORIGINS", "*").split(",")
@@ -42,10 +48,17 @@ MODEL_MAP = {
 loaded_models = {}
 
 def get_model(model_name: str):
+    global loaded_models
     if model_name not in MODEL_MAP:
         raise HTTPException(status_code=404, detail="Model not found")
     
     if model_name not in loaded_models:
+        # AGGRESSIVE MEMORY MANAGEMENT: Clear other models before loading a new one.
+        print(f"Clearing model cache to save memory before loading {model_name}...")
+        loaded_models.clear()
+        import gc
+        gc.collect()
+
         base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         model_path = os.path.join(base_dir, MODEL_MAP[model_name]["path"])
         print(f"--- Attempting to load {model_name} from {model_path} ---")
