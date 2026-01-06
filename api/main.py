@@ -4,8 +4,6 @@ from fastapi.responses import Response, StreamingResponse
 import os
 import cv2
 import numpy as np
-import tensorflow as tf
-from tensorflow.keras.models import Model, load_model
 import base64
 import sys
 import io
@@ -52,25 +50,28 @@ def get_model(model_name: str):
     if model_name not in MODEL_MAP:
         raise HTTPException(status_code=404, detail="Model not found")
     
+    # Lazy load TensorFlow only when needed
+    from tensorflow.keras.models import load_model
+    import gc
+
     if model_name not in loaded_models:
-        # AGGRESSIVE MEMORY MANAGEMENT: Clear other models before loading a new one.
-        print(f"Clearing model cache to save memory before loading {model_name}...")
+        print(f"Aggressively clearing RAM and loading {model_name}...")
         loaded_models.clear()
-        import gc
         gc.collect()
 
         base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         model_path = os.path.join(base_dir, MODEL_MAP[model_name]["path"])
-        print(f"--- Attempting to load {model_name} from {model_path} ---")
+        
         if not os.path.exists(model_path):
             print(f"CRITICAL: Model file not found at {model_path}")
-            raise HTTPException(status_code=404, detail=f"Model file not found at {model_path}")
+            raise HTTPException(status_code=404, detail=f"File missing at {model_path}")
+        
         try:
             loaded_models[model_name] = load_model(model_path)
-            print(f"SUCCESS: {model_name} loaded into memory.")
+            print(f"SUCCESS: {model_name} is live.")
         except Exception as e:
-            print(f"ERROR loading {model_name}: {e}")
-            raise HTTPException(status_code=500, detail=f"Internal model load error: {e}")
+            print(f"ERROR: Could not load model: {str(e)}")
+            raise HTTPException(status_code=500, detail=f"Model Load Failure: {str(e)}")
     
     return loaded_models[model_name]
 

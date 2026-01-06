@@ -45,7 +45,7 @@ function App() {
       setModels(resp.data);
     } catch (err) {
       console.error("Failed to fetch models", err);
-      setError("Backend API not reachable. Please ensure FastAPI is running.");
+      setError(`Backend API not reachable at ${API_BASE}. Please ensure your Vercel VITE_API_URL matches your Railway URL.`);
     }
   };
 
