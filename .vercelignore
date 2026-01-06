@@ -1,0 +1,18 @@
+# Ignore backend and model folders for Vercel (Frontend only)
+api/
+cnn+clahe/
+resnet50/
+vgg16/
+vgg19/
+notebooks/
+*.keras
+*.h5
+*.py
+requirements.txt
+runtime.txt
+Procfile
+knowledge_base.md
+rag_engine.py
+report_generator.py
+app.py
+make_notebooks.py
