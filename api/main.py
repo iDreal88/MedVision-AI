@@ -291,7 +291,8 @@ async def download_pdf(report: dict):
                 pdf.set_fill_color(37, 99, 235) # Blue 600
                 pdf.ellipse(12, current_y + 3, 1.5, 1.5, 'F')
                 pdf.set_x(16)
-                pdf.multi_cell(0, 7, line[2:], ln=True)
+                write_bold_text(pdf, line[2:])
+                pdf.ln(7)
             elif line.strip() == '':
                 pdf.ln(2)
             else:
