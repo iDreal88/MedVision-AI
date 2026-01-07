@@ -21,6 +21,8 @@ os.environ['TF_USE_LEGACY_KERAS'] = '1' # Ensure Keras 2 compatibility for trans
 
 import traceback
 
+app = FastAPI(title="Thesis ML API")
+
 @app.get("/")
 def read_root():
     return {"status": "MedVision API is running", "models": list(MODEL_MAP.keys())}
