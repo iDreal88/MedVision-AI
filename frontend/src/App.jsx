@@ -15,7 +15,7 @@ import {
   X
 } from 'lucide-react';
 
-const API_BASE = 'http://120.125.96.103:11006';
+const API_BASE = 'https://homiest-penny-unreticently.ngrok-free.dev';
 
 function App() {
   const [selectedModel, setSelectedModel] = useState('CNN+CLAHE');
