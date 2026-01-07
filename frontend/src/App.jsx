@@ -189,7 +189,7 @@ function App() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
-              className="grid lg:grid-cols-12 gap-12"
+              className="grid grid-cols-1 lg:grid-cols-12 gap-12"
             >
 
               {/* Left Column: Input */}
@@ -232,7 +232,7 @@ function App() {
                     <h2 className="text-lg font-semibold text-white">Mammogram Upload</h2>
                   </div>
                   <label
-                    className={`flex flex-col items-center justify-center h-64 border-2 border-dashed rounded-[32px] transition-all duration-500 cursor-pointer group ${preview ? 'border-brand-secondary/50 bg-brand-secondary/5' : 'border-white/10 hover:border-white/20 bg-white/[0.02]'
+                    className={`flex flex-col items-center justify-center h-48 md:h-64 border-2 border-dashed rounded-[32px] transition-all duration-500 cursor-pointer group ${preview ? 'border-brand-secondary/50 bg-brand-secondary/5' : 'border-white/10 hover:border-white/20 bg-white/[0.02]'
                       }`}
                   >
                     {preview ? (
@@ -665,48 +665,50 @@ function App() {
                 </div>
               ) : (
                 <div className="overflow-hidden glass rounded-[32px] border border-white/5">
-                  <table className="w-full text-left border-collapse">
-                    <thead>
-                      <tr className="border-b border-white/5 bg-white/[0.02]">
-                        <th className="px-8 py-6 text-[10px] font-black uppercase tracking-[0.2em] text-slate-500">Image Preview</th>
-                        <th className="px-8 py-6 text-[10px] font-black uppercase tracking-[0.2em] text-slate-500">Timestamp</th>
-                        <th className="px-8 py-6 text-[10px] font-black uppercase tracking-[0.2em] text-slate-500">Model Used</th>
-                        <th className="px-8 py-6 text-[10px] font-black uppercase tracking-[0.2em] text-slate-500">Diagnosis</th>
-                        <th className="px-8 py-6 text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 text-right">Confidence</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {analysisHistory.map((item) => (
-                        <tr key={item.id} className="border-b border-white/5 hover:bg-white/[0.01] transition-colors group">
-                          <td className="px-8 py-6">
-                            <div className="w-16 h-16 rounded-xl overflow-hidden border border-white/10 bg-black group-hover:scale-110 transition-transform">
-                              <img src={item.preview} className="w-full h-full object-cover" alt="Scan" />
-                            </div>
-                          </td>
-                          <td className="px-8 py-6">
-                            <span className="text-xs font-bold text-slate-400 uppercase">{item.timestamp}</span>
-                          </td>
-                          <td className="px-8 py-6">
-                            <div className="flex items-center gap-2">
-                              <div className="w-1.5 h-1.5 rounded-full bg-brand-primary" />
-                              <span className="text-xs font-bold text-white">{item.model}</span>
-                            </div>
-                          </td>
-                          <td className="px-8 py-6">
-                            <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase border ${item.label === 'Cancer'
-                              ? 'bg-red-500/10 border-red-500/20 text-red-500'
-                              : 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400'
-                              }`}>
-                              {item.label}
-                            </span>
-                          </td>
-                          <td className="px-8 py-6 text-right">
-                            <span className="text-sm font-black text-slate-200">{item.confidence.toFixed(1)}%</span>
-                          </td>
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-left border-collapse min-w-[800px]">
+                      <thead>
+                        <tr className="border-b border-white/5 bg-white/[0.02]">
+                          <th className="px-8 py-6 text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 whitespace-nowrap">Image Preview</th>
+                          <th className="px-8 py-6 text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 whitespace-nowrap">Timestamp</th>
+                          <th className="px-8 py-6 text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 whitespace-nowrap">Model Used</th>
+                          <th className="px-8 py-6 text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 whitespace-nowrap">Diagnosis</th>
+                          <th className="px-8 py-6 text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 whitespace-nowrap text-right">Confidence</th>
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                      </thead>
+                      <tbody>
+                        {analysisHistory.map((item) => (
+                          <tr key={item.id} className="border-b border-white/5 hover:bg-white/[0.01] transition-colors group">
+                            <td className="px-8 py-6">
+                              <div className="w-16 h-16 rounded-xl overflow-hidden border border-white/10 bg-black group-hover:scale-110 transition-transform">
+                                <img src={item.preview} className="w-full h-full object-cover" alt="Scan" />
+                              </div>
+                            </td>
+                            <td className="px-8 py-6">
+                              <span className="text-xs font-bold text-slate-400 uppercase whitespace-nowrap">{item.timestamp}</span>
+                            </td>
+                            <td className="px-8 py-6">
+                              <div className="flex items-center gap-2">
+                                <div className="w-1.5 h-1.5 rounded-full bg-brand-primary" />
+                                <span className="text-xs font-bold text-white whitespace-nowrap">{item.model}</span>
+                              </div>
+                            </td>
+                            <td className="px-8 py-6">
+                              <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase border whitespace-nowrap ${item.label === 'Cancer'
+                                ? 'bg-red-500/10 border-red-500/20 text-red-500'
+                                : 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400'
+                                }`}>
+                                {item.label}
+                              </span>
+                            </td>
+                            <td className="px-8 py-6 text-right">
+                              <span className="text-sm font-black text-slate-200">{item.confidence.toFixed(1)}%</span>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
               )}
             </motion.div>
