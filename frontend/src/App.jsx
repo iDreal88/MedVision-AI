@@ -15,7 +15,7 @@ import {
   X
 } from 'lucide-react';
 
-const API_BASE = 'https://homiest-penny-unreticently.ngrok-free.dev';
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
 function App() {
   const [selectedModel, setSelectedModel] = useState('CNN+CLAHE');
