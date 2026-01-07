@@ -626,6 +626,9 @@ function App() {
                   </div>
                   <div className="p-4 glass rounded-[32px] border border-white/5 bg-gradient-to-br from-emerald-500/5 to-transparent">
                     <img
+                      src="/illustrations/rag.png"
+                      alt="RAG Architecture Diagram"
+                      className="w-full h-full object-cover rounded-2xl shadow-2xl border border-white/5"
                     />
                   </div>
                 </section>
