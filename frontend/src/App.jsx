@@ -402,6 +402,15 @@ function App() {
                               "Summary and Discussion": <CheckCircle2 className="w-5 h-5 text-blue-400" />
                             };
 
+                            const renderFormattedText = (text) => {
+                              return text.split(/(\*\*.*?\*\*)/g).map((part, i) => {
+                                if (part.startsWith('**') && part.endsWith('**')) {
+                                  return <strong key={i} className="font-bold text-white/90">{part.slice(2, -2)}</strong>;
+                                }
+                                return part;
+                              });
+                            };
+
                             return sections.map((sec, idx) => (
                               <motion.div
                                 key={idx}
@@ -425,9 +434,9 @@ function App() {
                                       {c.startsWith('- ') ? (
                                         <span className="flex gap-2">
                                           <span className="text-brand-primary mt-1">•</span>
-                                          <span>{c.replace('- ', '')}</span>
+                                          <span>{renderFormattedText(c.replace('- ', ''))}</span>
                                         </span>
-                                      ) : c}
+                                      ) : renderFormattedText(c)}
                                     </p>
                                   ))}
                                 </div>
