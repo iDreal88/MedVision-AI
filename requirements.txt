@@ -3,8 +3,10 @@ uvicorn
 python-multipart
 opencv-python-headless
 numpy
-tensorflow-cpu
+tensorflow-cpu==2.15.0
 fpdf
 jinja2
 faiss-cpu
 sentence-transformers
+torch --index-url https://download.pytorch.org/whl/cpu
+transformers==4.36.0
