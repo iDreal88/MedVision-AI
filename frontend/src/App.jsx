@@ -26,6 +26,7 @@ function App() {
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
   const [currentView, setCurrentView] = useState('home'); // 'home', 'dashboard', 'documentation', 'log'
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [analysisHistory, setAnalysisHistory] = useState(() => {
     const saved = localStorage.getItem('analysisHistory');
     return saved ? JSON.parse(saved) : [];
@@ -150,12 +151,35 @@ function App() {
           <button onClick={() => setCurrentView('log')} className={`hover:text-white transition-colors ${currentView === 'log' ? 'text-brand-primary' : ''}`}>Analysis Log</button>
         </div>
         <div className="flex items-center gap-4">
-          <div className="px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] font-bold uppercase tracking-wider flex items-center gap-1.5">
+          <div className="hidden md:flex px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] font-bold uppercase tracking-wider items-center gap-1.5">
             <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-            Backend Online
+            Online
           </div>
+          {/* Mobile Menu Toggle */}
+          <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="md:hidden text-white p-2">
+            {mobileMenuOpen ? <X /> : <div className="space-y-1.5"><div className="w-6 h-0.5 bg-white" /><div className="w-6 h-0.5 bg-white" /><div className="w-6 h-0.5 bg-white" /></div>}
+          </button>
         </div>
       </nav>
+
+      {/* Mobile Navigation Dropdown */}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            className="md:hidden bg-black/90 backdrop-blur-xl border-b border-white/10 overflow-hidden"
+          >
+            <div className="flex flex-col gap-4 p-6 text-sm font-medium text-slate-400">
+              <button onClick={() => { setCurrentView('home'); setMobileMenuOpen(false); }} className={`text-left py-2 hover:text-white transition-colors ${currentView === 'home' ? 'text-brand-primary' : ''}`}>Diagnosis</button>
+              <button onClick={() => { setCurrentView('dashboard'); setMobileMenuOpen(false); }} className={`text-left py-2 hover:text-white transition-colors ${currentView === 'dashboard' ? 'text-brand-primary' : ''}`}>Dashboard</button>
+              <button onClick={() => { setCurrentView('documentation'); setMobileMenuOpen(false); }} className={`text-left py-2 hover:text-white transition-colors ${currentView === 'documentation' ? 'text-brand-primary' : ''}`}>Documentation</button>
+              <button onClick={() => { setCurrentView('log'); setMobileMenuOpen(false); }} className={`text-left py-2 hover:text-white transition-colors ${currentView === 'log' ? 'text-brand-primary' : ''}`}>Analysis Log</button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <main className="relative max-w-7xl mx-auto px-6 py-12">
         <AnimatePresence mode="wait">
