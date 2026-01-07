@@ -14,7 +14,6 @@ import {
   CheckCircle2,
   X
 } from 'lucide-react';
-import ReactMarkdown from 'react-markdown';
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
@@ -135,11 +134,11 @@ function App() {
             <p className="text-[10px] text-slate-500 uppercase tracking-[0.2em] font-medium leading-none">Predict Cancer</p>
           </div>
         </div>
-        <div className="hidden md:flex items-center gap-8 text-sm font-medium text-slate-300">
-          <button onClick={() => setCurrentView('home')} className={`hover:text-white transition-all hover:scale-105 active:scale-95 ${currentView === 'home' ? 'text-brand-primary' : ''}`}>Diagnosis</button>
-          <button onClick={() => setCurrentView('dashboard')} className={`hover:text-white transition-all hover:scale-105 active:scale-95 ${currentView === 'dashboard' ? 'text-brand-primary' : ''}`}>Dashboard</button>
-          <button onClick={() => setCurrentView('documentation')} className={`hover:text-white transition-all hover:scale-105 active:scale-95 ${currentView === 'documentation' ? 'text-brand-primary' : ''}`}>Documentation</button>
-          <button onClick={() => setCurrentView('log')} className={`hover:text-white transition-all hover:scale-105 active:scale-95 ${currentView === 'log' ? 'text-brand-primary' : ''}`}>Analysis Log</button>
+        <div className="hidden md:flex items-center gap-8 text-sm font-medium text-slate-400">
+          <button onClick={() => setCurrentView('home')} className={`hover:text-white transition-colors ${currentView === 'home' ? 'text-brand-primary' : ''}`}>Diagnosis</button>
+          <button onClick={() => setCurrentView('dashboard')} className={`hover:text-white transition-colors ${currentView === 'dashboard' ? 'text-brand-primary' : ''}`}>Dashboard</button>
+          <button onClick={() => setCurrentView('documentation')} className={`hover:text-white transition-colors ${currentView === 'documentation' ? 'text-brand-primary' : ''}`}>Documentation</button>
+          <button onClick={() => setCurrentView('log')} className={`hover:text-white transition-colors ${currentView === 'log' ? 'text-brand-primary' : ''}`}>Analysis Log</button>
         </div>
         <div className="flex items-center gap-4">
           <div className="px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] font-bold uppercase tracking-wider flex items-center gap-1.5">
@@ -173,8 +172,8 @@ function App() {
                         key={m}
                         onClick={() => setSelectedModel(m)}
                         className={`p-4 rounded-2xl border transition-all duration-300 text-left relative overflow-hidden group ${selectedModel === m
-                          ? 'border-brand-primary bg-brand-primary/10 text-white shadow-lg shadow-brand-primary/10 scale-[1.02]'
-                          : 'border-white/10 bg-white/[0.03] text-slate-300 hover:border-white/30 hover:bg-white/[0.05]'
+                          ? 'border-brand-primary bg-brand-primary/5 text-white shadow-lg shadow-brand-primary/5'
+                          : 'border-white/5 bg-white/[0.02] text-slate-400 hover:border-white/20'
                           }`}
                       >
                         <span className="text-sm font-bold block mb-1">{m}</span>
@@ -331,11 +330,11 @@ function App() {
                       {/* Visualizations */}
                       <div className="grid grid-cols-2 gap-6">
                         <div className="space-y-4">
-                          <h4 className="text-sm font-bold text-slate-200 flex items-center gap-2">
-                            <Activity className="w-4 h-4 text-emerald-400" />
+                          <h4 className="text-sm font-bold text-slate-400 flex items-center gap-2">
+                            <Activity className="w-4 h-4 text-emerald-500" />
                             Original Preprocessed
                           </h4>
-                          <div className="aspect-square rounded-[32px] overflow-hidden border border-white/10 bg-black shadow-2xl transition-transform hover:scale-[1.01]">
+                          <div className="aspect-square rounded-[32px] overflow-hidden border border-white/5 bg-black shadow-2xl">
                             <img
                               src={`data:image/jpeg;base64,${result.processed_image}`}
                               className="w-full h-full object-cover"
@@ -421,21 +420,16 @@ function App() {
                                   <h4 className="font-bold text-slate-200 text-sm tracking-wide">{sec.title}</h4>
                                 </div>
                                 <div className="space-y-3 px-1">
-                                  <ReactMarkdown
-                                    components={{
-                                      p: ({ node, ...props }) => <p className="text-slate-200 text-sm leading-relaxed mb-3" {...props} />,
-                                      li: ({ node, ...props }) => (
-                                        <li className="flex gap-2 text-slate-200 text-sm leading-relaxed mb-2">
-                                          <span className="text-brand-primary mt-1.5 shrink-0">•</span>
-                                          <span {...props} />
-                                        </li>
-                                      ),
-                                      ul: ({ node, ...props }) => <ul className="space-y-1 list-none mb-4" {...props} />,
-                                      strong: ({ node, ...props }) => <strong className="text-white font-black bg-white/5 px-1.5 py-0.5 rounded" {...props} />
-                                    }}
-                                  >
-                                    {sec.content.join('\n')}
-                                  </ReactMarkdown>
+                                  {sec.content.map((c, i) => (
+                                    <p key={i} className="text-slate-400 text-xs leading-relaxed">
+                                      {c.startsWith('- ') ? (
+                                        <span className="flex gap-2">
+                                          <span className="text-brand-primary mt-1">•</span>
+                                          <span>{c.replace('- ', '')}</span>
+                                        </span>
+                                      ) : c}
+                                    </p>
+                                  ))}
                                 </div>
                               </motion.div>
                             ));
@@ -482,16 +476,16 @@ function App() {
                     <h3 className="text-xl font-bold text-white mb-4">{m.name}</h3>
                     <div className="space-y-4">
                       <div className="flex justify-between items-center">
-                        <span className="text-xs text-slate-400 uppercase font-black tracking-widest">Accuracy</span>
+                        <span className="text-xs text-slate-500 uppercase font-bold tracking-widest">Accuracy</span>
                         <span className="text-sm font-black text-white">{m.acc}</span>
                       </div>
                       <div className="flex justify-between items-center">
-                        <span className="text-xs text-slate-400 uppercase font-black tracking-widest">Precision</span>
-                        <span className="text-sm font-black text-slate-100">{m.prec}</span>
+                        <span className="text-xs text-slate-500 uppercase font-bold tracking-widest">Precision</span>
+                        <span className="text-sm font-black text-slate-300">{m.prec}</span>
                       </div>
                       <div className="flex justify-between items-center">
-                        <span className="text-xs text-slate-400 uppercase font-black tracking-widest">Recall</span>
-                        <span className="text-sm font-black text-slate-100">{m.rec}</span>
+                        <span className="text-xs text-slate-500 uppercase font-bold tracking-widest">Recall</span>
+                        <span className="text-sm font-black text-slate-300">{m.rec}</span>
                       </div>
                     </div>
                   </div>
@@ -506,7 +500,7 @@ function App() {
                       <CheckCircle2 className="w-4 h-4" />
                       <span className="text-sm font-bold uppercase tracking-widest">Overall Leader</span>
                     </div>
-                    <p className="text-slate-200 text-sm leading-relaxed">
+                    <p className="text-slate-400 text-sm leading-relaxed">
                       The **CNN+CLAHE** configuration consistently outperforms others, demonstrating the massive impact of local contrast enhancement on mammography feature extraction.
                     </p>
                   </div>
@@ -515,7 +509,7 @@ function App() {
                       <Brain className="w-4 h-4" />
                       <span className="text-sm font-bold uppercase tracking-widest">Generalization</span>
                     </div>
-                    <p className="text-slate-200 text-sm leading-relaxed">
+                    <p className="text-slate-400 text-sm leading-relaxed">
                       **ResNet50** shows higher variance but superior generalization on cross-institutional datasets, likely due to its deeper residual architecture.
                     </p>
                   </div>
@@ -524,7 +518,7 @@ function App() {
                       <Zap className="w-4 h-4" />
                       <span className="text-sm font-bold uppercase tracking-widest">Feature Focus</span>
                     </div>
-                    <p className="text-slate-200 text-sm leading-relaxed">
+                    <p className="text-slate-400 text-sm leading-relaxed">
                       **VGG Families** excel at detecting micro-calcifications but often suffer from vanishing gradients in purely local feature identification compared to CNN+CLAHE.
                     </p>
                   </div>
@@ -580,7 +574,7 @@ function App() {
                       Visualization
                     </div>
                     <h3 className="text-2xl font-bold text-white">Explainable AI (Grad-CAM)</h3>
-                    <p className="text-slate-200 leading-relaxed">
+                    <p className="text-slate-400 leading-relaxed">
                       Gradient-weighted Class Activation Mapping (Grad-CAM) uses the gradients of any target concept flowing into the final convolutional layer to produce a coarse localization map highlighting the important regions in the image for predicting the concept.
                     </p>
                   </div>
@@ -592,7 +586,7 @@ function App() {
                       Knowledge Retrieval
                     </div>
                     <h3 className="text-2xl font-bold text-white">RAG-Enhanced Reporting</h3>
-                    <p className="text-slate-200 leading-relaxed">
+                    <p className="text-slate-400 leading-relaxed">
                       Our system doesn't just predict; it references. Retrieval-Augmented Generation (RAG) pulls relevant clinical context from a medical knowledge base based on the specific anatomical findings detected by the CNN. This ensures our reports are grounded in clinical literature.
                     </p>
                   </div>
