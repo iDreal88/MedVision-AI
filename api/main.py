@@ -291,15 +291,34 @@ async def download_pdf(report: dict):
                 pdf.set_fill_color(37, 99, 235) # Blue 600
                 pdf.ellipse(12, current_y + 3, 1.5, 1.5, 'F')
                 pdf.set_x(16)
-                pdf.multi_cell(0, 7, line[2:], ln=True)
+                
+                # Handle bold in list items
+                clean_line = line[2:]
+                parts = clean_line.split('**')
+                for i, part in enumerate(parts):
+                    if i % 2 == 1: # Bold part
+                        pdf.set_font("helvetica", "B", 11)
+                        pdf.write(7, part)
+                    else:
+                        pdf.set_font("helvetica", "", 11)
+                        pdf.write(7, part)
+                pdf.ln()
+
             elif line.strip() == '':
                 pdf.ln(2)
             else:
                 pdf.set_font("helvetica", size=11)
                 pdf.set_text_color(71, 85, 105)
-                # Handle simple bold markers **text**
-                clean_line = line.replace('**', '')
-                pdf.multi_cell(0, 7, clean_line, ln=True)
+                # Handle bold markers **text**
+                parts = line.split('**')
+                for i, part in enumerate(parts):
+                    if i % 2 == 1: # Bold part
+                        pdf.set_font("helvetica", "B", 11)
+                        pdf.write(7, part)
+                    else:
+                        pdf.set_font("helvetica", "", 11)
+                        pdf.write(7, part)
+                pdf.ln()
                 
         return StreamingResponse(
             io.BytesIO(pdf.output()),
