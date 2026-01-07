@@ -5,7 +5,7 @@ opencv-python-headless
 numpy
 tensorflow-cpu==2.15.0
 tf-keras
-fpdf
+fpdf2
 jinja2
 faiss-cpu
 sentence-transformers

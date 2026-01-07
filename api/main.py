@@ -9,7 +9,6 @@ import sys
 import io
 from fpdf import FPDF
 
-from fpdf import FPDF
 import tensorflow as tf
 from tensorflow.keras.models import Model, load_model
 
@@ -258,56 +257,59 @@ class ClinicalPDF(FPDF):
 
 @app.post("/download-pdf")
 async def download_pdf(report: dict):
-    content = report.get("content", "")
-    pdf = ClinicalPDF()
-    pdf.alias_nb_pages()
-    pdf.add_page()
-    
-    # Body Styling
-    lines = content.split('\n')
-    for line in lines:
-        pdf.set_x(10)
-        if line.startswith('# '):
-            pdf.ln(5)
-            pdf.set_font("helvetica", "B", 18)
-            pdf.set_text_color(30, 41, 59)
-            pdf.cell(0, 10, line[2:].upper(), ln=True)
-            self_draw_line(pdf)
-            pdf.ln(2)
-        elif line.startswith('## '):
-            pdf.ln(4)
-            pdf.set_font("helvetica", "B", 14)
-            pdf.set_text_color(51, 65, 85)
-            pdf.cell(0, 10, line[3:], ln=True)
-            pdf.ln(1)
-        elif line.startswith('### '):
-            pdf.set_font("helvetica", "B", 12)
-            pdf.set_text_color(71, 85, 105)
-            pdf.cell(0, 8, line[4:], ln=True)
-        elif line.startswith('- '):
-            pdf.set_font("helvetica", size=11)
-            pdf.set_text_color(51, 65, 85)
-            # Dot bullet
-            current_y = pdf.get_y()
-            pdf.set_fill_color(37, 99, 235) # Blue 600
-            pdf.ellipse(12, current_y + 3, 1.5, 1.5, 'F')
-            pdf.set_x(16)
-            pdf.multi_cell(0, 7, line[2:], ln=True)
-        elif line.strip() == '':
-            pdf.ln(2)
-        else:
-            pdf.set_font("helvetica", size=11)
-            pdf.set_text_color(71, 85, 105)
-            # Handle simple bold markers **text**
-            clean_line = line.replace('**', '')
-            pdf.multi_cell(0, 7, clean_line, ln=True)
-            
-    pdf_bytes = pdf.output()
-    return Response(
-        content=bytes(pdf_bytes),
-        media_type="application/pdf",
-        headers={"Content-Disposition": "attachment; filename=diagnosis_report.pdf"}
-    )
+    try:
+        content = report.get("content", "")
+        pdf = ClinicalPDF()
+        pdf.alias_nb_pages()
+        pdf.add_page()
+        
+        # Body Styling
+        lines = content.split('\n')
+        for line in lines:
+            pdf.set_x(10)
+            if line.startswith('# '):
+                pdf.ln(5)
+                pdf.set_font("helvetica", "B", 18)
+                pdf.set_text_color(30, 41, 59)
+                pdf.cell(0, 10, line[2:].upper(), ln=True)
+                self_draw_line(pdf)
+                pdf.ln(2)
+            elif line.startswith('## '):
+                pdf.ln(4)
+                pdf.set_font("helvetica", "B", 14)
+                pdf.set_text_color(51, 65, 85)
+                pdf.cell(0, 10, line[3:], ln=True)
+                pdf.ln(1)
+            elif line.startswith('### '):
+                pdf.set_font("helvetica", "B", 12)
+                pdf.set_text_color(71, 85, 105)
+                pdf.cell(0, 8, line[4:], ln=True)
+            elif line.startswith('- '):
+                pdf.set_font("helvetica", size=11)
+                pdf.set_text_color(51, 65, 85)
+                # Dot bullet
+                current_y = pdf.get_y()
+                pdf.set_fill_color(37, 99, 235) # Blue 600
+                pdf.ellipse(12, current_y + 3, 1.5, 1.5, 'F')
+                pdf.set_x(16)
+                pdf.multi_cell(0, 7, line[2:], ln=True)
+            elif line.strip() == '':
+                pdf.ln(2)
+            else:
+                pdf.set_font("helvetica", size=11)
+                pdf.set_text_color(71, 85, 105)
+                # Handle simple bold markers **text**
+                clean_line = line.replace('**', '')
+                pdf.multi_cell(0, 7, clean_line, ln=True)
+                
+        return Response(
+            content=pdf.output(),
+            media_type="application/pdf",
+            headers={"Content-Disposition": "attachment; filename=diagnosis_report.pdf"}
+        )
+    except Exception as e:
+        print(f"PDF ERROR: {traceback.format_exc()}")
+        raise HTTPException(status_code=500, detail=str(e))
 
 def self_draw_line(pdf):
     pdf.set_draw_color(226, 232, 240) # Slate 200
