@@ -626,13 +626,59 @@ function App() {
                   </div>
                   <div className="p-4 glass rounded-[32px] border border-white/5 bg-gradient-to-br from-emerald-500/5 to-transparent">
                     <img
-                      src="/illustrations/rag.png"
-                      alt="RAG Architecture Diagram"
-                      className="w-full h-full object-cover rounded-2xl shadow-2xl border border-white/5"
                     />
                   </div>
                 </section>
               </div>
+
+              <section className="space-y-12 pt-12 border-t border-white/5">
+                <div className="text-center space-y-4">
+                  <h3 className="text-2xl font-bold text-white">Technology Stack</h3>
+                  <p className="text-slate-400">Built with modern, scalable, and high-performance tools.</p>
+                </div>
+
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                  <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/5 hover:bg-white/[0.05] transition-colors text-center space-y-3 group">
+                    <div className="w-12 h-12 mx-auto rounded-xl bg-[#61DAFB]/10 flex items-center justify-center group-hover:scale-110 transition-transform">
+                      <div className="text-[#61DAFB] font-black text-xs">RC</div>
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-white text-sm">React 18</h4>
+                      <p className="text-[10px] text-slate-500 uppercase tracking-widest mt-1">Frontend UI</p>
+                    </div>
+                  </div>
+
+                  <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/5 hover:bg-white/[0.05] transition-colors text-center space-y-3 group">
+                    <div className="w-12 h-12 mx-auto rounded-xl bg-[#009688]/10 flex items-center justify-center group-hover:scale-110 transition-transform">
+                      <Zap className="w-6 h-6 text-[#009688]" />
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-white text-sm">FastAPI</h4>
+                      <p className="text-[10px] text-slate-500 uppercase tracking-widest mt-1">AI Backend</p>
+                    </div>
+                  </div>
+
+                  <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/5 hover:bg-white/[0.05] transition-colors text-center space-y-3 group">
+                    <div className="w-12 h-12 mx-auto rounded-xl bg-[#FF6F00]/10 flex items-center justify-center group-hover:scale-110 transition-transform">
+                      <Brain className="w-6 h-6 text-[#FF6F00]" />
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-white text-sm">TensorFlow</h4>
+                      <p className="text-[10px] text-slate-500 uppercase tracking-widest mt-1">Neural Engine</p>
+                    </div>
+                  </div>
+
+                  <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/5 hover:bg-white/[0.05] transition-colors text-center space-y-3 group">
+                    <div className="w-12 h-12 mx-auto rounded-xl bg-[#2496ED]/10 flex items-center justify-center group-hover:scale-110 transition-transform">
+                      <div className="text-[#2496ED] font-black text-xs">DOC</div>
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-white text-sm">Docker</h4>
+                      <p className="text-[10px] text-slate-500 uppercase tracking-widest mt-1">Container</p>
+                    </div>
+                  </div>
+                </div>
+              </section>
             </motion.div>
           )}
 
