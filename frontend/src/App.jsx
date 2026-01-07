@@ -31,6 +31,15 @@ function App() {
     return saved ? JSON.parse(saved) : [];
   });
 
+  const renderFormattedText = (text) => {
+    return text.split(/(\*\*.*?\*\*)/g).map((part, i) => {
+      if (part.startsWith('**') && part.endsWith('**')) {
+        return <strong key={i} className="font-bold text-white/90">{part.slice(2, -2)}</strong>;
+      }
+      return part;
+    });
+  };
+
   useEffect(() => {
     localStorage.setItem('analysisHistory', JSON.stringify(analysisHistory));
   }, [analysisHistory]);
@@ -402,14 +411,6 @@ function App() {
                               "Summary and Discussion": <CheckCircle2 className="w-5 h-5 text-blue-400" />
                             };
 
-                            const renderFormattedText = (text) => {
-                              return text.split(/(\*\*.*?\*\*)/g).map((part, i) => {
-                                if (part.startsWith('**') && part.endsWith('**')) {
-                                  return <strong key={i} className="font-bold text-white/90">{part.slice(2, -2)}</strong>;
-                                }
-                                return part;
-                              });
-                            };
 
                             return sections.map((sec, idx) => (
                               <motion.div
@@ -510,7 +511,7 @@ function App() {
                       <span className="text-sm font-bold uppercase tracking-widest">Overall Leader</span>
                     </div>
                     <p className="text-slate-400 text-sm leading-relaxed">
-                      The **CNN+CLAHE** configuration consistently outperforms others, demonstrating the massive impact of local contrast enhancement on mammography feature extraction.
+                      {renderFormattedText("The **CNN+CLAHE** configuration consistently outperforms others, demonstrating the massive impact of local contrast enhancement on mammography feature extraction.")}
                     </p>
                   </div>
                   <div className="space-y-3">
@@ -519,7 +520,7 @@ function App() {
                       <span className="text-sm font-bold uppercase tracking-widest">Generalization</span>
                     </div>
                     <p className="text-slate-400 text-sm leading-relaxed">
-                      **ResNet50** shows higher variance but superior generalization on cross-institutional datasets, likely due to its deeper residual architecture.
+                      {renderFormattedText("**ResNet50** shows higher variance but superior generalization on cross-institutional datasets, likely due to its deeper residual architecture.")}
                     </p>
                   </div>
                   <div className="space-y-3">
@@ -528,7 +529,7 @@ function App() {
                       <span className="text-sm font-bold uppercase tracking-widest">Feature Focus</span>
                     </div>
                     <p className="text-slate-400 text-sm leading-relaxed">
-                      **VGG Families** excel at detecting micro-calcifications but often suffer from vanishing gradients in purely local feature identification compared to CNN+CLAHE.
+                      {renderFormattedText("**VGG Families** excel at detecting micro-calcifications but often suffer from vanishing gradients in purely local feature identification compared to CNN+CLAHE.")}
                     </p>
                   </div>
                 </div>
