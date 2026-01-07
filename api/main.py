@@ -297,8 +297,15 @@ async def download_pdf(report: dict):
             else:
                 pdf.set_font("helvetica", size=11)
                 pdf.set_text_color(71, 85, 105)
-                # Use fpdf2's markdown support for bold/italics
-                pdf.write(h=7, txt=line, markdown=True)
+                # Parse markdown-style bold text **text**
+                parts = line.split('**')
+                for i, part in enumerate(parts):
+                    if i % 2 == 1: # Odd parts are inside ** tags
+                        pdf.set_font("helvetica", "B", 11)
+                        pdf.write(7, part)
+                    else:
+                        pdf.set_font("helvetica", "", 11)
+                        pdf.write(7, part)
                 pdf.ln(7)
                 
         return StreamingResponse(
