@@ -329,7 +329,7 @@ function App() {
                       className="space-y-8"
                     >
                       {/* Results Header Card */}
-                      <div className="grid grid-cols-2 gap-6">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                         <div className="p-8 rounded-[32px] glass hover:border-brand-primary/30 transition-colors group">
                           <p className="text-xs font-bold uppercase tracking-widest text-slate-500 mb-2">Diagnosis Type</p>
                           <div className="flex items-end gap-3">
@@ -361,7 +361,7 @@ function App() {
                       </div>
 
                       {/* Visualizations */}
-                      <div className="grid grid-cols-2 gap-6">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                         <div className="space-y-4">
                           <h4 className="text-sm font-bold text-slate-400 flex items-center gap-2">
                             <Activity className="w-4 h-4 text-emerald-500" />
