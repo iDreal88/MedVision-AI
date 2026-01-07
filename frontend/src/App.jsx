@@ -15,7 +15,7 @@ import {
   X
 } from 'lucide-react';
 
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+const API_BASE = 'http://120.125.96.103:11006';
 
 function App() {
   const [selectedModel, setSelectedModel] = useState('CNN+CLAHE');
