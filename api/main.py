@@ -14,9 +14,10 @@ from fpdf import FPDF
 # Add root directory to path for RAG modules
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'  # Suppress TF logging to save some memory/noise
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+os.environ['TF_USE_LEGACY_KERAS'] = '1' # Ensure Keras 2 compatibility for transformers
 
-app = FastAPI(title="Thesis ML API")
+import traceback
 
 @app.get("/")
 def read_root():
@@ -51,6 +52,7 @@ def get_model(model_name: str):
         raise HTTPException(status_code=404, detail="Model not found")
     
     # Lazy load TensorFlow only when needed
+    import tensorflow as tf
     from tensorflow.keras.models import load_model
     import gc
 
@@ -86,6 +88,8 @@ def apply_clahe(img):
     return img_c / 255.0
 
 def make_gradcam_heatmap(img_tensor, model, last_conv_layer_name):
+    import tensorflow as tf
+    from tensorflow.keras.models import Model
     try:
         # Find base model if nested (ResNet/VGG)
         base_model = None
@@ -138,7 +142,7 @@ def make_gradcam_heatmap(img_tensor, model, last_conv_layer_name):
             heatmap /= (tf.reduce_max(heatmap) + 1e-8)
             return heatmap.numpy()
     except Exception as e:
-        print(f"Grad-CAM Error: {e}")
+        print(f"Grad-CAM Error: {traceback.format_exc()}")
         return None
 
 def overlay_gradcam(img, heatmap, alpha=0.4):
@@ -159,61 +163,66 @@ async def predict(
     file: UploadFile = File(...),
     model_name: str = Form(...)
 ):
-    # Read image
-    contents = await file.read()
-    nparr = np.frombuffer(contents, np.uint8)
-    img = cv2.imdecode(nparr, cv2.IMREAD_GRAYSCALE)
-    if img is None:
-        raise HTTPException(status_code=400, detail="Invalid image file")
+    try:
+        import tensorflow as tf
+        # Read image
+        contents = await file.read()
+        nparr = np.frombuffer(contents, np.uint8)
+        img = cv2.imdecode(nparr, cv2.IMREAD_GRAYSCALE)
+        if img is None:
+            raise HTTPException(status_code=400, detail="Invalid image file")
 
-    # Load model
-    model = get_model(model_name)
-    
-    # Preprocess
-    img_processed = cv2.resize(img, (128, 128))
-    img_ready = apply_clahe(img_processed)
-    img_input = img_ready.reshape(1, 128, 128, 1)
-
-    # Inference
-    prediction = model.predict(img_input)
-    pred_class = int(np.argmax(prediction[0]))
-    confidence = float(prediction[0][pred_class])
-    label = "Cancer" if pred_class == 1 else "Non-Cancer"
-
-    # Grad-CAM
-    img_tensor = tf.convert_to_tensor(img_input, dtype=tf.float32)
-    heatmap = make_gradcam_heatmap(img_tensor, model, MODEL_MAP[model_name]["layer"])
-    
-    result = {
-        "label": label,
-        "confidence": confidence * 100,
-        "original_image": base64.b64encode(cv2.imencode('.jpg', img)[1]).decode('utf-8'),
-        "processed_image": base64.b64encode(cv2.imencode('.jpg', (img_ready*255).astype(np.uint8))[1]).decode('utf-8')
-    }
-
-    if heatmap is not None:
-        overlay = overlay_gradcam(img_ready, heatmap)
-        result["gradcam_image"] = base64.b64encode(cv2.imencode('.jpg', overlay)[1]).decode('utf-8')
-    
-    # RAG Report Generation
-    kb_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "knowledge_base.md")
-    if os.path.exists(kb_path):
-        from report_generator import ReportGenerator
-        report_gen = ReportGenerator(kb_path)
+        # Load model
+        model = get_model(model_name)
         
-        # Dynamic XAI description based on model architecture and result
-        if label == "Cancer":
-            if "ResNet" in model_name or "VGG" in model_name:
-                finding = f"The {model_name} architecture identified high-entropy activation patterns within the deeper convolutional blocks. These clusters correlate with irregular structural density and architectural distortion characteristic of malignant lesions."
-            else:
-                finding = "High-intensity activation centroids detected. The model weights these dense regions as primary indicators of malignant tissue morphology."
-        else:
-            finding = f"The {model_name} model shows diffuse, low-level activations across the parenchymal background. No focal areas of suspicious density were identified in the targeting layers."
+        # Preprocess
+        img_processed = cv2.resize(img, (128, 128))
+        img_ready = apply_clahe(img_processed)
+        img_input = img_ready.reshape(1, 128, 128, 1)
+
+        # Inference
+        prediction = model.predict(img_input)
+        pred_class = int(np.argmax(prediction[0]))
+        confidence = float(prediction[0][pred_class])
+        label = "Cancer" if pred_class == 1 else "Non-Cancer"
+
+        # Grad-CAM
+        img_tensor = tf.convert_to_tensor(img_input, dtype=tf.float32)
+        heatmap = make_gradcam_heatmap(img_tensor, model, MODEL_MAP[model_name]["layer"])
+        
+        result = {
+            "label": label,
+            "confidence": confidence * 100,
+            "original_image": base64.b64encode(cv2.imencode('.jpg', img)[1]).decode('utf-8'),
+            "processed_image": base64.b64encode(cv2.imencode('.jpg', (img_ready*255).astype(np.uint8))[1]).decode('utf-8')
+        }
+
+        if heatmap is not None:
+            overlay = overlay_gradcam(img_ready, heatmap)
+            result["gradcam_image"] = base64.b64encode(cv2.imencode('.jpg', overlay)[1]).decode('utf-8')
+        
+        # RAG Report Generation
+        kb_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "knowledge_base.md")
+        if os.path.exists(kb_path):
+            from report_generator import ReportGenerator
+            report_gen = ReportGenerator(kb_path)
             
-        report_content = report_gen.generate_report(label, confidence * 100, finding)
-        result["report"] = report_content
-    
-    return result
+            # Dynamic XAI description based on model architecture and result
+            if label == "Cancer":
+                if "ResNet" in model_name or "VGG" in model_name:
+                    finding = f"The {model_name} architecture identified high-entropy activation patterns within the deeper convolutional blocks. These clusters correlate with irregular structural density and architectural distortion characteristic of malignant lesions."
+                else:
+                    finding = "High-intensity activation centroids detected. The model weights these dense regions as primary indicators of malignant tissue morphology."
+            else:
+                finding = f"The {model_name} model shows diffuse, low-level activations across the parenchymal background. No focal areas of suspicious density were identified in the targeting layers."
+                
+            report_content = report_gen.generate_report(label, confidence * 100, finding)
+            result["report"] = report_content
+        
+        return result
+    except Exception as e:
+        print(f"PREDICT ERROR: {traceback.format_exc()}")
+        raise HTTPException(status_code=500, detail=str(e))
 
 class ClinicalPDF(FPDF):
     def header(self):
