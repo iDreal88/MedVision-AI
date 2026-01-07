@@ -99,7 +99,20 @@ function App() {
       document.body.appendChild(link);
       link.click();
     } catch (err) {
-      alert("Failed to download PDF");
+      console.error("PDF Download Error:", err);
+      let errorMessage = "Unknown error";
+      if (err.response?.data instanceof Blob) {
+        const text = await err.response.data.text();
+        try {
+          const parsed = JSON.parse(text);
+          errorMessage = parsed.detail || text;
+        } catch (e) {
+          errorMessage = text;
+        }
+      } else {
+        errorMessage = err.response?.data?.detail || err.message || "Unknown error";
+      }
+      alert(`Failed to download PDF: ${errorMessage}`);
     }
   };
 
