@@ -297,9 +297,9 @@ async def download_pdf(report: dict):
             else:
                 pdf.set_font("helvetica", size=11)
                 pdf.set_text_color(71, 85, 105)
-                # Handle simple bold markers **text**
-                clean_line = line.replace('**', '')
-                pdf.multi_cell(0, 7, clean_line, ln=True)
+                # Use fpdf2's markdown support for bold/italics
+                pdf.write(h=7, txt=line, markdown=True)
+                pdf.ln(7)
                 
         return StreamingResponse(
             io.BytesIO(pdf.output()),
