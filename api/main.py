@@ -291,16 +291,15 @@ async def download_pdf(report: dict):
                 pdf.set_fill_color(37, 99, 235) # Blue 600
                 pdf.ellipse(12, current_y + 3, 1.5, 1.5, 'F')
                 pdf.set_x(16)
-                write_bold_text(pdf, line[2:])
-                pdf.ln(7)
+                pdf.multi_cell(0, 7, line[2:], ln=True)
             elif line.strip() == '':
                 pdf.ln(2)
             else:
                 pdf.set_font("helvetica", size=11)
                 pdf.set_text_color(71, 85, 105)
-                # Manual bolding parsing for **text**
-                write_bold_text(pdf, line)
-                pdf.ln(7)
+                # Handle simple bold markers **text**
+                clean_line = line.replace('**', '')
+                pdf.multi_cell(0, 7, clean_line, ln=True)
                 
         return StreamingResponse(
             io.BytesIO(pdf.output()),
@@ -314,15 +313,6 @@ async def download_pdf(report: dict):
 def self_draw_line(pdf):
     pdf.set_draw_color(226, 232, 240) # Slate 200
     pdf.line(10, pdf.get_y(), 200, pdf.get_y())
-
-def write_bold_text(pdf, text):
-    parts = text.split('**')
-    for i, part in enumerate(parts):
-        if i % 2 == 1:
-            pdf.set_font("helvetica", "B", 11)
-        else:
-            pdf.set_font("helvetica", "", 11)
-        pdf.write(7, part)
 
 if __name__ == "__main__":
     import uvicorn
