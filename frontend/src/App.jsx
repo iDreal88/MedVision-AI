@@ -14,6 +14,7 @@ import {
   CheckCircle2,
   X
 } from 'lucide-react';
+import ReactMarkdown from 'react-markdown';
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
@@ -420,16 +421,21 @@ function App() {
                                   <h4 className="font-bold text-slate-200 text-sm tracking-wide">{sec.title}</h4>
                                 </div>
                                 <div className="space-y-3 px-1">
-                                  {sec.content.map((c, i) => (
-                                    <p key={i} className="text-slate-400 text-xs leading-relaxed">
-                                      {c.startsWith('- ') ? (
-                                        <span className="flex gap-2">
+                                  <ReactMarkdown
+                                    components={{
+                                      p: ({ node, ...props }) => <p className="text-slate-400 text-xs leading-relaxed" {...props} />,
+                                      li: ({ node, ...props }) => (
+                                        <li className="flex gap-2 text-slate-400 text-xs leading-relaxed">
                                           <span className="text-brand-primary mt-1">•</span>
-                                          <span>{c.replace('- ', '')}</span>
-                                        </span>
-                                      ) : c}
-                                    </p>
-                                  ))}
+                                          <span {...props} />
+                                        </li>
+                                      ),
+                                      ul: ({ node, ...props }) => <ul className="space-y-2 list-none" {...props} />,
+                                      strong: ({ node, ...props }) => <strong className="text-white font-bold" {...props} />
+                                    }}
+                                  >
+                                    {sec.content.join('\n')}
+                                  </ReactMarkdown>
                                 </div>
                               </motion.div>
                             ));
