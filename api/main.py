@@ -297,8 +297,8 @@ async def download_pdf(report: dict):
             else:
                 pdf.set_font("helvetica", size=11)
                 pdf.set_text_color(71, 85, 105)
-                # Use fpdf2's markdown support for bold/italics
-                pdf.write(h=7, txt=line, markdown=True)
+                # Manual bolding parsing for **text**
+                write_bold_text(pdf, line)
                 pdf.ln(7)
                 
         return StreamingResponse(
@@ -313,6 +313,15 @@ async def download_pdf(report: dict):
 def self_draw_line(pdf):
     pdf.set_draw_color(226, 232, 240) # Slate 200
     pdf.line(10, pdf.get_y(), 200, pdf.get_y())
+
+def write_bold_text(pdf, text):
+    parts = text.split('**')
+    for i, part in enumerate(parts):
+        if i % 2 == 1:
+            pdf.set_font("helvetica", "B", 11)
+        else:
+            pdf.set_font("helvetica", "", 11)
+        pdf.write(7, part)
 
 if __name__ == "__main__":
     import uvicorn
