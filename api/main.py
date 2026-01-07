@@ -10,6 +10,8 @@ import io
 from fpdf import FPDF
 
 from fpdf import FPDF
+import tensorflow as tf
+from tensorflow.keras.models import Model, load_model
 
 # Add root directory to path for RAG modules
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -51,9 +53,7 @@ def get_model(model_name: str):
     if model_name not in MODEL_MAP:
         raise HTTPException(status_code=404, detail="Model not found")
     
-    # Lazy load TensorFlow only when needed
-    import tensorflow as tf
-    from tensorflow.keras.models import load_model
+    # Aggressive clearing RAM before loading
     import gc
 
     if model_name not in loaded_models:
@@ -88,8 +88,6 @@ def apply_clahe(img):
     return img_c / 255.0
 
 def make_gradcam_heatmap(img_tensor, model, last_conv_layer_name):
-    import tensorflow as tf
-    from tensorflow.keras.models import Model
     try:
         # Find base model if nested (ResNet/VGG)
         base_model = None
@@ -164,7 +162,6 @@ async def predict(
     model_name: str = Form(...)
 ):
     try:
-        import tensorflow as tf
         # Read image
         contents = await file.read()
         nparr = np.frombuffer(contents, np.uint8)
