@@ -4,6 +4,7 @@ python-multipart
 opencv-python-headless
 numpy
 tensorflow-cpu==2.15.0
+tf-keras
 fpdf
 jinja2
 faiss-cpu

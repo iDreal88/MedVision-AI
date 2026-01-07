@@ -9,10 +9,10 @@ import sys
 import io
 from fpdf import FPDF
 
+from fpdf import FPDF
+
 # Add root directory to path for RAG modules
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from rag_engine import RAGEngine
-from report_generator import ReportGenerator
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'  # Suppress TF logging to save some memory/noise
 
@@ -198,6 +198,7 @@ async def predict(
     # RAG Report Generation
     kb_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "knowledge_base.md")
     if os.path.exists(kb_path):
+        from report_generator import ReportGenerator
         report_gen = ReportGenerator(kb_path)
         
         # Dynamic XAI description based on model architecture and result
