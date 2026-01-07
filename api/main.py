@@ -7,10 +7,9 @@ import numpy as np
 import base64
 import sys
 import io
-from fpdf import FPDF
-
 import tensorflow as tf
 from tensorflow.keras.models import Model, load_model
+from fpdf import FPDF
 
 # Add root directory to path for RAG modules
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -302,8 +301,8 @@ async def download_pdf(report: dict):
                 clean_line = line.replace('**', '')
                 pdf.multi_cell(0, 7, clean_line, ln=True)
                 
-        return Response(
-            content=pdf.output(),
+        return StreamingResponse(
+            io.BytesIO(pdf.output()),
             media_type="application/pdf",
             headers={"Content-Disposition": "attachment; filename=diagnosis_report.pdf"}
         )
