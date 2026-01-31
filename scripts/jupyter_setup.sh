@@ -36,4 +36,4 @@ echo "If you are on a remote server, use: ssh -L 11006:localhost:11006 user@host
 # --port 11006: Use the requested port
 # --ip 0.0.0.0: Listen on all interfaces (useful for DGX/Spark environments)
 # --allow-root: Often needed on cluster environments
-jupyter lab --ip=0.0.0.0 --port=11006 --no-browser --allow-root
+python3 -m jupyter lab --ip=0.0.0.0 --port=11006 --no-browser --allow-root
