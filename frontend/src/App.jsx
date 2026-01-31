@@ -256,7 +256,7 @@ function App() {
                         </div>
                         <div className="space-y-1.5">
                           <p className="font-semibold text-slate-300">Drop medical image</p>
-                          <p className="text-xs text-slate-500">Supports PNG, JPG, or DICOM-exported JPEG</p>
+                          <p className="text-xs text-slate-500">Supports PNG, JPG (Grayscale Mammograms only)</p>
                         </div>
                       </div>
                     )}
