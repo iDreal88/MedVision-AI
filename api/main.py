@@ -165,10 +165,29 @@ async def predict(
         # Read image
         contents = await file.read()
         nparr = np.frombuffer(contents, np.uint8)
-        img = cv2.imdecode(nparr, cv2.IMREAD_GRAYSCALE)
-        if img is None:
-            raise HTTPException(status_code=400, detail="Invalid image file")
+        
+        # 1. Validate Image Validity (Prevent random non-image files)
+        img_color = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+        if img_color is None:
+            raise HTTPException(status_code=400, detail="Invalid image file format. Please upload a valid PNG or JPG.")
 
+        # 2. Validate Content (Mammogram Check)
+        # Check for color saturation. Mammograms are grayscale.
+        # Random everyday images usually have color.
+        hsv = cv2.cvtColor(img_color, cv2.COLOR_BGR2HSV)
+        h, s, v = cv2.split(hsv)
+        mean_saturation = np.mean(s)
+        
+        # Threshold: > 25 means significant color content (0-255 scale)
+        if mean_saturation > 25:
+             raise HTTPException(
+                 status_code=400, 
+                 detail=f"Uploaded image appears to be a color photograph (Saturation: {mean_saturation:.1f}). Please upload a valid grayscale mammogram."
+             )
+             
+        # Convert to grayscale for model interaction
+        img = cv2.cvtColor(img_color, cv2.COLOR_BGR2GRAY)
+        
         # Load model
         model = get_model(model_name)
         
