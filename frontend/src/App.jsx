@@ -743,17 +743,18 @@ function App() {
                       </thead>
                       <tbody>
                         {analysisHistory.map((item) => (
-                          <tr key={item.id} className="border-b border-white/5 hover:bg-white/[0.01] transition-colors group">
+                          <tr 
+                            key={item.id} 
+                            onClick={() => handleRestoreResult(item)}
+                            className="border-b border-white/5 hover:bg-white/[0.05] transition-colors group cursor-pointer"
+                          >
                             <td className="px-8 py-6">
-                              <button 
-                                onClick={() => handleRestoreResult(item)}
-                                className="w-16 h-16 rounded-xl overflow-hidden border border-white/10 bg-black hover:border-brand-primary/50 group-hover:scale-110 transition-all duration-300 relative group/preview"
-                              >
+                              <div className="w-16 h-16 rounded-xl overflow-hidden border border-white/10 bg-black group-hover:scale-110 transition-transform relative group/preview">
                                 <img src={item.preview} className="w-full h-full object-cover" alt="Scan" />
-                                <div className="absolute inset-0 bg-brand-primary/20 opacity-0 group-hover/preview:opacity-100 flex items-center justify-center transition-opacity">
+                                <div className="absolute inset-0 bg-brand-primary/20 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
                                   <Activity className="w-4 h-4 text-white" />
                                 </div>
-                              </button>
+                              </div>
                             </td>
                             <td className="px-8 py-6">
                               <span className="text-xs font-bold text-slate-400 uppercase whitespace-nowrap">{item.timestamp}</span>
