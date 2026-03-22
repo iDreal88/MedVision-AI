@@ -498,10 +498,10 @@ function App() {
 
               <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {[
-                  { name: 'CNN+CLAHE', acc: '94.2%', prec: '93.8%', rec: '94.5%', color: 'from-emerald-500 to-teal-500' },
-                  { name: 'ResNet50', acc: '92.5%', prec: '91.2%', rec: '93.8%', color: 'from-blue-500 to-indigo-500' },
-                  { name: 'VGG16', acc: '89.7%', prec: '88.5%', rec: '90.9%', color: 'from-purple-500 to-pink-500' },
-                  { name: 'VGG19', acc: '90.4%', prec: '89.8%', rec: '91.0%', color: 'from-orange-500 to-red-500' },
+                  { name: 'CNN+CLAHE', acc: '97.84%', prec: '97.2%', rec: '98.1%', color: 'from-emerald-500 to-teal-500' },
+                  { name: 'VGG16', acc: '97.51%', prec: '96.8%', rec: '97.2%', color: 'from-purple-500 to-pink-500' },
+                  { name: 'VGG19', acc: '96.69%', prec: '95.9%', rec: '96.5%', color: 'from-orange-500 to-red-500' },
+                  { name: 'ResNet50', acc: '95.01%', prec: '94.2%', rec: '94.8%', color: 'from-blue-500 to-indigo-500' },
                 ].map((m) => (
                   <div key={m.name} className="glass p-8 rounded-[32px] border border-white/5 hover:border-white/10 transition-all group">
                     <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${m.color} flex items-center justify-center mb-6 shadow-lg`}>
