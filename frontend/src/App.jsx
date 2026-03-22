@@ -432,6 +432,8 @@ function App() {
                             const sections = [];
                             let currentSection = null;
 
+                            if (!result?.report) return <p className="text-slate-500 text-xs italic">Historical report data not found for this specific record.</p>;
+
                             result.report.split('\n').forEach(line => {
                               if (line.startsWith('## ')) {
                                 if (currentSection) sections.push(currentSection);
