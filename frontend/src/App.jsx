@@ -86,7 +86,9 @@ function App() {
         model: selectedModel,
         label: resp.data.label,
         confidence: resp.data.confidence,
-        preview: `data:image/jpeg;base64,${resp.data.processed_image}`
+        preview: `data:image/jpeg;base64,${resp.data.processed_image}`,
+        gradcam_image: resp.data.gradcam_image,
+        report: resp.data.report
       }, ...prev]);
     } catch (err) {
       setError(err.response?.data?.detail || "An error occurred during diagnosis.");
@@ -124,6 +126,18 @@ function App() {
       }
       alert(`Failed to download PDF: ${errorMessage}`);
     }
+  };
+
+  const handleRestoreResult = (item) => {
+    setResult({
+      label: item.label,
+      confidence: item.confidence,
+      processed_image: item.preview.replace('data:image/jpeg;base64,', ''),
+      gradcam_image: item.gradcam_image,
+      report: item.report
+    });
+    setSelectedModel(item.model);
+    setCurrentView('home');
   };
 
   return (
@@ -729,9 +743,15 @@ function App() {
                         {analysisHistory.map((item) => (
                           <tr key={item.id} className="border-b border-white/5 hover:bg-white/[0.01] transition-colors group">
                             <td className="px-8 py-6">
-                              <div className="w-16 h-16 rounded-xl overflow-hidden border border-white/10 bg-black group-hover:scale-110 transition-transform">
+                              <button 
+                                onClick={() => handleRestoreResult(item)}
+                                className="w-16 h-16 rounded-xl overflow-hidden border border-white/10 bg-black hover:border-brand-primary/50 group-hover:scale-110 transition-all duration-300 relative group/preview"
+                              >
                                 <img src={item.preview} className="w-full h-full object-cover" alt="Scan" />
-                              </div>
+                                <div className="absolute inset-0 bg-brand-primary/20 opacity-0 group-hover/preview:opacity-100 flex items-center justify-center transition-opacity">
+                                  <Activity className="w-4 h-4 text-white" />
+                                </div>
+                              </button>
                             </td>
                             <td className="px-8 py-6">
                               <span className="text-xs font-bold text-slate-400 uppercase whitespace-nowrap">{item.timestamp}</span>
