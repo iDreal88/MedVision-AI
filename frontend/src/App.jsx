@@ -76,6 +76,7 @@ function App() {
       clear_history: "Clear History",
       no_history: "No History Recorded",
       metrics_desc: "In-House Models vs Literature Benchmarks",
+      overall_leader_title: "Overall Leader",
       overall_leader_desc: "The **CNN+CLAHE** configuration consistently outperforms others, demonstrating the massive impact of local contrast enhancement on mammography feature extraction.",
       generalization_title: "Generalization",
       generalization_desc: "**ResNet50** shows higher variance but superior generalization on cross-institutional datasets, likely due to its deeper residual architecture.",
@@ -132,6 +133,7 @@ function App() {
       clear_history: "清除歷史",
       no_history: "暫無歷史記錄",
       metrics_desc: "內部模型與文獻基準對比",
+      overall_leader_title: "綜合領先者",
       overall_leader_desc: "**CNN+CLAHE** 的配置始終優於其他架構，證明了局部對比度增強對乳房攝影特徵提取的巨大影響。",
       generalization_title: "泛化能力",
       generalization_desc: "**ResNet50** 表現出較高的方差，但在跨機構數據集上具有卓越的泛化能力，這可能歸功於其更深層的殘差架構。",
@@ -189,6 +191,7 @@ function App() {
       clear_history: "Bersihkan Riwayat",
       no_history: "Tidak Ada Riwayat Tercatat",
       metrics_desc: "Model Internal vs Benchmark Literatur",
+      overall_leader_title: "Pemimpin Keseluruhan",
       overall_leader_desc: "Konfigurasi **CNN+CLAHE** secara konsisten mengungguli arsitektur lain, menunjukkan dampak besar dari peningkatan kontras lokal pada ekstraksi fitur mammografi.",
       generalization_title: "Generalisasi",
       generalization_desc: "**ResNet50** menunjukkan varian yang lebih tinggi tetapi generalisasi yang unggul pada dataset lintas-institusi, kemungkinan karena arsitektur residualnya yang lebih dalam.",
@@ -246,6 +249,7 @@ function App() {
       clear_history: "기록 삭제",
       no_history: "기록된 기록 없음",
       metrics_desc: "사내 모델 vs 문헌 벤치마크",
+      overall_leader_title: "종합 선두 모델",
       overall_leader_desc: "**CNN+CLAHE** 구성은 다른 아키텍처보다 지속적으로 우수한 성능을 보여주며, 유방 촬영술 특징 추출에서 국부 대비 향상의 큰 영향을 보여줍니다.",
       generalization_title: "일반화",
       generalization_desc: "**ResNet50**은 더 높은 분산을 보이지만 깊은 잔차 아키텍처 덕분에 기관 간 데이터셋에서 뛰어난 일반화 성능을 보여줍니다.",
@@ -305,6 +309,7 @@ function App() {
       clahe_desc: "CLAHE は、マンモグラム内の微小石灰化や構造的歪みの視認性を高めるために使用されます。",
       gradcam_desc: "Grad-CAM は、画像内の診断に重要な領域を強調するローカライゼーションマップを生成します。",
       metrics_desc: "社内モデル vs 文献ベンチマーク",
+      overall_leader_title: "総合リーダー",
       overall_leader_desc: "**CNN+CLAHE** 構成は一貫して他のモデルを上回っており、マンモグラフィ特徴抽出における局所コントラスト強調の大きな影響を証明しています。",
       generalization_title: "汎用性",
       generalization_desc: "**ResNet50** はより高い分散を示しますが、深い残差アーキテクチャのおかげで、施設間データセットにおいて優れた汎用性を示します。",
@@ -934,7 +939,7 @@ function App() {
                   <div className="space-y-3">
                     <div className="flex items-center gap-2 text-emerald-400">
                       <CheckCircle2 className="w-4 h-4" />
-                      <span className="text-sm font-bold uppercase tracking-widest">Overall Leader</span>
+                      <span className="text-sm font-bold uppercase tracking-widest">{t.overall_leader_title}</span>
                     </div>
                     <p className="text-slate-400 text-sm leading-relaxed">
                       {renderFormattedText(t.overall_leader_desc)}
