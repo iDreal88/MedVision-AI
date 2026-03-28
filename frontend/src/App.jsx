@@ -177,6 +177,9 @@ function App() {
       report_primary_prediction: "主要預測",
       report_statistical_confidence: "統計置信度",
       report_xai_visualization: "XAI 視覺化",
+      report_xai_findings_intro: "基於最終卷積層中的高強度激活質心：",
+      report_rag_intro_cancer: "根據惡性腫瘤的懷疑，從醫學知識庫中檢索到以下見解：",
+      report_rag_intro_noncancer: "根據良性結果的懷疑，從醫學知識庫中檢索到以下見解：",
     },
     zs: {
       diagnosis: "诊断",
@@ -241,6 +244,9 @@ function App() {
       report_primary_prediction: "主要预测",
       report_statistical_confidence: "统计置信度",
       report_xai_visualization: "XAI 可视化",
+      report_xai_findings_intro: "基于最终卷积层中的高强度激活质心：",
+      report_rag_intro_cancer: "根据恶性肿瘤的怀疑，从医学知识库中检索到以下见解：",
+      report_rag_intro_noncancer: "根据良性结果的怀疑，从医学知识库中检索到以下见解：",
     },
     ja: {
       diagnosis: "診断",
@@ -818,73 +824,55 @@ function App() {
     }
   };
 
-  const printReport = () => {
-    if (!result) return;
-    
-    const valueMap = {
-        en: { "Cancer": "Cancer", "Non-Cancer": "Non-Cancer", "Malignancy": "Malignancy", "Biopsy": "Biopsy" },
-        zh: { "Cancer": "惡性腫瘤 (Cancer)", "Non-Cancer": "良性/非癌症", "Malignancy": "惡性", "Biopsy": "組織切片" },
-        zs: { "Cancer": "恶性肿瘤 (Cancer)", "Non-Cancer": "良性/非癌症", "Malignancy": "恶性", "Biopsy": "组织切片" },
-        ja: { "Cancer": "癌 (Cancer)", "Non-Cancer": "非癌性/良性", "Malignancy": "悪性", "Biopsy": "生検" },
-        ko: { "Cancer": "암 (Cancer)", "Non-Cancer": "비암성/양성", "Malignancy": "악성", "Biopsy": "생검" },
-        es: { "Cancer": "Cáncer", "Non-Cancer": "No Cancerígeno", "Malignancy": "Malignidad", "Biopsy": "Biopsia" },
-        id: { "Cancer": "Kanker", "Non-Cancer": "Bukan Kanker", "Malignancy": "Keganasan", "Biopsy": "Biopsi" },
-        fr: { "Cancer": "Cancer", "Non-Cancer": "Non Cancéreux", "Malignancy": "Malignité", "Biopsy": "Biopsie" },
-        de: { "Cancer": "Krebs", "Non-Cancer": "Nicht krebsartig", "Malignancy": "Malignität", "Biopsy": "Biopsie" }
-    };
+  const downloadPDF = async () => {
+    if (!result?.report) return;
+    try {
+      // Logic for selecting the correct language version of the report for the PDF
+      let reportContent = "";
+      if (typeof result.report === 'object' && result.report !== null) {
+          reportContent = result.report[language] || result.report['en'] || "";
+      } else {
+          // Emergency translation layer for legacy string reports from backend
+          reportContent = result.report;
+          // Apply basic translations if backend is still English
+          const commonPhrases = {
+            "Cancer": t.report_primary_prediction || "Cancer",
+            "Non-Cancer": t.report_primary_prediction === "良性/非癌症" ? "良性" : "Non-Cancer",
+            "Based on the high-intensity activation centroids in the final convolutional layers:": t.report_xai_findings_intro || "Based on XAI Analysis:",
+            "The following insights were retrieved from the medical knowledge base based on the suspicion of Cancer:": t.report_rag_intro_cancer || "Clinical Context (Cancer):",
+            "The following insights were retrieved from the medical knowledge base based on the suspicion of Non-Cancer:": t.report_rag_intro_noncancer || "Clinical Context (Benign):"
+          };
+          Object.keys(commonPhrases).forEach(phrase => {
+              reportContent = reportContent.replaceAll(phrase, commonPhrases[phrase]);
+          });
+      }
 
-    const reportText = (typeof result.report === 'object' && result.report !== null) 
-        ? (result.report[language] || result.report['en'] || "") 
-        : (result.report || "");
-
-    let localizedText = reportText;
-    if (valueMap[language]) {
-        Object.keys(valueMap[language]).forEach(enVal => {
-            localizedText = localizedText.replace(new RegExp(enVal, 'g'), valueMap[language][enVal]);
-        });
+      const resp = await axios.post(`${API_BASE}/download-pdf`,
+        { content: reportContent },
+        { responseType: 'blob' }
+      );
+      const url = window.URL.createObjectURL(new Blob([resp.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `diagnosis_report_${language}_${result.label}.pdf`);
+      document.body.appendChild(link);
+      link.click();
+    } catch (err) {
+      console.error("PDF Download Error:", err);
+      let errorMessage = "Unknown error";
+      if (err.response?.data instanceof Blob) {
+        const text = await err.response.data.text();
+        try {
+          const parsed = JSON.parse(text);
+          errorMessage = parsed.detail || text;
+        } catch (e) {
+          errorMessage = text;
+        }
+      } else {
+        errorMessage = err.response?.data?.detail || err.message || "Unknown error";
+      }
+      alert(`Failed to download PDF: ${errorMessage}`);
     }
-
-    const printWin = window.open('', '_blank');
-    printWin.document.write(`
-      <html>
-        <head>
-          <title>MedVision AI Clinical Report - ${language}</title>
-          <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
-          <style>
-            body { font-family: 'Inter', sans-serif; padding: 40px; color: #1e293b; background: #fff; }
-            .header { border-bottom: 4px solid #3b82f6; padding-bottom: 20px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; }
-            .logo { font-weight: 900; font-size: 24px; color: #0f172a; }
-            h1 { font-size: 28px; margin: 0; }
-            h2 { color: #3b82f6; border-bottom: 1px solid #e2e8f0; padding-bottom: 8px; margin-top: 40px; }
-            .meta { background: #f8fafc; padding: 20px; border-radius: 12px; margin-bottom: 30px; }
-            .meta-item { margin-bottom: 8px; font-size: 14px; }
-            .val { font-weight: bold; }
-            .content { line-height: 1.8; white-space: pre-wrap; font-size: 15px; }
-            @media print { .no-print { display: none; } }
-          </style>
-        </head>
-        <body>
-          <div class="header">
-            <div class="logo">MEDVISION AI</div>
-            <div style="text-align: right; color: #64748b; font-size: 12px;">Diagnostic Session: ${new Date().toLocaleDateString()}</div>
-          </div>
-          <h1>Clinical Diagnosis & Pathology Report</h1>
-          <div class="meta">
-             <div class="meta-item">Primary Prediction: <span class="val">${valueMap[language]?.[result.label] || result.label}</span></div>
-             <div class="meta-item">Statistical Confidence: <span class="val">${result.confidence.toFixed(2)}%</span></div>
-             <div class="meta-item">Diagnostic Model: <span class="val">${selectedModel}</span></div>
-             <div class="meta-item">Native Locale: <span class="val">${nativeDisplayMap[language]}</span></div>
-          </div>
-          <div class="content">${localizedText.replace(/^# .*\n/, '')}</div>
-          <div style="margin-top: 50px; padding-top: 20px; border-top: 1px dashed #e2e8f0; font-size: 11px; color: #94a3b8; text-align: center;">
-            DISCLAIMER: This document is generated by an AI assistant for research and educational purposes. 
-            All findings must be validated by a board-certified radiologist.
-          </div>
-          <script>window.onload = () => { window.print(); }</script>
-        </body>
-      </html>
-    `);
-    printWin.document.close();
   };
 
   const handleRestoreResult = (item) => {
@@ -916,7 +904,7 @@ function App() {
             <p className="text-[10px] font-bold uppercase tracking-widest text-brand-primary">{t.predict_cancer}</p>
           </div>
         </div>
-        <div className="hidden xl:flex items-center gap-8 text-sm font-medium text-slate-400">
+        <div className="hidden lg:flex items-center gap-8 text-sm font-medium text-slate-400">
           <button onClick={() => setCurrentView('home')} className={`hover:text-white transition-colors ${currentView === 'home' ? 'text-brand-primary' : ''}`}>{t.diagnosis}</button>
           <button onClick={() => setCurrentView('dashboard')} className={`hover:text-white transition-colors ${currentView === 'dashboard' ? 'text-brand-primary' : ''}`}>{t.dashboard}</button>
           <button onClick={() => setCurrentView('documentation')} className={`hover:text-white transition-colors ${currentView === 'documentation' ? 'text-brand-primary' : ''}`}>{t.documentation}</button>
@@ -1203,7 +1191,7 @@ function App() {
                             <p className="text-xs text-slate-500 underline decoration-brand-primary/30 underline-offset-4">{t.clinical_summary}</p>
                           </div>
                           <button
-                            onClick={printReport}
+                            onClick={downloadPDF}
                             className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white/5 hover:bg-brand-primary/10 border border-white/10 hover:border-brand-primary/30 transition-all text-xs font-bold group shadow-xl shadow-black/20"
                           >
                             <Download className="w-3.5 h-3.5 group-hover:translate-y-0.5 transition-transform" />
@@ -1232,44 +1220,39 @@ function App() {
                                "XAI Visualization": t.report_xai_visualization
                             };
 
-                            // Multi-lang pathology value mapper for deep localization
-                            const valueMap = {
-                                en: { "Cancer": "Cancer", "Non-Cancer": "Non-Cancer", "Malignancy": "Malignancy", "Biopsy": "Biopsy" },
-                                zh: { "Cancer": "惡性腫瘤 (Cancer)", "Non-Cancer": "良性/非癌症", "Malignancy": "惡性", "Biopsy": "組織切片" },
-                                zs: { "Cancer": "恶性肿瘤 (Cancer)", "Non-Cancer": "良性/非癌症", "Malignancy": "恶性", "Biopsy": "组织切片" },
-                                ja: { "Cancer": "癌 (Cancer)", "Non-Cancer": "非癌性/良性", "Malignancy": "悪性", "Biopsy": "生検" },
-                                ko: { "Cancer": "암 (Cancer)", "Non-Cancer": "비암성/양성", "Malignancy": "악성", "Biopsy": "생검" },
-                                es: { "Cancer": "Cáncer", "Non-Cancer": "No Cancerígeno", "Malignancy": "Malignidad", "Biopsy": "Biopsia" },
-                                id: { "Cancer": "Kanker", "Non-Cancer": "Bukan Kanker", "Malignancy": "Keganasan", "Biopsy": "Biopsi" },
-                                fr: { "Cancer": "Cancer", "Non-Cancer": "Non Cancéreux", "Malignancy": "Malignité", "Biopsy": "Biopsie" },
-                                de: { "Cancer": "Krebs", "Non-Cancer": "Nicht krebsartig", "Malignancy": "Malignität", "Biopsy": "Biopsie" }
-                            };
-
                             const reportText = (typeof result.report === 'object' && result.report !== null) 
                                 ? (result.report[language] || result.report['en'] || "") 
                                 : (result.report || "");
 
                             reportText.split('\n').forEach(line => {
+                              if (line.startsWith('## ')) {
+                                if (currentSection) sections.push(currentSection);
+                                const rawTitle = line.replace('## ', '').trim();
+                                currentSection = { title: sectionTranslationMap[rawTitle] || rawTitle, content: [] };
+                              } else if (currentSection && line.trim() !== '' && !line.startsWith('# ')) {
                                 let procLine = line;
-                                // Deep value translation for values inside report text
-                                if (valueMap[language]) {
-                                    Object.keys(valueMap[language]).forEach(enVal => {
-                                        procLine = procLine.replace(new RegExp(enVal, 'g'), valueMap[language][enVal]);
-                                    });
-                                }
+                               Object.keys(labelTranslationMap).forEach(key => {
+                                   if (procLine.includes(key)) {
+                                      procLine = procLine.replace(key, labelTranslationMap[key]);
+                                   }
+                                });
                                 
-                                if (procLine.startsWith('## ')) {
-                                    if (currentSection) sections.push(currentSection);
-                                    const rawTitle = procLine.replace('## ', '').trim();
-                                    currentSection = { title: sectionTranslationMap[rawTitle] || rawTitle, content: [] };
-                                } else if (currentSection && procLine.trim() !== '' && !procLine.startsWith('# ')) {
-                                    Object.keys(labelTranslationMap).forEach(key => {
-                                       if (procLine.includes(key)) {
-                                          procLine = procLine.replace(key, labelTranslationMap[key]);
-                                       }
-                                    });
-                                    currentSection.content.push(procLine);
-                                }
+                                // Emergency Translation Fallback for body text
+                                const bodyTranslators = {
+                                  "Based on the high-intensity activation centroids in the final convolutional layers:": t.report_xai_findings_intro,
+                                  "The following insights were retrieved from the medical knowledge base based on the suspicion of Cancer:": t.report_rag_intro_cancer,
+                                  "The following insights were retrieved from the medical knowledge base based on the suspicion of Non-Cancer:": t.report_rag_intro_noncancer,
+                                  "Cancer": t.report_primary_prediction === "主要预测" || t.report_primary_prediction === "主要預測" ? (language === "zh" ? "惡性腫瘤" : "恶性肿瘤") : "Cancer",
+                                  "Non-Cancer": language === "zh" ? "良性" : "良性"
+                                };
+                                Object.keys(bodyTranslators).forEach(orig => {
+                                   if (procLine.includes(orig) && bodyTranslators[orig]) {
+                                      procLine = procLine.replace(orig, bodyTranslators[orig]);
+                                   }
+                                });
+
+                                currentSection.content.push(procLine);
+                              }
                             });
                             if (currentSection) sections.push(currentSection);
 
