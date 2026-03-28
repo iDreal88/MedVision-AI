@@ -180,6 +180,13 @@ function App() {
       report_xai_findings_intro: "基於最終卷積層中的高強度激活質心：",
       report_rag_intro_cancer: "根據惡性腫瘤的懷疑，從醫學知識庫中檢索到以下見解：",
       report_rag_intro_noncancer: "根據良性結果的懷疑，從醫學知識庫中檢索到以下見解：",
+      birads_desc: "乳房影像報告與數據系統 (BI-RADS) 是臨床報告的標準：",
+      birads_0: "不完整。需要進一步影像檢查。",
+      birads_1: "陰性。無腫塊，結構正常。",
+      birads_2: "良性發現。包括分泌性鈣化、單純囊腫等。",
+      birads_3: "可能是良性。惡性風險 <2%。建議 6 個月後追蹤。",
+      birads_4: "疑似。2% 至 95% 的惡性可能性。通常建議活檢。",
+      birads_5: "高度懷疑惡性。>95% 的可能性。活檢是強制性的。",
     },
     zs: {
       diagnosis: "诊断",
@@ -824,11 +831,44 @@ function App() {
     }
   };
 
+  const getLocalizedReport = (rawText) => {
+    if (!rawText) return "";
+    let procText = rawText;
+    const translators = {
+       "Clinical AI Diagnosis & Pathology Report": t.report_title || "臨床 AI 診斷與病理報告",
+       "Patient/Case Information": t.report_patient_info,
+       "Explainable AI (XAI) Findings": t.report_xai_findings,
+       "Clinical Context (Retrieved via RAG)": t.report_clinical_context,
+       "Summary and Discussion": t.report_summary_discussion,
+       "Analytical Method": t.report_analytical_method,
+       "Primary Prediction": t.report_primary_prediction,
+       "Statistical Confidence": t.report_statistical_confidence,
+       "XAI Visualization": t.report_xai_visualization,
+       "Based on the high-intensity activation centroids in the final convolutional layers:": t.report_xai_findings_intro,
+       "High-intensity activation centroids detected. The model weights these dense regions as primary indicators of malignant tissue morphology.": language === "zh" || language === "zs" ? (language === "zh" ? "檢測到高強度激活質心。模型將這些密集區域視為惡性組織形態的主要指標。" : "检测到高强度激活质心。模型将这些密集区域视为恶性组织形态的主要指标。") : "High-intensity activation centroids detected. The model weights these dense regions as primary indicators of malignant tissue morphology.",
+       "The following insights were retrieved from the medical knowledge base based on the suspicion of Cancer:": t.report_rag_intro_cancer,
+       "The following insights were retrieved from the medical knowledge base based on the suspicion of Non-Cancer:": t.report_rag_intro_noncancer,
+       "Neural Network Classification (ResNet50/VGG/CNN)": language === "zh" || language === "zs" ? (language === "zh" ? "神經網絡分類 (ResNet50/VGG/CNN)" : "神经网络分类 (ResNet50/VGG/CNN)") : "Neural Network Classification (ResNet50/VGG/CNN)",
+       "Grad-CAM Activation Heatmap": language === "zh" || language === "zs" ? (language === "zh" ? "Grad-CAM 激活熱力圖" : "Grad-CAM 激活热力图") : "Grad-CAM Activation Heatmap",
+       "Cancer": t.report_primary_prediction === "主要预测" || t.report_primary_prediction === "主要預測" ? (language === "zh" ? "惡性腫瘤" : "恶性肿瘤") : "Cancer",
+       "Non-Cancer": language === "zh" ? "良性" : "良性"
+    };
+
+    Object.keys(translators).forEach(orig => {
+       if (translators[orig]) {
+         // Escape regex special chars and replace globally
+         procText = procText.split(orig).join(translators[orig]);
+       }
+    });
+    return procText;
+  };
+
   const downloadPDF = () => {
     if (!result?.report) return;
     
-    // Select correct language report
-    const reportText = typeof result.report === 'object' ? (result.report[language] || result.report['en']) : result.report;
+    // Select correct language report and apply global translation engine
+    const rawReport = typeof result.report === 'object' ? (result.report[language] || result.report['en']) : result.report;
+    const reportText = getLocalizedReport(rawReport);
     
     // Create hidden print window
     const printWindow = window.open('', '_blank', 'width=800,height=600');

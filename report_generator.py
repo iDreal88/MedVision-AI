@@ -104,6 +104,33 @@ class ReportGenerator:
             local_prediction = label_map[prediction_label].get(lang, prediction_label)
             local_intro = intro_map.get(lang, intro_map["en"])
 
+            birads_map = {
+                "en": """## BI-RADS Assessment Categories
+The Breast Imaging-Reporting and Data System (BI-RADS) is a standard for reporting:
+- **BI-RADS 0**: Incomplete. Further imaging is required.
+- **BI-RADS 1**: Negative. Symmetrical breasts with no masses.
+- **BI-RADS 2**: Benign Findings. (e.g., simple cysts).
+- **BI-RADS 3**: Probably Benign. <2% risk of malignancy.
+- **BI-RADS 4**: Suspicious. 2% to 95% likelihood of malignancy.
+- **BI-RADS 5**: Highly Suggestive of Malignancy. >95% likelihood.""",
+                "zh": """## BI-RADS 評估類別
+乳房影像報告與數據系統 (BI-RADS) 是臨床報告的標準：
+- **BI-RADS 0**: 不完整。需要進一步影像檢查。
+- **BI-RADS 1**: 陰性。無腫塊，結構正常。
+- **BI-RADS 2**: 良性發現（如：單純囊腫）。
+- **BI-RADS 3**: 可能是良性。惡性風險 <2%。建議追蹤。
+- **BI-RADS 4**: 疑似。2% 至 95% 的惡性可能性。通常建議活檢。
+- **BI-RADS 5**: 高度懷疑惡性。>95% 的可能性。活檢是強制性的。""",
+                "zs": """## BI-RADS 评估类别
+乳房影像报告与数据系统 (BI-RADS) 是临床报告的标准：
+- **BI-RADS 0**: 不完整。需要进一步影像检查。
+- **BI-RADS 1**: 阴性。无肿块，结构正常。
+- **BI-RADS 2**: 良性发现（如：单纯囊肿）。
+- **BI-RADS 3**: 可能是良性。恶性风险 <2%。建议追踪。
+- **BI-RADS 4**: 疑似。2% 至 95% 的恶性可能性。通常建议活检。
+- **BI-RADS 5**: 高度怀疑恶性。>95% 的可能性。活检是强制性的。"""
+            }
+
             reports[lang] = f"""# {title_map.get(lang, title_map["en"])}
 ## Patient/Case Information
 - **Analytical Method**: Neural Network Classification (ResNet50/VGG/CNN)
@@ -117,6 +144,8 @@ class ReportGenerator:
 
 ## Clinical Context (Retrieved via RAG)
 {context_map[prediction_label][lang]}
+
+{birads_map.get(lang, birads_map["en"])}
 
 ## Summary and Discussion
 The deep learning ensemble has classified this case as **{local_prediction}** with a confidence score of **{confidence:.2f}%**. 
