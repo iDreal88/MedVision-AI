@@ -1194,7 +1194,11 @@ function App() {
                                "XAI Visualization": t.report_xai_visualization
                             };
 
-                            result.report.split('\n').forEach(line => {
+                            const reportText = (typeof result.report === 'object' && result.report !== null) 
+                                ? (result.report[language] || result.report['en'] || "") 
+                                : (result.report || "");
+
+                            reportText.split('\n').forEach(line => {
                               if (line.startsWith('## ')) {
                                 if (currentSection) sections.push(currentSection);
                                 const rawTitle = line.replace('## ', '').trim();
