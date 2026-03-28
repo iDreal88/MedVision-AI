@@ -75,6 +75,21 @@ function App() {
       tech_stack: "Technology Stack",
       clear_history: "Clear History",
       no_history: "No History Recorded",
+      metrics_desc: "In-House Models vs Literature Benchmarks",
+      overall_leader_desc: "The **CNN+CLAHE** configuration consistently outperforms others, demonstrating the massive impact of local contrast enhancement on mammography feature extraction.",
+      generalization_title: "Generalization",
+      generalization_desc: "**ResNet50** shows higher variance but superior generalization on cross-institutional datasets, likely due to its deeper residual architecture.",
+      feature_focus_title: "Feature Focus",
+      feature_focus_desc: "**VGG Families** excel at detecting micro-calcifications but often suffer from vanishing gradients in purely local feature identification compared to CNN+CLAHE.",
+      tech_doc_subtitle: "Understanding the core technologies powering MedVision AI.",
+      image_preview: "Image Preview",
+      timestamp: "Timestamp",
+      model_used: "Model Used",
+      diagnosis: "Diagnosis",
+      log_subtitle: "Session history of neural diagnoses performed.",
+      clahe_desc: "Contrast Limited Adaptive Histogram Equalization (CLAHE) is used to enhance the visibility of micro-calcifications and architectural distortions in mammograms. Classic histogram equalization often over-amplifies noise in homogeneous regions; CLAHE limits this contrast enhancement through local clipping.",
+      gradcam_desc: "Gradient-weighted Class Activation Mapping (Grad-CAM) uses the gradients of any target concept flowing into the final convolutional layer to produce a coarse localization map highlighting the important regions in the image for predicting the concept.",
+      rag_desc: "Our system doesn't just predict; it references. Retrieval-Augmented Generation (RAG) pulls relevant clinical context from a medical knowledge base based on the specific anatomical findings detected by the CNN. This ensures our reports are grounded in clinical literature.",
     },
     zh: {
       diagnosis: "診斷",
@@ -116,6 +131,21 @@ function App() {
       tech_stack: "技術棧",
       clear_history: "清除歷史",
       no_history: "暫無歷史記錄",
+      metrics_desc: "內部模型與文獻基準對比",
+      overall_leader_desc: "**CNN+CLAHE** 的配置始終優於其他架構，證明了局部對比度增強對乳房攝影特徵提取的巨大影響。",
+      generalization_title: "泛化能力",
+      generalization_desc: "**ResNet50** 表現出較高的方差，但在跨機構數據集上具有卓越的泛化能力，這可能歸功於其更深層的殘差架構。",
+      feature_focus_title: "特徵焦點",
+      feature_focus_desc: "**VGG 系列** 擅長檢測微鈣化點，但在純局部特徵識別中，與 CNN+CLAHE 相比，往往會受到梯度消失的困擾。",
+      tech_doc_subtitle: "瞭解驅動 MedVision AI 的核心技術。",
+      image_preview: "影像預覽",
+      timestamp: "時間戳",
+      model_used: "所用模型",
+      diagnosis: "診斷",
+      log_subtitle: "執行神經診斷的會話歷史。",
+      clahe_desc: "對比度受限自適應直方圖均衡法 (CLAHE) 用於增強乳房攝影中微鈣化點和結構失真的可見性。傳統的直方圖均衡法往往會過度放大均勻區域的噪聲；CLAHE 通過局部裁剪限制了這種對比度增強。",
+      gradcam_desc: "梯度加權類激活映射 (Grad-CAM) 利用流向最終卷積層的任何目標概念的梯度，生成粗略的定位圖，突顯影像中對預測該概念至關重要的區域。",
+      rag_desc: "我們的系統不僅僅是預測，它還會引用參考。檢索增強生成 (RAG) 根據 CNN 檢測到的特定解剖學發現，從醫學知識庫中提取相關的臨床背景，確保報告有臨床文獻支持。",
     },
     id: {
       diagnosis: "Diagnosis",
@@ -158,6 +188,21 @@ function App() {
       tech_stack: "Tumpukan Teknologi",
       clear_history: "Bersihkan Riwayat",
       no_history: "Tidak Ada Riwayat Tercatat",
+      metrics_desc: "Model Internal vs Benchmark Literatur",
+      overall_leader_desc: "Konfigurasi **CNN+CLAHE** secara konsisten mengungguli arsitektur lain, menunjukkan dampak besar dari peningkatan kontras lokal pada ekstraksi fitur mammografi.",
+      generalization_title: "Generalisasi",
+      generalization_desc: "**ResNet50** menunjukkan varian yang lebih tinggi tetapi generalisasi yang unggul pada dataset lintas-institusi, kemungkinan karena arsitektur residualnya yang lebih dalam.",
+      feature_focus_title: "Fokus Fitur",
+      feature_focus_desc: "**Keluarga VGG** unggul dalam mendeteksi mikro-kalsifikasi tetapi sering mengalami masalah vanishing gradients dibandingkan dengan CNN+CLAHE.",
+      tech_doc_subtitle: "Memahami teknologi inti yang mendukung MedVision AI.",
+      image_preview: "Pratinjau Gambar",
+      timestamp: "Stempel Waktu",
+      model_used: "Model Digunakan",
+      diagnosis: "Diagnosis",
+      log_subtitle: "Riwayat sesi diagnosis neural yang dilakukan.",
+      clahe_desc: "Contrast Limited Adaptive Histogram Equalization (CLAHE) digunakan untuk meningkatkan visibilitas mikro-kalsifikasi dan distorsi struktural pada mammografi.",
+      gradcam_desc: "Gradient-weighted Class Activation Mapping (Grad-CAM) menggunakan gradien dari target yang mengalir ke lapisan konvensional terakhir untuk menghasilkan peta lokalisasi kasar.",
+      rag_desc: "Sistem kami tidak hanya memprediksi; ia mereferensikan. Retrieval-Augmented Generation (RAG) menarik konteks klinis yang relevan dari basis pengetahuan medis.",
     },
     ko: {
       diagnosis: "진단",
@@ -200,6 +245,21 @@ function App() {
       tech_stack: "기술 스택",
       clear_history: "기록 삭제",
       no_history: "기록된 기록 없음",
+      metrics_desc: "사내 모델 vs 문헌 벤치마크",
+      overall_leader_desc: "**CNN+CLAHE** 구성은 다른 아키텍처보다 지속적으로 우수한 성능을 보여주며, 유방 촬영술 특징 추출에서 국부 대비 향상의 큰 영향을 보여줍니다.",
+      generalization_title: "일반화",
+      generalization_desc: "**ResNet50**은 더 높은 분산을 보이지만 깊은 잔차 아키텍처 덕분에 기관 간 데이터셋에서 뛰어난 일반화 성능을 보여줍니다.",
+      feature_focus_title: "특징 초점",
+      feature_focus_desc: "**VGG 제품군**은 미세 석회화 감지에는 뛰어나지만 CNN+CLAHE에 비해 사라지는 기울기 문제로 인해 어려움을 겪는 경우가 많습니다.",
+      tech_doc_subtitle: "MedVision AI를 지원하는 핵심 기술 이해.",
+      image_preview: "이미지 미리보기",
+      timestamp: "타임스탬프",
+      model_used: "사용된 모델",
+      diagnosis: "진단",
+      log_subtitle: "수행된 신경 진단의 세션 기록.",
+      clahe_desc: "CLAHE는 유방 촬영 이미지의 미세 석회화 및 구조적 왜곡의 가시성을 높이는 데 사용됩니다.",
+      gradcam_desc: "Grad-CAM은 활성화 맵을 생성하여 이미지에서 진단에 중요한 영역을 강조합니다.",
+      rag_desc: "RAG는 CNN이 감지한 소견을 바탕으로 의학 지식 베이스에서 관련 임상 문맥을 가져옵니다.",
     },
     ja: {
       diagnosis: "診断",
@@ -241,6 +301,7 @@ function App() {
       tech_stack: "技術スタック",
       clear_history: "履歴をクリア",
       no_history: "履歴がありません",
+      rag_desc: "RAG は、CNN が検出した所見に基づき、医学知識ベースから関連する臨床文脈を抽出します。",
     }
   };
 
@@ -790,7 +851,7 @@ function App() {
                     <Activity className="w-24 h-24 text-brand-primary" />
                   </div>
                   <h3 className="text-2xl font-bold text-white mb-2">{t.metrics_title}</h3>
-                  <p className="text-xs text-slate-500 mb-8 uppercase tracking-widest font-bold">In-House Models vs Literature Benchmarks</p>
+                  <p className="text-xs text-slate-500 mb-8 uppercase tracking-widest font-bold">{t.metrics_desc}</p>
                   <ComparisonGraph />
                 </div>
                 
@@ -861,25 +922,25 @@ function App() {
                       <span className="text-sm font-bold uppercase tracking-widest">Overall Leader</span>
                     </div>
                     <p className="text-slate-400 text-sm leading-relaxed">
-                      {renderFormattedText("The **CNN+CLAHE** configuration consistently outperforms others, demonstrating the massive impact of local contrast enhancement on mammography feature extraction.")}
+                      {renderFormattedText(t.overall_leader_desc)}
                     </p>
                   </div>
                   <div className="space-y-3">
                     <div className="flex items-center gap-2 text-blue-400">
                       <Brain className="w-4 h-4" />
-                      <span className="text-sm font-bold uppercase tracking-widest">Generalization</span>
+                      <span className="text-sm font-bold uppercase tracking-widest">{t.generalization_title}</span>
                     </div>
                     <p className="text-slate-400 text-sm leading-relaxed">
-                      {renderFormattedText("**ResNet50** shows higher variance but superior generalization on cross-institutional datasets, likely due to its deeper residual architecture.")}
+                      {renderFormattedText(t.generalization_desc)}
                     </p>
                   </div>
                   <div className="space-y-3">
                     <div className="flex items-center gap-2 text-brand-primary">
                       <Zap className="w-4 h-4" />
-                      <span className="text-sm font-bold uppercase tracking-widest">Feature Focus</span>
+                      <span className="text-sm font-bold uppercase tracking-widest">{t.feature_focus_title}</span>
                     </div>
                     <p className="text-slate-400 text-sm leading-relaxed">
-                      {renderFormattedText("**VGG Families** excel at detecting micro-calcifications but often suffer from vanishing gradients in purely local feature identification compared to CNN+CLAHE.")}
+                      {renderFormattedText(t.feature_focus_desc)}
                     </p>
                   </div>
                 </div>
@@ -897,7 +958,7 @@ function App() {
             >
               <div className="text-center space-y-4">
                 <h2 className="text-4xl font-black text-white">{t.technical_docs}</h2>
-                <p className="text-slate-400">Understanding the core technologies powering MedVision AI.</p>
+                <p className="text-slate-400">{t.tech_doc_subtitle}</p>
               </div>
 
               <div className="space-y-24">
@@ -908,8 +969,7 @@ function App() {
                     </div>
                     <h3 className="text-2xl font-bold text-white">CLAHE Optimization</h3>
                     <p className="text-slate-400 leading-relaxed">
-                      Contrast Limited Adaptive Histogram Equalization (CLAHE) is used to enhance the visibility of micro-calcifications and architectural distortions in mammograms.
-                      Classic histogram equalization often over-amplifies noise in homogeneous regions; CLAHE limits this contrast enhancement through local clipping.
+                      {t.clahe_desc}
                     </p>
                   </div>
                   <div className="p-4 glass rounded-[32px] border border-white/5 bg-gradient-to-br from-brand-primary/5 to-transparent">
@@ -935,7 +995,7 @@ function App() {
                     </div>
                     <h3 className="text-2xl font-bold text-white">Explainable AI (Grad-CAM)</h3>
                     <p className="text-slate-400 leading-relaxed">
-                      Gradient-weighted Class Activation Mapping (Grad-CAM) uses the gradients of any target concept flowing into the final convolutional layer to produce a coarse localization map highlighting the important regions in the image for predicting the concept.
+                      {t.gradcam_desc}
                     </p>
                   </div>
                 </section>
@@ -947,7 +1007,7 @@ function App() {
                     </div>
                     <h3 className="text-2xl font-bold text-white">RAG-Enhanced Reporting</h3>
                     <p className="text-slate-400 leading-relaxed">
-                      Our system doesn't just predict; it references. Retrieval-Augmented Generation (RAG) pulls relevant clinical context from a medical knowledge base based on the specific anatomical findings detected by the CNN. This ensures our reports are grounded in clinical literature.
+                      {t.rag_desc}
                     </p>
                   </div>
                   <div className="p-4 glass rounded-[32px] border border-white/5 bg-gradient-to-br from-emerald-500/5 to-transparent">
