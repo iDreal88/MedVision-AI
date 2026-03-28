@@ -216,23 +216,22 @@ async def predict(
             overlay = overlay_gradcam(img_ready, heatmap)
             result["gradcam_image"] = base64.b64encode(cv2.imencode('.jpg', overlay)[1]).decode('utf-8')
         
-        # RAG Report Generation
+        # RAG Report Generation (with localsave fallback for Mac crashes)
         kb_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "knowledge_base.md")
+        result["report"] = "Clinical synthesis currently available in production environment (Hugging Face)."
+        
         if os.path.exists(kb_path):
-            from report_generator import ReportGenerator
-            report_gen = ReportGenerator(kb_path)
-            
-            # Dynamic XAI description based on model architecture and result
-            if label == "Cancer":
-                if "ResNet" in model_name or "VGG" in model_name:
-                    finding = f"The {model_name} architecture identified high-entropy activation patterns within the deeper convolutional blocks. These clusters correlate with irregular structural density and architectural distortion characteristic of malignant lesions."
-                else:
-                    finding = "High-intensity activation centroids detected. The model weights these dense regions as primary indicators of malignant tissue morphology."
-            else:
-                finding = f"The {model_name} model shows diffuse, low-level activations across the parenchymal background. No focal areas of suspicious density were identified in the targeting layers."
+            try:
+                from report_generator import ReportGenerator
+                report_gen = ReportGenerator(kb_path)
                 
-            report_content = report_gen.generate_report(label, confidence * 100, finding)
-            result["report"] = report_content
+                # Dynamic XAI description
+                finding = f"Neural activations aligned with {label} morphology using {model_name}."
+                report_content = report_gen.generate_report(label, confidence * 100, finding)
+                result["report"] = report_content
+            except Exception as rag_err:
+                print(f"RAG Load Failure (Safe Fallback): {rag_err}")
+                result["report"] = f"Diagnosis complete. (Detailed RAG report skipped locally to prevent macOS library conflict)."
         
         return result
     except Exception as e:
