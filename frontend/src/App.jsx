@@ -220,6 +220,14 @@ function App() {
       clahe_desc: "对比度受限自适应直方图均衡法 (CLAHE) 用于增强乳腺摄影中微钙化点和结构失真的可见性。传统的直方图均衡法往往会过度放大均匀区域的噪声；CLAHE 通过局部裁剪限制了这种对比度增强。",
       gradcam_desc: "梯度加权类激活映射 (Grad-CAM) 利用流向最终卷积层的任何目标概念的梯度，生成粗略的定位图，突显影像中对预测该概念至关重要的区域。",
       rag_desc: "我们的系统不仅仅是预测，它还会引用参考。检索增强生成 (RAG) 根据 CNN 检测到的特定解剖学发现，从医学知识库中提取相关的临床背景，确保报告有临床文献支持。",
+      report_patient_info: "患者/病例信息",
+      report_xai_findings: "可解释 AI (XAI) 发现",
+      report_clinical_context: "临床背景 (通过 RAG 检索)",
+      report_summary_discussion: "总结与讨论",
+      report_analytical_method: "分析方法",
+      report_primary_prediction: "主要预测",
+      report_statistical_confidence: "统计置信度",
+      report_xai_visualization: "XAI 可视化",
     },
     es: {
       diagnosis: "Diagnóstico",
@@ -275,6 +283,14 @@ function App() {
       clahe_desc: "CLAHE mejora la visibilidad de microcalcificaciones.",
       gradcam_desc: "Grad-CAM resalta regiones críticas para la predicción.",
       rag_desc: "RAG extrae contexto clínico relevante.",
+      report_patient_info: "Información del Paciente",
+      report_xai_findings: "Hallazgos de IA Explicable (XAI)",
+      report_clinical_context: "Contexto Clínico (RAG)",
+      report_summary_discussion: "Resumen y Discusión",
+      report_analytical_method: "Método Analítico",
+      report_primary_prediction: "Predicción Primaria",
+      report_statistical_confidence: "Confianza Estadística",
+      report_xai_visualization: "Visualización XAI",
     },
     fr: {
       diagnosis: "Diagnostic",
@@ -330,6 +346,14 @@ function App() {
       clahe_desc: "CLAHE améliore la visibilité.",
       gradcam_desc: "Grad-CAM identifie les zones critiques.",
       rag_desc: "RAG extrait du contexte clinique.",
+      report_patient_info: "Informations Patient",
+      report_xai_findings: "Résultats de l'IA Explicable (XAI)",
+      report_clinical_context: "Contexte Clinique (RAG)",
+      report_summary_discussion: "Résumé et Discussion",
+      report_analytical_method: "Méthode Analytique",
+      report_primary_prediction: "Prédiction Primaire",
+      report_statistical_confidence: "Confiance Statistique",
+      report_xai_visualization: "Visualisation XAI",
     },
     de: {
       diagnosis: "Diagnose",
@@ -385,6 +409,14 @@ function App() {
       clahe_desc: "CLAHE verbessert die Sichtbarkeit.",
       gradcam_desc: "Grad-CAM markiert kritische Bereiche.",
       rag_desc: "RAG zieht klinischen Kontext.",
+      report_patient_info: "Patienteninformationen",
+      report_xai_findings: "Erklärbare KI (XAI) Befunde",
+      report_clinical_context: "Klinischer Kontext (RAG)",
+      report_summary_discussion: "Zusammenfassung",
+      report_analytical_method: "Analysemethode",
+      report_primary_prediction: "Primärvorhersage",
+      report_statistical_confidence: "Statistische Konfidenz",
+      report_xai_visualization: "XAI-Visualisierung",
     },
     id: {
       diagnosis: "Diagnosis",
@@ -443,6 +475,14 @@ function App() {
       clahe_desc: "Contrast Limited Adaptive Histogram Equalization (CLAHE) digunakan untuk meningkatkan visibilitas mikro-kalsifikasi dan distorsi struktural pada mammografi.",
       gradcam_desc: "Gradient-weighted Class Activation Mapping (Grad-CAM) menggunakan gradien dari target yang mengalir ke lapisan konvensional terakhir untuk menghasilkan peta lokalisasi kasar.",
       rag_desc: "Sistem kami tidak hanya memprediksi; ia mereferensikan. Retrieval-Augmented Generation (RAG) menarik konteks klinis yang relevan dari basis pengetahuan medis.",
+      report_patient_info: "Informasi Pasien",
+      report_xai_findings: "Temuan AI Terperinci (XAI)",
+      report_clinical_context: "Konteks Klinis (RAG)",
+      report_summary_discussion: "Ringkasan dan Diskusi",
+      report_analytical_method: "Metode Analitis",
+      report_primary_prediction: "Prediksi Utama",
+      report_statistical_confidence: "Kepercayaan Statistik",
+      report_xai_visualization: "Visualisasi XAI",
     },
     ko: {
       diagnosis: "진단",
@@ -501,6 +541,14 @@ function App() {
       clahe_desc: "CLAHE는 유방 촬영 이미지의 미세 석회화 및 구조적 왜곡의 가시성을 높이는 데 사용됩니다.",
       gradcam_desc: "Grad-CAM은 활성화 맵을 생성하여 이미지에서 진단에 중요한 영역을 강조합니다.",
       rag_desc: "RAG는 CNN이 감지한 소견을 바탕으로 의학 지식 베이스에서 관련 임상 문맥을 가져옵니다.",
+      report_patient_info: "환자/사례 정보",
+      report_xai_findings: "설명 가능한 AI (XAI) 소견",
+      report_clinical_context: "임상 문맥 (RAG를 통한 검색)",
+      report_summary_discussion: "요약 및 토론",
+      report_analytical_method: "분석 방법",
+      report_primary_prediction: "주요 예측",
+      report_statistical_confidence: "통계적 신뢰도",
+      report_xai_visualization: "XAI 시각화",
     },
     ja: {
       diagnosis: "診断",
@@ -558,6 +606,14 @@ function App() {
       model_used: "使用モデル",
       diagnosis: "診断",
       log_subtitle: "実行された神経診断のセッション履歴。",
+      report_patient_info: "患者/症例情報",
+      report_xai_findings: "説明可能なAI (XAI) の所見",
+      report_clinical_context: "臨床的背景 (RAGによる検索)",
+      report_summary_discussion: "要約と考察",
+      report_analytical_method: "分析方法",
+      report_primary_prediction: "主な予測",
+      report_statistical_confidence: "統計的信頼度",
+      report_xai_visualization: "XAI視覚化",
     }
   };
 
@@ -1047,12 +1103,33 @@ function App() {
 
                             if (!result?.report) return <p className="text-slate-500 text-xs italic">Historical report data not found for this specific record.</p>;
 
+                            const sectionTranslationMap = {
+                               "Patient/Case Information": t.report_patient_info,
+                               "Explainable AI (XAI) Findings": t.report_xai_findings,
+                               "Clinical Context (Retrieved via RAG)": t.report_clinical_context,
+                               "Summary and Discussion": t.report_summary_discussion
+                            };
+
+                            const labelTranslationMap = {
+                               "Analytical Method": t.report_analytical_method,
+                               "Primary Prediction": t.report_primary_prediction,
+                               "Statistical Confidence": t.report_statistical_confidence,
+                               "XAI Visualization": t.report_xai_visualization
+                            };
+
                             result.report.split('\n').forEach(line => {
                               if (line.startsWith('## ')) {
                                 if (currentSection) sections.push(currentSection);
-                                currentSection = { title: line.replace('## ', ''), content: [] };
+                                const rawTitle = line.replace('## ', '').trim();
+                                currentSection = { title: sectionTranslationMap[rawTitle] || rawTitle, content: [] };
                               } else if (currentSection && line.trim() !== '' && !line.startsWith('# ')) {
-                                currentSection.content.push(line);
+                                let procLine = line;
+                                Object.keys(labelTranslationMap).forEach(key => {
+                                   if (procLine.includes(key)) {
+                                      procLine = procLine.replace(key, labelTranslationMap[key]);
+                                   }
+                                });
+                                currentSection.content.push(procLine);
                               }
                             });
                             if (currentSection) sections.push(currentSection);
