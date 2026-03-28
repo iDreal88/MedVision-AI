@@ -13,6 +13,8 @@ import {
   Activity,
   CheckCircle2,
   ScanHeart,
+  Globe,
+  ChevronDown,
   X
 } from 'lucide-react';
 
@@ -29,6 +31,15 @@ function App() {
   const [currentView, setCurrentView] = useState('home'); // 'home', 'dashboard', 'documentation', 'log'
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [language, setLanguage] = useState('en'); // 'en', 'zh', 'id', 'ko', 'ja'
+  const [langMenuOpen, setLangMenuOpen] = useState(false);
+
+  const nativeDisplayMap = {
+    en: "English",
+    zh: "繁體中文",
+    id: "Indonesia",
+    ko: "한국어",
+    ja: "日本語"
+  };
   const [analysisHistory, setAnalysisHistory] = useState(() => {
     const saved = localStorage.getItem('analysisHistory');
     return saved ? JSON.parse(saved) : [];
@@ -515,16 +526,39 @@ function App() {
           <button onClick={() => setCurrentView('log')} className={`hover:text-white transition-colors ${currentView === 'log' ? 'text-brand-primary' : ''}`}>{t.log}</button>
         </div>
         <div className="flex items-center gap-4">
-          <div className="hidden sm:flex items-center gap-2 bg-white/5 border border-white/10 rounded-xl p-1">
-             {['en', 'zh', 'id', 'ko', 'ja'].map(lang => (
-               <button 
-                  key={lang} 
-                  onClick={() => setLanguage(lang)}
-                  className={`w-7 h-7 flex items-center justify-center rounded-lg text-[10px] font-black uppercase transition-all ${language === lang ? 'bg-brand-primary text-white shadow-lg' : 'text-slate-500 hover:text-white'}`}
-               >
-                 {lang}
-               </button>
-             ))}
+          <div className="relative">
+             <button 
+                onClick={() => setLangMenuOpen(!langMenuOpen)}
+                className="flex items-center gap-2 px-3 py-2 rounded-xl bg-white/5 border border-white/10 hover:border-white/20 transition-all group"
+             >
+                <Globe className="w-4 h-4 text-slate-400 group-hover:text-brand-primary" />
+                <span className="text-[10px] font-bold uppercase tracking-widest text-white hidden md:inline">
+                   {nativeDisplayMap[language]}
+                </span>
+                <ChevronDown className={`w-3 h-3 text-slate-500 transition-transform duration-300 ${langMenuOpen ? 'rotate-180' : ''}`} />
+             </button>
+
+             <AnimatePresence>
+                {langMenuOpen && (
+                   <motion.div
+                      initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                      className="absolute right-0 mt-2 w-40 glass rounded-2xl border border-white/10 shadow-2xl py-2 z-[60]"
+                   >
+                      {['en', 'zh', 'id', 'ko', 'ja'].map(lang => (
+                         <button
+                            key={lang}
+                            onClick={() => { setLanguage(lang); setLangMenuOpen(false); }}
+                            className={`w-full text-left px-4 py-2 text-[11px] font-bold transition-colors flex justify-between items-center ${language === lang ? 'text-brand-primary bg-white/5' : 'text-slate-400 hover:text-white hover:bg-white/5'}`}
+                         >
+                            {nativeDisplayMap[lang]}
+                            {language === lang && <CheckCircle2 className="w-3 h-3" />}
+                         </button>
+                      ))}
+                   </motion.div>
+                )}
+             </AnimatePresence>
           </div>
           <div className="hidden md:flex px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] font-bold uppercase tracking-wider items-center gap-1.5">
             <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
