@@ -1096,14 +1096,14 @@ function App() {
             >
               <div className="flex items-end justify-between">
                 <div className="space-y-1">
-                  <h2 className="text-3xl font-black text-white">Analysis Log</h2>
-                  <p className="text-slate-500 text-sm">Session history of neural diagnoses performed.</p>
+                  <h2 className="text-3xl font-black text-white">{t.log}</h2>
+                  <p className="text-slate-500 text-sm">{t.log_subtitle}</p>
                 </div>
                 <button
                   onClick={() => setAnalysisHistory([])}
                   className="px-4 py-2 rounded-xl bg-white/5 hover:bg-red-500/10 border border-white/10 hover:border-red-500/30 text-red-500 text-[10px] font-bold uppercase tracking-widest transition-all"
                 >
-                  Clear History
+                  {t.clear_history}
                 </button>
               </div>
 
@@ -1119,11 +1119,11 @@ function App() {
                     <table className="w-full text-left border-collapse min-w-[800px]">
                       <thead>
                         <tr className="border-b border-white/5 bg-white/[0.02]">
-                          <th className="px-8 py-6 text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 whitespace-nowrap">Image Preview</th>
-                          <th className="px-8 py-6 text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 whitespace-nowrap">Timestamp</th>
-                          <th className="px-8 py-6 text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 whitespace-nowrap">Model Used</th>
-                          <th className="px-8 py-6 text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 whitespace-nowrap">Diagnosis</th>
-                          <th className="px-8 py-6 text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 whitespace-nowrap text-right">Confidence</th>
+                          <th className="px-8 py-6 text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 whitespace-nowrap">{t.image_preview}</th>
+                          <th className="px-8 py-6 text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 whitespace-nowrap">{t.timestamp}</th>
+                          <th className="px-8 py-6 text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 whitespace-nowrap">{t.model_used}</th>
+                          <th className="px-8 py-6 text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 whitespace-nowrap">{t.diagnosis}</th>
+                          <th className="px-8 py-6 text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 whitespace-nowrap text-right">{t.confidence}</th>
                         </tr>
                       </thead>
                       <tbody>
