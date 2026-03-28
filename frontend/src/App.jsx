@@ -905,7 +905,7 @@ function App() {
           </div>
           <div>
             <h1 className="text-xl font-black tracking-tighter text-white">MedVision AI</h1>
-            <p className="text-[10px] font-bold uppercase tracking-widest text-brand-primary">{t.predict_cancer}</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-brand-primary">{t.predict_cancer} v2.0</p>
           </div>
         </div>
         <div className="hidden lg:flex items-center gap-8 text-sm font-medium text-slate-400">
