@@ -27,10 +27,200 @@ function App() {
   const [error, setError] = useState(null);
   const [currentView, setCurrentView] = useState('home'); // 'home', 'dashboard', 'documentation', 'log'
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [language, setLanguage] = useState('en'); // 'en', 'zh', 'id', 'ko', 'ja'
   const [analysisHistory, setAnalysisHistory] = useState(() => {
     const saved = localStorage.getItem('analysisHistory');
     return saved ? JSON.parse(saved) : [];
   });
+
+  const translations = {
+    en: {
+      diagnosis: "Diagnosis",
+      dashboard: "Dashboard",
+      documentation: "Documentation",
+      log: "Analysis Log",
+      model_config: "Model Configuration",
+      mammogram_upload: "Mammogram Upload",
+      execute: "Execute Neural Diagnosis",
+      processing: "Processing Neural Layers...",
+      summary: "Diagnosis Intelligence",
+      confidence: "Confidence Level",
+      verified: "Verified Result",
+      download: "Download PDF Report",
+      waiting: "Waiting for Data Pipeline",
+      waiting_desc: "Initialize the diagnosis on the left to witness advanced neural analysis results here.",
+      performance_dashboard: "Model Performance Dashboard",
+      performance_desc: "Comparative analysis of our neural architectures based on the thesis dataset benchmarks.",
+      metrics_title: "Comparative Accuracy Benchmarking",
+      metrics_interpretation: "Metrics Interpretation",
+      accuracy: "Accuracy",
+      precision: "Precision",
+      recall: "Recall",
+      rag_engine_title: "LLM-Powered RAG Engine",
+      llm_info: "Powered by Gemini-1.5-Flash for high-fidelity clinical synthesis.",
+    },
+    zh: {
+      diagnosis: "診斷",
+      dashboard: "儀表板",
+      documentation: "技術文檔",
+      log: "分析日誌",
+      model_config: "模型配置",
+      mammogram_upload: "乳房攝影上傳",
+      execute: "執行神經診斷",
+      processing: "神經層處理中...",
+      summary: "診斷智慧",
+      confidence: "置信度",
+      verified: "驗證結果",
+      download: "下載 PDF 報告",
+      waiting: "等待數據傳輸",
+      waiting_desc: "在左側初始化診斷，即可在此查看高級神經分析結果。",
+      performance_dashboard: "模型性能儀表板",
+      performance_desc: "基於論文數據集基準的各項神經架構對比分析。",
+      metrics_title: "準確度基準對比圖形化",
+      metrics_interpretation: "指標解釋",
+      accuracy: "準確度",
+      precision: "精確度",
+      recall: "召回率",
+      rag_engine_title: "LLM 驅動 RAG 引擎",
+      llm_info: "採用 Gemini-1.5-Flash 以實現高品質臨床報告生成。",
+    },
+    id: {
+      diagnosis: "Diagnosis",
+      dashboard: "Dasbor",
+      documentation: "Dokumentasi",
+      log: "Log Analisis",
+      model_config: "Konfigurasi Model",
+      mammogram_upload: "Unggah Mammogram",
+      execute: "Eksekusi Diagnosis Neural",
+      processing: "Memproses Lapisan Neural...",
+      summary: "Kecerdasan Diagnosis",
+      confidence: "Tingkat Kepercayaan",
+      verified: "Hasil Terverifikasi",
+      download: "Unduh Laporan PDF",
+      waiting: "Menunggu Jalur Data",
+      waiting_desc: "Inisialisasi diagnosis di sebelah kiri untuk melihat hasil analisis neural tingkat lanjut di sini.",
+      performance_dashboard: "Dasbor Performa Model",
+      performance_desc: "Analisis komparatif arsitektur neural kami berdasarkan benchmark dataset tesis.",
+      metrics_title: "Pembandingan Akurasi",
+      metrics_interpretation: "Interpretasi Metrik",
+      accuracy: "Akurasi",
+      precision: "Presisi",
+      recall: "Recall",
+      rag_engine_title: "Mesin RAG Berbasis LLM",
+      llm_info: "Didukung oleh Gemini-1.5-Flash untuk sintesis klinis tingkat tinggi.",
+    },
+    ko: {
+      diagnosis: "진단",
+      dashboard: "대시보드",
+      documentation: "문서화",
+      log: "분석 로그",
+      model_config: "모델 설정",
+      mammogram_upload: "유방 촬영술 업로드",
+      execute: "신경 진단 실행",
+      processing: "신경층 처리 중...",
+      summary: "진단 인텔리전스",
+      confidence: "신뢰 수준",
+      verified: "검증된 결과",
+      download: "PDF 보고서 다운로드",
+      waiting: "데이터 파이프라인 대기 중",
+      waiting_desc: "왼쪽에서 진단을 시작하여 고급 신경 분석 결과를 확인하십시오.",
+      performance_dashboard: "모델 성능 대시보드",
+      performance_desc: "논문 데이터셋 벤치마크에 기반한 신경 아키텍처 비교 분석.",
+      metrics_title: "정확도 벤치마킹",
+      metrics_interpretation: "지표 해석",
+      accuracy: "정확도",
+      precision: "정밀도",
+      recall: "재현율",
+      rag_engine_title: "LLM 기반 RAG 엔진",
+      llm_info: "Gemini-1.5-Flash를 통해 고충실도 임상 종합 기능을 제공합니다.",
+    },
+    ja: {
+      diagnosis: "診断",
+      dashboard: "ダッシュボード",
+      documentation: "ドキュメント",
+      log: "分析ログ",
+      model_config: "モデル設定",
+      mammogram_upload: "マンモグラムのアップロード",
+      execute: "神経診断を実行",
+      processing: "神経層を処理中...",
+      summary: "診断インテリジェンス",
+      confidence: "信頼レベル",
+      verified: "検証済み結果",
+      download: "PDFレポートをダウンロード",
+      waiting: "データパイプライン待機中",
+      waiting_desc: "左側で診断を初期化し、最新の神経分析結果をここで確認してください。",
+      performance_dashboard: "モデルパフォーマンスダッシュボード",
+      performance_desc: "論文データセットのベンチマークに基づく神経アーキテクチャの比較分析。",
+      metrics_title: "予測精度比較グラフ",
+      metrics_interpretation: "指標の解釈",
+      accuracy: "正確度",
+      precision: "適合率",
+      recall: "再現率",
+      rag_engine_title: "LLM 搭載 RAG エンジン",
+      llm_info: "Gemini-1.5-Flash を採用し、高度な臨床レポート生成を実現。",
+    }
+  };
+
+  const t = translations[language];
+
+  const ComparisonGraph = () => {
+    const data = [
+      { name: 'KNN', accuracy: 95.3, benchmark: 92.5, color: '#94a3b8' },
+      { name: 'ResNet50', accuracy: 95.0, benchmark: 95.0, color: '#3b82f6' },
+      { name: 'VGG19', accuracy: 96.7, benchmark: 93.0, color: '#f97316' },
+      { name: 'VGG16', accuracy: 97.5, benchmark: 92.0, color: '#a855f7' },
+      { name: 'CNN+CLAHE', accuracy: 97.8, benchmark: 94.0, color: '#10b981' },
+    ];
+
+    return (
+      <div className="w-full h-80 flex flex-col pt-10 px-4">
+        <div className="flex-1 flex items-end gap-4 md:gap-8 justify-between relative border-b border-white/10 pb-2">
+          {/* Y-axis markers */}
+          <div className="absolute left-[-30px] h-full flex flex-col justify-between text-[10px] text-slate-500 font-bold">
+            <span>100%</span>
+            <span>95%</span>
+            <span>90%</span>
+          </div>
+          
+          {data.map((item) => (
+            <div key={item.name} className="flex-1 flex flex-col items-center gap-2 group">
+              <div className="w-full flex justify-center gap-1 md:gap-2 h-64 items-end">
+                {/* Benchmark Bar */}
+                <motion.div 
+                  initial={{ height: 0 }}
+                  animate={{ height: `${(item.benchmark - 90) * 10}%` }}
+                  className="w-1.5 md:w-3 bg-white/5 rounded-t-sm relative group-hover:bg-white/10 transition-colors"
+                >
+                  <div className="absolute top-[-15px] left-1/2 -translate-x-1/2 text-[8px] opacity-0 group-hover:opacity-100 transition-opacity text-slate-400 whitespace-nowrap">Lit: {item.benchmark}%</div>
+                </motion.div>
+                {/* Our Accuracy Bar */}
+                <motion.div 
+                  initial={{ height: 0 }}
+                  animate={{ height: `${(item.accuracy - 90) * 10}%` }}
+                  style={{ backgroundColor: item.color }}
+                  className="w-4 md:w-8 rounded-t-lg shadow-lg relative group-hover:brightness-110 transition-all cursor-help"
+                >
+                   <div className="absolute top-[-25px] left-1/2 -translate-x-1/2 text-[10px] font-black text-white whitespace-nowrap">{item.accuracy}%</div>
+                   <div className="absolute inset-0 bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity" />
+                </motion.div>
+              </div>
+              <span className="text-[10px] font-bold text-slate-500 group-hover:text-white transition-colors rotate-45 md:rotate-0 mt-2">{item.name}</span>
+            </div>
+          ))}
+        </div>
+        <div className="mt-8 flex justify-center gap-6 text-[10px] font-bold uppercase tracking-widest">
+           <div className="flex items-center gap-2">
+              <div className="w-3 h-3 bg-white/10 rounded-sm" />
+              <span className="text-slate-500">Literature Benchmark</span>
+           </div>
+           <div className="flex items-center gap-2">
+              <div className="w-3 h-3 bg-brand-primary rounded-sm" />
+              <span className="text-slate-200">Our MedVision-AI</span>
+           </div>
+        </div>
+      </div>
+    );
+  };
 
   const renderFormattedText = (text) => {
     return text.split(/(\*\*.*?\*\*)/g).map((part, i) => {
@@ -158,13 +348,24 @@ function App() {
             <p className="text-[10px] text-slate-500 uppercase tracking-[0.2em] font-medium leading-none">Predict Cancer</p>
           </div>
         </div>
-        <div className="hidden md:flex items-center gap-8 text-sm font-medium text-slate-400">
-          <button onClick={() => setCurrentView('home')} className={`hover:text-white transition-colors ${currentView === 'home' ? 'text-brand-primary' : ''}`}>Diagnosis</button>
-          <button onClick={() => setCurrentView('dashboard')} className={`hover:text-white transition-colors ${currentView === 'dashboard' ? 'text-brand-primary' : ''}`}>Dashboard</button>
-          <button onClick={() => setCurrentView('documentation')} className={`hover:text-white transition-colors ${currentView === 'documentation' ? 'text-brand-primary' : ''}`}>Documentation</button>
-          <button onClick={() => setCurrentView('log')} className={`hover:text-white transition-colors ${currentView === 'log' ? 'text-brand-primary' : ''}`}>Analysis Log</button>
+        <div className="hidden lg:flex items-center gap-8 text-sm font-medium text-slate-400">
+          <button onClick={() => setCurrentView('home')} className={`hover:text-white transition-colors ${currentView === 'home' ? 'text-brand-primary' : ''}`}>{t.diagnosis}</button>
+          <button onClick={() => setCurrentView('dashboard')} className={`hover:text-white transition-colors ${currentView === 'dashboard' ? 'text-brand-primary' : ''}`}>{t.dashboard}</button>
+          <button onClick={() => setCurrentView('documentation')} className={`hover:text-white transition-colors ${currentView === 'documentation' ? 'text-brand-primary' : ''}`}>{t.documentation}</button>
+          <button onClick={() => setCurrentView('log')} className={`hover:text-white transition-colors ${currentView === 'log' ? 'text-brand-primary' : ''}`}>{t.log}</button>
         </div>
         <div className="flex items-center gap-4">
+          <div className="hidden sm:flex items-center gap-2 bg-white/5 border border-white/10 rounded-xl p-1">
+             {['en', 'zh', 'id', 'ko', 'ja'].map(lang => (
+               <button 
+                  key={lang} 
+                  onClick={() => setLanguage(lang)}
+                  className={`w-7 h-7 flex items-center justify-center rounded-lg text-[10px] font-black uppercase transition-all ${language === lang ? 'bg-brand-primary text-white shadow-lg' : 'text-slate-500 hover:text-white'}`}
+               >
+                 {lang}
+               </button>
+             ))}
+          </div>
           <div className="hidden md:flex px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] font-bold uppercase tracking-wider items-center gap-1.5">
             <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
             Online
@@ -211,7 +412,7 @@ function App() {
                 <section className="space-y-4">
                   <div className="flex items-center gap-2 mb-2">
                     <Brain className="w-5 h-5 text-brand-primary" />
-                    <h2 className="text-lg font-semibold text-white">Model Configuration</h2>
+                    <h2 className="text-lg font-semibold text-white">{t.model_config}</h2>
                   </div>
                   <div className="grid grid-cols-2 gap-3">
                     {['CNN+CLAHE', 'ResNet50', 'VGG16', 'VGG19'].map((m) => (
@@ -243,7 +444,7 @@ function App() {
                 <section className="space-y-4">
                   <div className="flex items-center gap-2 mb-2">
                     <ImageIcon className="w-5 h-5 text-brand-secondary" />
-                    <h2 className="text-lg font-semibold text-white">Mammogram Upload</h2>
+                    <h2 className="text-lg font-semibold text-white">{t.mammogram_upload}</h2>
                   </div>
                   <label
                     className={`flex flex-col items-center justify-center h-48 md:h-64 border-2 border-dashed rounded-[32px] transition-all duration-500 cursor-pointer group ${preview ? 'border-brand-secondary/50 bg-brand-secondary/5' : 'border-white/10 hover:border-white/20 bg-white/[0.02]'
@@ -289,12 +490,12 @@ function App() {
                   {loading ? (
                     <>
                       <div className="w-5 h-5 border-3 border-white/30 border-t-white rounded-full animate-spin" />
-                      <span>Processing Neural Layers...</span>
+                      <span>{t.processing}</span>
                     </>
                   ) : (
                     <>
                       <Zap className="w-5 h-5 fill-current" />
-                      <span>Execute Neural Diagnosis</span>
+                      <span>{t.execute}</span>
                     </>
                   )}
                 </button>
@@ -332,8 +533,8 @@ function App() {
                           <Zap className="w-8 h-8 text-brand-primary/20" />
                         </motion.div>
                       </div>
-                      <h3 className="text-xl font-semibold text-slate-400">Waiting for Data Pipeline</h3>
-                      <p className="text-sm text-slate-600 max-w-xs mt-2">Initialize the diagnosis on the left to witness advanced neural analysis results here.</p>
+                      <h3 className="text-xl font-semibold text-slate-400">{t.waiting}</h3>
+                      <p className="text-sm text-slate-600 max-w-xs mt-2">{t.waiting_desc}</p>
                     </motion.div>
                   ) : (
                     <motion.div
@@ -357,7 +558,7 @@ function App() {
                           </div>
                         </div>
                         <div className="p-8 rounded-[32px] glass hover:border-brand-secondary/30 transition-colors group">
-                          <p className="text-xs font-bold uppercase tracking-widest text-slate-500 mb-2">Confidence Level</p>
+                          <p className="text-xs font-bold uppercase tracking-widest text-slate-500 mb-2">{t.confidence}</p>
                           <div className="flex items-end gap-3">
                             <h3 className="text-4xl font-black text-white">
                               {result.confidence.toFixed(1)}%
@@ -415,7 +616,7 @@ function App() {
                       <div className="space-y-6">
                         <div className="flex items-center justify-between">
                           <div>
-                            <h3 className="text-2xl font-bold text-white mb-1">Diagnosis Intelligence</h3>
+                            <h3 className="text-2xl font-bold text-white mb-1">{t.summary}</h3>
                             <p className="text-xs text-slate-500 underline decoration-brand-primary/30 underline-offset-4">RAG-Enhanced Clinical Analysis</p>
                           </div>
                           <button
@@ -423,7 +624,7 @@ function App() {
                             className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white/5 hover:bg-brand-primary/10 border border-white/10 hover:border-brand-primary/30 transition-all text-xs font-bold group shadow-xl shadow-black/20"
                           >
                             <Download className="w-3.5 h-3.5 group-hover:translate-y-0.5 transition-transform" />
-                            Download PDF Report
+                            {t.download}
                           </button>
                         </div>
 
@@ -508,8 +709,46 @@ function App() {
               className="space-y-12"
             >
               <div className="text-center space-y-4 max-w-2xl mx-auto mb-12">
-                <h2 className="text-4xl font-black text-white">Model Performance Dashboard</h2>
-                <p className="text-slate-400 text-sm">Comparative analysis of our neural architectures based on the thesis dataset benchmarks.</p>
+                <h2 className="text-4xl font-black text-white">{t.performance_dashboard}</h2>
+                <p className="text-slate-400 text-sm">{t.performance_desc}</p>
+              </div>
+
+              <div className="grid lg:grid-cols-12 gap-12">
+                <div className="lg:col-span-8 glass p-12 rounded-[40px] border border-white/5 relative overflow-hidden">
+                  <div className="absolute top-0 right-0 p-8 opacity-5">
+                    <Activity className="w-24 h-24 text-brand-primary" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-white mb-2">{t.metrics_title}</h3>
+                  <p className="text-xs text-slate-500 mb-8 uppercase tracking-widest font-bold">In-House Models vs Literature Benchmarks</p>
+                  <ComparisonGraph />
+                </div>
+                
+                <div className="lg:col-span-4 space-y-6">
+                  <div className="glass p-8 rounded-[32px] border border-emerald-500/20 bg-emerald-500/5 relative overflow-hidden group">
+                     <div className="absolute top-0 right-1/2 translate-x-1/2 w-32 h-32 bg-emerald-500/10 blur-[60px] group-hover:bg-emerald-500/20 transition-all" />
+                     <h4 className="text-sm font-black text-emerald-400 uppercase tracking-widest mb-4 flex items-center gap-2">
+                        <Brain className="w-4 h-4" />
+                        {t.rag_engine_title}
+                     </h4>
+                     <p className="text-xs text-slate-300 leading-relaxed font-medium">
+                        {t.llm_info}
+                     </p>
+                     <div className="mt-8 pt-6 border-t border-white/10 flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-lg bg-emerald-500/20 flex items-center justify-center">
+                           <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                        </div>
+                        <span className="text-[10px] text-emerald-400 font-bold uppercase tracking-tighter italic">Validated Architecture</span>
+                     </div>
+                  </div>
+
+                  <div className="glass p-8 rounded-[32px] border border-brand-primary/20 bg-brand-primary/5">
+                     <h4 className="text-xl font-bold text-white mb-2">97.84%</h4>
+                     <p className="text-[10px] text-slate-500 uppercase tracking-widest font-bold">Peak Pipeline Accuracy</p>
+                     <div className="mt-4 h-1.5 w-full bg-slate-800 rounded-full overflow-hidden">
+                        <motion.div initial={{ width: 0 }} animate={{ width: '97.84%' }} transition={{ duration: 1.5 }} className="h-full bg-brand-primary shadow-[0_0_15px_rgba(37,99,235,0.5)]" />
+                     </div>
+                  </div>
+                </div>
               </div>
 
               <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -526,15 +765,15 @@ function App() {
                     <h3 className="text-xl font-bold text-white mb-4">{m.name}</h3>
                     <div className="space-y-4">
                       <div className="flex justify-between items-center">
-                        <span className="text-xs text-slate-500 uppercase font-bold tracking-widest">Accuracy</span>
+                        <span className="text-xs text-slate-500 uppercase font-bold tracking-widest">{t.accuracy}</span>
                         <span className="text-sm font-black text-white">{m.acc}</span>
                       </div>
                       <div className="flex justify-between items-center">
-                        <span className="text-xs text-slate-500 uppercase font-bold tracking-widest">Precision</span>
+                        <span className="text-xs text-slate-500 uppercase font-bold tracking-widest">{t.precision}</span>
                         <span className="text-sm font-black text-slate-300">{m.prec}</span>
                       </div>
                       <div className="flex justify-between items-center">
-                        <span className="text-xs text-slate-500 uppercase font-bold tracking-widest">Recall</span>
+                        <span className="text-xs text-slate-500 uppercase font-bold tracking-widest">{t.recall}</span>
                         <span className="text-sm font-black text-slate-300">{m.rec}</span>
                       </div>
                     </div>
@@ -543,7 +782,7 @@ function App() {
               </div>
 
               <div className="glass p-12 rounded-[40px] border border-white/5">
-                <h3 className="text-2xl font-bold text-white mb-8">Metrics Interpretation</h3>
+                <h3 className="text-2xl font-bold text-white mb-8">{t.metrics_interpretation}</h3>
                 <div className="grid md:grid-cols-3 gap-12 font-medium">
                   <div className="space-y-3">
                     <div className="flex items-center gap-2 text-emerald-400">
