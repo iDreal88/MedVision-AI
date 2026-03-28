@@ -302,6 +302,20 @@ function App() {
       clear_history: "履歴をクリア",
       no_history: "履歴がありません",
       rag_desc: "RAG は、CNN が検出した所見に基づき、医学知識ベースから関連する臨床文脈を抽出します。",
+      clahe_desc: "CLAHE は、マンモグラム内の微小石灰化や構造的歪みの視認性を高めるために使用されます。",
+      gradcam_desc: "Grad-CAM は、画像内の診断に重要な領域を強調するローカライゼーションマップを生成します。",
+      metrics_desc: "社内モデル vs 文献ベンチマーク",
+      overall_leader_desc: "**CNN+CLAHE** 構成は一貫して他のモデルを上回っており、マンモグラフィ特徴抽出における局所コントラスト強調の大きな影響を証明しています。",
+      generalization_title: "汎用性",
+      generalization_desc: "**ResNet50** はより高い分散を示しますが、深い残差アーキテクチャのおかげで、施設間データセットにおいて優れた汎用性を示します。",
+      feature_focus_title: "特徴フォーカス",
+      feature_focus_desc: "**VGG ファミリー** は微小石灰化の検出に優れていますが、CNN+CLAHE と比較して勾配消失の問題が発生しやすい傾向があります。",
+      tech_doc_subtitle: "MedVision AI を支えるコア技術についての解説。",
+      image_preview: "画像プレビュー",
+      timestamp: "タイムスタンプ",
+      model_used: "使用モデル",
+      diagnosis: "診断",
+      log_subtitle: "実行された神経診断のセッション履歴。",
     }
   };
 
@@ -364,6 +378,7 @@ function App() {
   };
 
   const renderFormattedText = (text) => {
+    if (typeof text !== 'string') return "";
     return text.split(/(\*\*.*?\*\*)/g).map((part, i) => {
       if (part.startsWith('**') && part.endsWith('**')) {
         return <strong key={i} className="font-bold text-white/90">{part.slice(2, -2)}</strong>;
