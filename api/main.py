@@ -7,6 +7,7 @@ import numpy as np
 import base64
 import sys
 import io
+import gc
 import tensorflow as tf
 from tensorflow.keras.models import Model, load_model
 from fpdf import FPDF
@@ -45,17 +46,14 @@ MODEL_MAP = {
     "VGG19": {"path": "vgg19/model_vgg19.keras", "layer": "block5_conv4"}
 }
 
-# Cache for loaded models
+# Global cache for lazy-loaded models
 loaded_models = {}
 
-def get_model(model_name: str):
-    global loaded_models
+def get_model(model_name):
+    """Lazy load model to save RAM on startup (crucial for Hugging Face Spaces)"""
     if model_name not in MODEL_MAP:
         raise HTTPException(status_code=404, detail="Model not found")
     
-    # Aggressive clearing RAM before loading
-    import gc
-
     if model_name not in loaded_models:
         print(f"Aggressively clearing RAM and loading {model_name}...")
         loaded_models.clear()
@@ -154,6 +152,7 @@ def overlay_gradcam(img, heatmap, alpha=0.4):
 # ==============================
 @app.get("/models")
 async def get_models():
+    # Only return keys to avoid triggering lazy loads prematurely
     return list(MODEL_MAP.keys())
 
 @app.post("/predict")
