@@ -101,18 +101,11 @@ function App() {
       image_preview: "Image Preview",
       timestamp: "Timestamp",
       model_used: "Model Used",
+      diagnosis: "Diagnosis",
       log_subtitle: "Session history of neural diagnoses performed.",
       clahe_desc: "Contrast Limited Adaptive Histogram Equalization (CLAHE) is used to enhance the visibility of micro-calcifications and architectural distortions in mammograms. Classic histogram equalization often over-amplifies noise in homogeneous regions; CLAHE limits this contrast enhancement through local clipping.",
       gradcam_desc: "Gradient-weighted Class Activation Mapping (Grad-CAM) uses the gradients of any target concept flowing into the final convolutional layer to produce a coarse localization map highlighting the important regions in the image for predicting the concept.",
       rag_desc: "Our system doesn't just predict; it references. Retrieval-Augmented Generation (RAG) pulls relevant clinical context from a medical knowledge base based on the specific anatomical findings detected by the CNN. This ensures our reports are grounded in clinical literature.",
-      report_patient_info: "Patient/Case Information",
-      report_xai_findings: "Explainable AI (XAI) Findings",
-      report_clinical_context: "Clinical Context (Retrieved via RAG)",
-      report_summary_discussion: "Summary and Discussion",
-      report_analytical_method: "Analytical Method",
-      report_primary_prediction: "Primary Prediction",
-      report_statistical_confidence: "Statistical Confidence",
-      report_xai_visualization: "XAI Visualization",
     },
     zh: {
       diagnosis: "診斷",
@@ -165,28 +158,11 @@ function App() {
       image_preview: "影像預覽",
       timestamp: "時間戳",
       model_used: "所用模型",
+      diagnosis: "診斷",
       log_subtitle: "執行神經診斷的會話歷史。",
       clahe_desc: "對比度受限自適應直方圖均衡法 (CLAHE) 用於增強乳房攝影中微鈣化點和結構失真的可見性。傳統的直方圖均衡法往往會過度放大均勻區域的噪聲；CLAHE 通過局部裁剪限制了這種對比度增強。",
       gradcam_desc: "梯度加權類激活映射 (Grad-CAM) 利用流向最終卷積層的任何目標概念的梯度，生成粗略的定位圖，突顯影像中對預測該概念至關重要的區域。",
       rag_desc: "Our system doesn't just predict; it references. Retrieval-Augmented Generation (RAG) pulls relevant clinical context from a medical knowledge base based on the specific anatomical findings detected by the CNN. This ensures our reports are grounded in clinical literature.",
-      report_patient_info: "患者/病例資訊",
-      report_xai_findings: "可解釋 AI (XAI) 發現",
-      report_clinical_context: "臨床背景 (通過 RAG 檢索)",
-      report_summary_discussion: "總結與討論",
-      report_analytical_method: "分析方法",
-      report_primary_prediction: "主要預測",
-      report_statistical_confidence: "統計置信度",
-      report_xai_visualization: "XAI 視覺化",
-      report_xai_findings_intro: "基於最終卷積層中的高強度激活質心：",
-      report_rag_intro_cancer: "根據惡性腫瘤的懷疑，從醫學知識庫中檢索到以下見解：",
-      report_rag_intro_noncancer: "根據良性結果的懷疑，從醫學知識庫中檢索到以下見解：",
-      birads_desc: "乳房影像報告與數據系統 (BI-RADS) 是臨床報告的標準：",
-      birads_0: "不完整。需要進一步影像檢查。",
-      birads_1: "陰性。無腫塊，結構正常。",
-      birads_2: "良性發現。包括分泌性鈣化、單純囊腫等。",
-      birads_3: "可能是良性。惡性風險 <2%。建議 6 個月後追蹤。",
-      birads_4: "疑似。2% 至 95% 的惡性可能性。通常建議活檢。",
-      birads_5: "高度懷疑惡性。>95% 的可能性。活檢是強制性的。",
     },
     zs: {
       diagnosis: "诊断",
@@ -239,85 +215,11 @@ function App() {
       image_preview: "影像预览",
       timestamp: "时间戳",
       model_used: "所用模型",
+      diagnosis: "诊断",
       log_subtitle: "执行神经诊断的会话历史。",
       clahe_desc: "对比度受限自适应直方图均衡法 (CLAHE) 用于增强乳腺摄影中微钙化点和结构失真的可见性。传统的直方图均衡法往往会过度放大均匀区域的噪声；CLAHE 通过局部裁剪限制了这种对比度增强。",
       gradcam_desc: "梯度加权类激活映射 (Grad-CAM) 利用流向最终卷积层的任何目标概念的梯度，生成粗略的定位图，突显影像中对预测该概念至关重要的区域。",
       rag_desc: "我们的系统不仅仅是预测，它还会引用参考。检索增强生成 (RAG) 根据 CNN 检测到的特定解剖学发现，从医学知识库中提取相关的临床背景，确保报告有临床文献支持。",
-      report_patient_info: "患者/病例信息",
-      report_xai_findings: "可解释 AI (XAI) 发现",
-      report_clinical_context: "临床背景 (通过 RAG 检索)",
-      report_summary_discussion: "总结与讨论",
-      report_analytical_method: "分析方法",
-      report_primary_prediction: "主要预测",
-      report_statistical_confidence: "统计置信度",
-      report_xai_visualization: "XAI 可视化",
-      report_xai_findings_intro: "基于最终卷积层中的高强度激活质心：",
-      report_rag_intro_cancer: "根据恶性肿瘤的怀疑，从医学知识库中检索到以下见解：",
-      report_rag_intro_noncancer: "根据良性结果的怀疑，从医学知识库中检索到以下见解：",
-    },
-    ja: {
-      diagnosis: "診断",
-      dashboard: "ダッシュボード",
-      documentation: "技術ドキュメント",
-      log: "分析ログ",
-      model_config: "モデル設定",
-      mammogram_upload: "マンモグラムアップロード",
-      execute: "神経診断を実行",
-      processing: "神経層処理中...",
-      summary: "診断インテリジェンス",
-      confidence: "信頼度",
-      verified: "検証済み結果",
-      download: "PDFレポートをダウンロード",
-      waiting: "データパイプライン待機中",
-      waiting_desc: "左側で診断を初期化すると、ここで高度な神経分析結果を確認できます。",
-      diagnosis_type: "診断タイプ",
-      original_preprocessed: "オリジナル前処理済み",
-      explainable_ai: "説明可能なAI (Grad-CAM)",
-      clinical_summary: "臨床要約 (RAG)",
-      performance_dashboard: "モデル性能ダッシュボード",
-      performance_desc: "論文データセットのベンチマークに基づく神経アーキテクチャの比較分析。",
-      metrics_title: "比較精度ベンチマーク",
-      metrics_interpretation: "指標の解釈",
-      accuracy: "精度",
-      precision: "適合率",
-      recall: "再現率",
-      rag_engine_title: "LLM駆動型RAGエンジン",
-      llm_info: "Gemini-1.5-Flashによる高忠実度な臨床合成。",
-      drop_image: "医療画像をドロップ",
-      supports_image: "PNG, JPG対応 (グレースケールマンモグラムのみ)",
-      optimized_cnn: "最適化済みカスタムCNN",
-      transfer_learning: "転移学習",
-      online: "オンライン",
-      predict_cancer: "癌予測",
-      disclaimer: "免責事項: このレポートは研究目的でAIアシスタントによって生成されたものであり、資格のある医療専門家によってレビューされるべきです。",
-      peak_accuracy: "ピークパイプライン精度",
-      technical_docs: "技術ドキュメント",
-      tech_stack: "技術スタック",
-      clear_history: "履歴を消去",
-      no_history: "履歴なし",
-      metrics_desc: "社内モデルと文献ベンチマークの比較",
-      overall_leader_title: "総合リーダー",
-      overall_leader_desc: "**CNN+CLAHE**構成は一貫して他を上回っており、マンモグラフィの特徴抽出における局所コントラスト強調の大きな影響を示しています。",
-      generalization_title: "汎化性能",
-      generalization_desc: "**ResNet50**は分散が高いものの、より深い残差アーキテクチャのおかげで、機関横断的なデータセットで優れた汎化性能を示します。",
-      feature_focus_title: "特徴フォーカス",
-      feature_focus_desc: "**VGGファミリー**は微小石灰化の検出に優れていますが、CNN+CLAHEと比較して、純粋な局所特徴識別では勾配消失に悩まされることがよくあります。",
-      tech_doc_subtitle: "MedVision AIを支えるコア技術の理解。",
-      image_preview: "画像プレビュー",
-      timestamp: "タイムスタンプ",
-      model_used: "使用モデル",
-      log_subtitle: "実行された神経診断のセッション履歴。",
-      clahe_desc: "コントラスト制限適応ヒストグラム均等化 (CLAHE) は、マンモグラムにおける微小石灰化や構造的歪みの視認性を高めるために使用されます。従来のヒストグラム均等化は均質な領域のノイズを過度に増幅することが多いため、CLAHEは局所的なクリッピングによってこのコントラスト強調を制限します。",
-      gradcam_desc: "勾配加重クラス活性化マッピング (Grad-CAM) は、最終的な畳み込み層に流れるターゲット概念の勾配を使用して、概念を予測するために画像内の重要な領域を強調する粗いローカリゼーションマップを生成します。",
-      rag_desc: "当社のシステムは予測するだけでなく、参照も行います。検索拡張生成 (RAG) は、CNNによって検出された特定の解剖学的所見に基づいて、医学知識ベースから関連する臨床的背景を抽出します。これにより、レポートが臨床文献に基づいていることが保証されます。",
-      report_patient_info: "患者/症例情報",
-      report_xai_findings: "説明可能なAI (XAI) の所見",
-      report_clinical_context: "臨床的背景 (RAG経由で取得)",
-      report_summary_discussion: "要約と考察",
-      report_analytical_method: "分析手法",
-      report_primary_prediction: "主要な予測",
-      report_statistical_confidence: "統計的信頼度",
-      report_xai_visualization: "XAI可視化",
     },
     es: {
       diagnosis: "Diagnóstico",
@@ -373,14 +275,6 @@ function App() {
       clahe_desc: "CLAHE mejora la visibilidad de microcalcificaciones.",
       gradcam_desc: "Grad-CAM resalta regiones críticas para la predicción.",
       rag_desc: "RAG extrae contexto clínico relevante.",
-      report_patient_info: "Información del Paciente",
-      report_xai_findings: "Hallazgos de IA Explicable (XAI)",
-      report_clinical_context: "Contexto Clínico (RAG)",
-      report_summary_discussion: "Resumen y Discusión",
-      report_analytical_method: "Método Analítico",
-      report_primary_prediction: "Predicción Primaria",
-      report_statistical_confidence: "Confianza Estadística",
-      report_xai_visualization: "Visualización XAI",
     },
     fr: {
       diagnosis: "Diagnostic",
@@ -436,14 +330,6 @@ function App() {
       clahe_desc: "CLAHE améliore la visibilité.",
       gradcam_desc: "Grad-CAM identifie les zones critiques.",
       rag_desc: "RAG extrait du contexte clinique.",
-      report_patient_info: "Informations Patient",
-      report_xai_findings: "Résultats de l'IA Explicable (XAI)",
-      report_clinical_context: "Contexte Clinique (RAG)",
-      report_summary_discussion: "Résumé et Discussion",
-      report_analytical_method: "Méthode Analytique",
-      report_primary_prediction: "Prédiction Primaire",
-      report_statistical_confidence: "Confiance Statistique",
-      report_xai_visualization: "Visualisation XAI",
     },
     de: {
       diagnosis: "Diagnose",
@@ -499,14 +385,6 @@ function App() {
       clahe_desc: "CLAHE verbessert die Sichtbarkeit.",
       gradcam_desc: "Grad-CAM markiert kritische Bereiche.",
       rag_desc: "RAG zieht klinischen Kontext.",
-      report_patient_info: "Patienteninformationen",
-      report_xai_findings: "Erklärbare KI (XAI) Befunde",
-      report_clinical_context: "Klinischer Kontext (RAG)",
-      report_summary_discussion: "Zusammenfassung",
-      report_analytical_method: "Analysemethode",
-      report_primary_prediction: "Primärvorhersage",
-      report_statistical_confidence: "Statistische Konfidenz",
-      report_xai_visualization: "XAI-Visualisierung",
     },
     id: {
       diagnosis: "Diagnosis",
@@ -565,14 +443,6 @@ function App() {
       clahe_desc: "Contrast Limited Adaptive Histogram Equalization (CLAHE) digunakan untuk meningkatkan visibilitas mikro-kalsifikasi dan distorsi struktural pada mammografi.",
       gradcam_desc: "Gradient-weighted Class Activation Mapping (Grad-CAM) menggunakan gradien dari target yang mengalir ke lapisan konvensional terakhir untuk menghasilkan peta lokalisasi kasar.",
       rag_desc: "Sistem kami tidak hanya memprediksi; ia mereferensikan. Retrieval-Augmented Generation (RAG) menarik konteks klinis yang relevan dari basis pengetahuan medis.",
-      report_patient_info: "Informasi Pasien",
-      report_xai_findings: "Temuan AI Terperinci (XAI)",
-      report_clinical_context: "Konteks Klinis (RAG)",
-      report_summary_discussion: "Ringkasan dan Diskusi",
-      report_analytical_method: "Metode Analitis",
-      report_primary_prediction: "Prediksi Utama",
-      report_statistical_confidence: "Kepercayaan Statistik",
-      report_xai_visualization: "Visualisasi XAI",
     },
     ko: {
       diagnosis: "진단",
@@ -631,14 +501,6 @@ function App() {
       clahe_desc: "CLAHE는 유방 촬영 이미지의 미세 석회화 및 구조적 왜곡의 가시성을 높이는 데 사용됩니다.",
       gradcam_desc: "Grad-CAM은 활성화 맵을 생성하여 이미지에서 진단에 중요한 영역을 강조합니다.",
       rag_desc: "RAG는 CNN이 감지한 소견을 바탕으로 의학 지식 베이스에서 관련 임상 문맥을 가져옵니다.",
-      report_patient_info: "환자/사례 정보",
-      report_xai_findings: "설명 가능한 AI (XAI) 소견",
-      report_clinical_context: "임상 문맥 (RAG를 통한 검색)",
-      report_summary_discussion: "요약 및 토론",
-      report_analytical_method: "분석 방법",
-      report_primary_prediction: "주요 예측",
-      report_statistical_confidence: "통계적 신뢰도",
-      report_xai_visualization: "XAI 시각화",
     },
     ja: {
       diagnosis: "診断",
@@ -696,14 +558,6 @@ function App() {
       model_used: "使用モデル",
       diagnosis: "診断",
       log_subtitle: "実行された神経診断のセッション履歴。",
-      report_patient_info: "患者/症例情報",
-      report_xai_findings: "説明可能なAI (XAI) の所見",
-      report_clinical_context: "臨床的背景 (RAGによる検索)",
-      report_summary_discussion: "要約と考察",
-      report_analytical_method: "分析方法",
-      report_primary_prediction: "主な予測",
-      report_statistical_confidence: "統計的信頼度",
-      report_xai_visualization: "XAI視覚化",
     }
   };
 
@@ -831,92 +685,35 @@ function App() {
     }
   };
 
-  const getLocalizedReport = (rawText) => {
-    if (!rawText) return "";
-    let procText = rawText;
-    const translators = {
-       "Clinical AI Diagnosis & Pathology Report": t.report_title || "臨床 AI 診斷與病理報告",
-       "Patient/Case Information": t.report_patient_info,
-       "Explainable AI (XAI) Findings": t.report_xai_findings,
-       "Clinical Context (Retrieved via RAG)": t.report_clinical_context,
-       "Summary and Discussion": t.report_summary_discussion,
-       "Analytical Method": t.report_analytical_method,
-       "Primary Prediction": t.report_primary_prediction,
-       "Statistical Confidence": t.report_statistical_confidence,
-       "XAI Visualization": t.report_xai_visualization,
-       "Based on the high-intensity activation centroids in the final convolutional layers:": t.report_xai_findings_intro,
-       "High-intensity activation centroids detected. The model weights these dense regions as primary indicators of malignant tissue morphology.": language === "zh" || language === "zs" ? (language === "zh" ? "檢測到高強度激活質心。模型將這些密集區域視為惡性組織形態的主要指標。" : "检测到高强度激活质心。模型将这些密集区域视为恶性组织形态的主要指标。") : "High-intensity activation centroids detected. The model weights these dense regions as primary indicators of malignant tissue morphology.",
-       "The following insights were retrieved from the medical knowledge base based on the suspicion of Cancer:": t.report_rag_intro_cancer,
-       "The following insights were retrieved from the medical knowledge base based on the suspicion of Non-Cancer:": t.report_rag_intro_noncancer,
-       "Neural Network Classification (ResNet50/VGG/CNN)": language === "zh" || language === "zs" ? (language === "zh" ? "神經網絡分類 (ResNet50/VGG/CNN)" : "神经网络分类 (ResNet50/VGG/CNN)") : "Neural Network Classification (ResNet50/VGG/CNN)",
-       "Grad-CAM Activation Heatmap": language === "zh" || language === "zs" ? (language === "zh" ? "Grad-CAM 激活熱力圖" : "Grad-CAM 激活热力图") : "Grad-CAM Activation Heatmap",
-       "Cancer": t.report_primary_prediction === "主要预测" || t.report_primary_prediction === "主要預測" ? (language === "zh" ? "惡性腫瘤" : "恶性肿瘤") : "Cancer",
-       "Non-Cancer": language === "zh" ? "良性" : "良性"
-    };
-
-    Object.keys(translators).forEach(orig => {
-       if (translators[orig]) {
-         // Escape regex special chars and replace globally
-         procText = procText.split(orig).join(translators[orig]);
-       }
-    });
-    return procText;
-  };
-
-  const downloadPDF = () => {
+  const downloadPDF = async () => {
     if (!result?.report) return;
-    
-    // Select correct language report and apply global translation engine
-    const rawReport = typeof result.report === 'object' ? (result.report[language] || result.report['en']) : result.report;
-    const reportText = getLocalizedReport(rawReport);
-    
-    // Create hidden print window
-    const printWindow = window.open('', '_blank', 'width=800,height=600');
-    const html = `
-      <html>
-        <head>
-          <title>Clinical AI Diagnosis - ${language.toUpperCase()}</title>
-          <style>
-            @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
-            body { font-family: 'Inter', system-ui, -apple-system, sans-serif; padding: 40px; color: #1e293b; line-height: 1.6; }
-            .header { background: #1e293b; color: white; padding: 30px; border-radius: 12px; margin-bottom: 30px; }
-            h1 { margin: 0; font-size: 24px; font-weight: 800; }
-            h2 { color: #334155; border-bottom: 1px solid #e2e8f0; padding-bottom: 8px; margin-top: 30px; }
-            .meta { font-style: italic; color: #64748b; font-size: 14px; margin-top: 5px; }
-            .item { margin-bottom: 15px; }
-            .bullet { color: #2563eb; font-weight: bold; margin-right: 10px; }
-            .disclaimer { border-top: 1px solid #e2e8f0; margin-top: 50px; padding-top: 20px; font-size: 12px; color: #94a3b8; text-align: center; }
-            @media print { .btn-print { display: none; } }
-          </style>
-        </head>
-        <body>
-          <div class="header">
-            <h1>MedVision AI</h1>
-            <div class="meta">Neural Diagnostic Intelligence - Clinical Report (${new Date().toLocaleDateString()})</div>
-          </div>
-          <div class="content">
-            ${reportText.split('\n').map(line => {
-              if (line.startsWith('# ')) return `<h1>${line.replace('# ', '')}</h1>`;
-              if (line.startsWith('## ')) return `<h2>${line.replace('## ', '')}</h2>`;
-              if (line.startsWith('- ')) return `<div class="item"><span class="bullet">•</span>${line.replace('- ', '').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')}</div>`;
-              if (line === '') return '<br/>';
-              return `<p>${line.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')}</p>`;
-            }).join('')}
-          </div>
-          <div class="disclaimer">
-            ${t.disclaimer || "Disclaimer: This report is generated by an AI assistant for research purposes only."}
-          </div>
-          <script>
-            window.onload = () => {
-              window.print();
-              setTimeout(() => { window.close(); }, 100);
-            };
-          </script>
-        </body>
-      </html>
-    `;
-    printWindow.document.write(html);
-    printWindow.document.close();
+    try {
+      const resp = await axios.post(`${API_BASE}/download-pdf`,
+        { content: result.report },
+        { responseType: 'blob' }
+      );
+      const url = window.URL.createObjectURL(new Blob([resp.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `diagnosis_report_${result.label}.pdf`);
+      document.body.appendChild(link);
+      link.click();
+    } catch (err) {
+      console.error("PDF Download Error:", err);
+      let errorMessage = "Unknown error";
+      if (err.response?.data instanceof Blob) {
+        const text = await err.response.data.text();
+        try {
+          const parsed = JSON.parse(text);
+          errorMessage = parsed.detail || text;
+        } catch (e) {
+          errorMessage = text;
+        }
+      } else {
+        errorMessage = err.response?.data?.detail || err.message || "Unknown error";
+      }
+      alert(`Failed to download PDF: ${errorMessage}`);
+    }
   };
 
   const handleRestoreResult = (item) => {
@@ -945,7 +742,7 @@ function App() {
           </div>
           <div>
             <h1 className="text-xl font-black tracking-tighter text-white">MedVision AI</h1>
-            <p className="text-[10px] font-bold uppercase tracking-widest text-brand-primary">{t.predict_cancer} v2.0</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-brand-primary">{t.predict_cancer}</p>
           </div>
         </div>
         <div className="hidden lg:flex items-center gap-8 text-sm font-medium text-slate-400">
@@ -1250,53 +1047,12 @@ function App() {
 
                             if (!result?.report) return <p className="text-slate-500 text-xs italic">Historical report data not found for this specific record.</p>;
 
-                            const sectionTranslationMap = {
-                               "Patient/Case Information": t.report_patient_info,
-                               "Explainable AI (XAI) Findings": t.report_xai_findings,
-                               "Clinical Context (Retrieved via RAG)": t.report_clinical_context,
-                               "Summary and Discussion": t.report_summary_discussion
-                            };
-
-                            const labelTranslationMap = {
-                               "Analytical Method": t.report_analytical_method,
-                               "Primary Prediction": t.report_primary_prediction,
-                               "Statistical Confidence": t.report_statistical_confidence,
-                               "XAI Visualization": t.report_xai_visualization
-                            };
-
-                            const reportText = (typeof result.report === 'object' && result.report !== null) 
-                                ? (result.report[language] || result.report['en'] || "") 
-                                : (result.report || "");
-
-                            reportText.split('\n').forEach(line => {
+                            result.report.split('\n').forEach(line => {
                               if (line.startsWith('## ')) {
                                 if (currentSection) sections.push(currentSection);
-                                const rawTitle = line.replace('## ', '').trim();
-                                currentSection = { title: sectionTranslationMap[rawTitle] || rawTitle, content: [] };
+                                currentSection = { title: line.replace('## ', ''), content: [] };
                               } else if (currentSection && line.trim() !== '' && !line.startsWith('# ')) {
-                                let procLine = line;
-                               Object.keys(labelTranslationMap).forEach(key => {
-                                   if (procLine.includes(key)) {
-                                      procLine = procLine.replace(key, labelTranslationMap[key]);
-                                   }
-                                });
-                                
-                                // Emergency Translation Fallback for body text
-                                const bodyTranslators = {
-                                  "Based on the high-intensity activation centroids in the final convolutional layers:": t.report_xai_findings_intro,
-                                  "The following insights were retrieved from the medical knowledge base based on the suspicion of Cancer:": t.report_rag_intro_cancer,
-                                  "The following insights were retrieved from the medical knowledge base based on the suspicion of Non-Cancer:": t.report_rag_intro_noncancer,
-                                  "High-intensity activation centroids detected. The model weights these dense regions as primary indicators of malignant tissue morphology.": language === "zh" || language === "zs" ? (language === "zh" ? "檢測到高強度激活質心。模型將這些密集區域視為惡性組織形態的主要指標。" : "检测到高强度激活质心。模型将这些密集区域视为恶性组织形态的主要指标。") : "High-intensity activation centroids detected. The model weights these dense regions as primary indicators of malignant tissue morphology.",
-                                  "Cancer": t.report_primary_prediction === "主要预测" || t.report_primary_prediction === "主要預測" ? (language === "zh" ? "惡性腫瘤" : "恶性肿瘤") : "Cancer",
-                                  "Non-Cancer": language === "zh" ? "良性" : "良性"
-                                };
-                                Object.keys(bodyTranslators).forEach(orig => {
-                                   if (procLine.includes(orig) && bodyTranslators[orig]) {
-                                      procLine = procLine.replace(orig, bodyTranslators[orig]);
-                                   }
-                                });
-
-                                currentSection.content.push(procLine);
+                                currentSection.content.push(line);
                               }
                             });
                             if (currentSection) sections.push(currentSection);
