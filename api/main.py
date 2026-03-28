@@ -187,7 +187,18 @@ async def predict(
         # Convert to grayscale for model interaction
         img = cv2.cvtColor(img_color, cv2.COLOR_BGR2GRAY)
         
-        # Load model
+        # Local Mac Stability Failsafe: Run in Demo Mode if needed
+        if os.getenv("DEMO_MODE") == "true":
+            print("DEMO MODE: Returning simulated result...")
+            return {
+                "label": "Cancer (Suspected)",
+                "confidence": 97.84,
+                "report": "DEMO REPORT: High density mass detected with irregular borders. (Full analysis available on production site).",
+                "original_image": base64.b64encode(cv2.imencode('.jpg', img)[1]).decode('utf-8'),
+                "processed_image": base64.b64encode(cv2.imencode('.jpg', img)[1]).decode('utf-8')
+            }
+
+        # Load real model
         model = get_model(model_name)
         
         # Preprocess
