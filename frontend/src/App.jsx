@@ -100,6 +100,10 @@ function App() {
       ai_backend: "AI Backend",
       neural_engine: "Neural Engine",
       container_tech: "Containerization",
+      preprocessing: "Pre-processing",
+      clahe_title: "CLAHE Optimization",
+      visualization: "Visualization",
+      gradcam_title: "Explainable AI (Grad-CAM)",
       generalization_title: "Generalization",
       generalization_desc: "**ResNet50** shows higher variance but superior generalization on cross-institutional datasets, likely due to its deeper residual architecture.",
       feature_focus_title: "Feature Focus",
@@ -172,6 +176,10 @@ function App() {
       ai_backend: "AI 後端",
       neural_engine: "神經引擎",
       container_tech: "容器化技術",
+      preprocessing: "預處理",
+      clahe_title: "CLAHE 優化",
+      visualization: "可視化",
+      gradcam_title: "可解釋 AI (Grad-CAM)",
       clahe_desc: "對比度受限自適應直方圖均衡法 (CLAHE) 用於增強乳房攝影中微鈣化點和結構失真的可見性。傳統的直方圖均衡法往往會過度放大均勻區域的噪聲；CLAHE 通過局部裁剪限制了這種對比度增強。",
       gradcam_desc: "梯度加權類激活映射 (Grad-CAM) 利用流向最終卷積層的任何目標概念的梯度，生成粗略的定位圖，突顯影像中對預測該概念至關重要的區域。",
       rag_desc: "我們的系統不僅僅是預測，它還會引用參考。檢索增強生成 (RAG) 根據 CNN 檢測到的特定解剖學發現，從醫學知識庫中提取相關的臨床背景，確保我們的報告有臨床文獻支持。",
@@ -234,6 +242,10 @@ function App() {
       ai_backend: "AI 后端",
       neural_engine: "神经引擎",
       container_tech: "容器化技术",
+      preprocessing: "预处理",
+      clahe_title: "CLAHE 优化",
+      visualization: "可视化",
+      gradcam_title: "可解释 AI (Grad-CAM)",
       diagnosis: "诊断",
       log_subtitle: "执行神经诊断的会话历史。",
       clahe_desc: "对比度受限自适应直方图均衡法 (CLAHE) 用于增强乳腺摄影中微钙化点和结构失真的可见性。传统的直方图均衡法往往会过度放大均匀区域的噪声；CLAHE 通过局部裁剪限制了这种对比度增强。",
@@ -298,6 +310,10 @@ function App() {
       ai_backend: "Back-end de IA",
       neural_engine: "Motor Neural",
       container_tech: "Contenedores",
+      preprocessing: "Pre-procesamiento",
+      clahe_title: "Optimización CLAHE",
+      visualization: "Visualización",
+      gradcam_title: "IA Explicable (Grad-CAM)",
       clahe_desc: "CLAHE mejora la visibilidad de microcalcificaciones.",
       gradcam_desc: "Grad-CAM resalta regiones críticas para la predicción.",
       rag_desc: "RAG extrae contexto clínico relevante.",
@@ -360,6 +376,10 @@ function App() {
       ai_backend: "Back-end IA",
       neural_engine: "Moteur Neural",
       container_tech: "Conteneurisation",
+      preprocessing: "Prétraitement",
+      clahe_title: "Optimisation CLAHE",
+      visualization: "Visualisation",
+      gradcam_title: "IA Explicable (Grad-CAM)",
       clahe_desc: "CLAHE améliore la visibilité.",
       gradcam_desc: "Grad-CAM identifie les zones critiques.",
       rag_desc: "RAG extrait du contexte clinique.",
@@ -422,6 +442,10 @@ function App() {
       ai_backend: "KI Back-end",
       neural_engine: "Neural-Engine",
       container_tech: "Container",
+      preprocessing: "Vorverarbeitung",
+      clahe_title: "CLAHE Optimierung",
+      visualization: "Visualisierung",
+      gradcam_title: "Erklärbare KI (Grad-CAM)",
       clahe_desc: "CLAHE verbessert die Sichtbarkeit.",
       gradcam_desc: "Grad-CAM markiert kritische Bereiche.",
       rag_desc: "RAG zieht klinischen Kontext.",
@@ -485,6 +509,10 @@ function App() {
       ai_backend: "Back-end AI",
       neural_engine: "Mesin Neural",
       container_tech: "Kontainerisasi",
+      preprocessing: "Pra-pemrosesan",
+      clahe_title: "Optimasi CLAHE",
+      visualization: "Visualisasi",
+      gradcam_title: "AI yang Dapat Dijelaskan (Grad-CAM)",
       diagnosis: "Diagnosis",
       log_subtitle: "Riwayat sesi diagnosis neural yang dilakukan.",
       clahe_desc: "Contrast Limited Adaptive Histogram Equalization (CLAHE) digunakan untuk meningkatkan visibilitas mikro-kalsifikasi dan distorsi struktural pada mammografi.",
@@ -550,6 +578,10 @@ function App() {
       ai_backend: "AI 백엔드",
       neural_engine: "신경 엔진",
       container_tech: "컨테이너 기술",
+      preprocessing: "전처리",
+      clahe_title: "CLAHE 최적화",
+      visualization: "시각화",
+      gradcam_title: "설명 가능한 AI (Grad-CAM)",
       diagnosis: "진단",
       log_subtitle: "수행된 신경 진단의 세션 기록.",
       clahe_desc: "CLAHE는 유방 촬영 이미지의 미세 석회화 및 구조적 왜곡의 가시성을 높이는 데 사용됩니다.",
@@ -617,6 +649,10 @@ function App() {
       ai_backend: "AI バックエンド",
       neural_engine: "ニューラルエンジン",
       container_tech: "コンテナ技術",
+      preprocessing: "前処理",
+      clahe_title: "CLAHE 最適化",
+      visualization: "視覚化",
+      gradcam_title: "説明可能な AI (Grad-CAM)",
       diagnosis: "診断",
       log_subtitle: "実行された神経診断のセッション履歴。",
     }
@@ -1306,9 +1342,9 @@ function App() {
                 <section className="grid md:grid-cols-2 gap-12 items-center">
                   <div className="space-y-6">
                     <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-primary/10 border border-brand-primary/20 text-brand-primary text-[10px] font-bold uppercase tracking-widest">
-                      Pre-processing
+                      {t.preprocessing}
                     </div>
-                    <h3 className="text-2xl font-bold text-white">CLAHE Optimization</h3>
+                    <h3 className="text-2xl font-bold text-white">{t.clahe_title}</h3>
                     <p className="text-slate-400 leading-relaxed">
                       {t.clahe_desc}
                     </p>
@@ -1332,9 +1368,9 @@ function App() {
                   </div>
                   <div className="space-y-6 order-1 md:order-2">
                     <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-secondary/10 border border-brand-secondary/20 text-brand-secondary text-[10px] font-bold uppercase tracking-widest">
-                      Visualization
+                      {t.visualization}
                     </div>
-                    <h3 className="text-2xl font-bold text-white">Explainable AI (Grad-CAM)</h3>
+                    <h3 className="text-2xl font-bold text-white">{t.gradcam_title}</h3>
                     <p className="text-slate-400 leading-relaxed">
                       {t.gradcam_desc}
                     </p>
