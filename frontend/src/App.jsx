@@ -93,6 +93,13 @@ function App() {
       metrics_desc: "In-House Models vs Literature Benchmarks",
       overall_leader_title: "Overall Leader",
       overall_leader_desc: "The **CNN+CLAHE** configuration consistently outperforms others, demonstrating the massive impact of local contrast enhancement on mammography feature extraction.",
+      knowledge_retrieval: "Knowledge Retrieval",
+      rag_enhanced_reporting: "RAG-Enhanced Reporting",
+      tech_stack_subtitle: "Built with modern, scalable, and high-performance tools.",
+      frontend_ui: "Frontend UI",
+      ai_backend: "AI Backend",
+      neural_engine: "Neural Engine",
+      container_tech: "Containerization",
       generalization_title: "Generalization",
       generalization_desc: "**ResNet50** shows higher variance but superior generalization on cross-institutional datasets, likely due to its deeper residual architecture.",
       feature_focus_title: "Feature Focus",
@@ -158,8 +165,13 @@ function App() {
       image_preview: "影像預覽",
       timestamp: "時間戳",
       model_used: "所用模型",
-      diagnosis: "診斷",
-      log_subtitle: "執行神經診斷的會話歷史。",
+      knowledge_retrieval: "知識檢索",
+      rag_enhanced_reporting: "RAG 增強報告",
+      tech_stack_subtitle: "採用現代、可擴展且高性能的工具構建。",
+      frontend_ui: "前端用戶界面",
+      ai_backend: "AI 後端",
+      neural_engine: "神經引擎",
+      container_tech: "容器化技術",
       clahe_desc: "對比度受限自適應直方圖均衡法 (CLAHE) 用於增強乳房攝影中微鈣化點和結構失真的可見性。傳統的直方圖均衡法往往會過度放大均勻區域的噪聲；CLAHE 通過局部裁剪限制了這種對比度增強。",
       gradcam_desc: "梯度加權類激活映射 (Grad-CAM) 利用流向最終卷積層的任何目標概念的梯度，生成粗略的定位圖，突顯影像中對預測該概念至關重要的區域。",
       rag_desc: "Our system doesn't just predict; it references. Retrieval-Augmented Generation (RAG) pulls relevant clinical context from a medical knowledge base based on the specific anatomical findings detected by the CNN. This ensures our reports are grounded in clinical literature.",
@@ -215,6 +227,13 @@ function App() {
       image_preview: "影像预览",
       timestamp: "时间戳",
       model_used: "所用模型",
+      knowledge_retrieval: "知识检索",
+      rag_enhanced_reporting: "RAG 增强报告",
+      tech_stack_subtitle: "采用现代、可扩展且高性能的工具构建。",
+      frontend_ui: "前端用户界面",
+      ai_backend: "AI 后端",
+      neural_engine: "神经引擎",
+      container_tech: "容器化技术",
       diagnosis: "诊断",
       log_subtitle: "执行神经诊断的会话历史。",
       clahe_desc: "对比度受限自适应直方图均衡法 (CLAHE) 用于增强乳腺摄影中微钙化点和结构失真的可见性。传统的直方图均衡法往往会过度放大均匀区域的噪声；CLAHE 通过局部裁剪限制了这种对比度增强。",
@@ -272,6 +291,13 @@ function App() {
       image_preview: "Previsualización",
       timestamp: "Tiempo",
       model_used: "Modelo",
+      knowledge_retrieval: "Recuperación de Conocimiento",
+      rag_enhanced_reporting: "Informes RAG",
+      tech_stack_subtitle: "Construido con herramientas modernas y escalables.",
+      frontend_ui: "UI Front-end",
+      ai_backend: "Back-end de IA",
+      neural_engine: "Motor Neural",
+      container_tech: "Contenedores",
       clahe_desc: "CLAHE mejora la visibilidad de microcalcificaciones.",
       gradcam_desc: "Grad-CAM resalta regiones críticas para la predicción.",
       rag_desc: "RAG extrae contexto clínico relevante.",
@@ -327,6 +353,13 @@ function App() {
       image_preview: "Aperçu",
       timestamp: "Horodatage",
       model_used: "Modèle Utilisé",
+      knowledge_retrieval: "Extraction de Base",
+      rag_enhanced_reporting: "Rapports RAG",
+      tech_stack_subtitle: "Développé avec des outils agiles et performants.",
+      frontend_ui: "UI Front-end",
+      ai_backend: "Back-end IA",
+      neural_engine: "Moteur Neural",
+      container_tech: "Conteneurisation",
       clahe_desc: "CLAHE améliore la visibilité.",
       gradcam_desc: "Grad-CAM identifie les zones critiques.",
       rag_desc: "RAG extrait du contexte clinique.",
@@ -382,6 +415,13 @@ function App() {
       image_preview: "Bildvorschau",
       timestamp: "Zeitstempel",
       model_used: "Modell",
+      knowledge_retrieval: "Wissensabruf",
+      rag_enhanced_reporting: "RAG-Berichte",
+      tech_stack_subtitle: "Gebaut mit skalierten Technologien.",
+      frontend_ui: "Front-end UI",
+      ai_backend: "KI Back-end",
+      neural_engine: "Neural-Engine",
+      container_tech: "Container",
       clahe_desc: "CLAHE verbessert die Sichtbarkeit.",
       gradcam_desc: "Grad-CAM markiert kritische Bereiche.",
       rag_desc: "RAG zieht klinischen Kontext.",
@@ -438,6 +478,13 @@ function App() {
       image_preview: "Pratinjau Gambar",
       timestamp: "Stempel Waktu",
       model_used: "Model Digunakan",
+      knowledge_retrieval: "Pengambilan Pengetahuan",
+      rag_enhanced_reporting: "Laporan RAG",
+      tech_stack_subtitle: "Dibangun dengan teknologi modern.",
+      frontend_ui: "UI Front-end",
+      ai_backend: "Back-end AI",
+      neural_engine: "Mesin Neural",
+      container_tech: "Kontainerisasi",
       diagnosis: "Diagnosis",
       log_subtitle: "Riwayat sesi diagnosis neural yang dilakukan.",
       clahe_desc: "Contrast Limited Adaptive Histogram Equalization (CLAHE) digunakan untuk meningkatkan visibilitas mikro-kalsifikasi dan distorsi struktural pada mammografi.",
@@ -496,6 +543,13 @@ function App() {
       image_preview: "이미지 미리보기",
       timestamp: "타임스탬프",
       model_used: "사용된 모델",
+      knowledge_retrieval: "지식 검색",
+      rag_enhanced_reporting: "RAG 기반 보고서",
+      tech_stack_subtitle: "최신 기술 스택으로 구축되었습니다.",
+      frontend_ui: "프론트엔드 UI",
+      ai_backend: "AI 백엔드",
+      neural_engine: "신경 엔진",
+      container_tech: "컨테이너 기술",
       diagnosis: "진단",
       log_subtitle: "수행된 신경 진단의 세션 기록.",
       clahe_desc: "CLAHE는 유방 촬영 이미지의 미세 석회화 및 구조적 왜곡의 가시성을 높이는 데 사용됩니다.",
@@ -556,6 +610,13 @@ function App() {
       image_preview: "画像プレビュー",
       timestamp: "タイムスタンプ",
       model_used: "使用モデル",
+      knowledge_retrieval: "知識検索",
+      rag_enhanced_reporting: "RAG レポート",
+      tech_stack_subtitle: "最新の技術スタックで構築されています。",
+      frontend_ui: "フロントエンド UI",
+      ai_backend: "AI バックエンド",
+      neural_engine: "ニューラルエンジン",
+      container_tech: "コンテナ技術",
       diagnosis: "診断",
       log_subtitle: "実行された神経診断のセッション履歴。",
     }
@@ -1283,9 +1344,9 @@ function App() {
                 <section className="grid md:grid-cols-2 gap-12 items-center">
                   <div className="space-y-6">
                     <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] font-bold uppercase tracking-widest">
-                      Knowledge Retrieval
+                      {t.knowledge_retrieval}
                     </div>
-                    <h3 className="text-2xl font-bold text-white">RAG-Enhanced Reporting</h3>
+                    <h3 className="text-2xl font-bold text-white">{t.rag_enhanced_reporting}</h3>
                     <p className="text-slate-400 leading-relaxed">
                       {t.rag_desc}
                     </p>
@@ -1303,7 +1364,7 @@ function App() {
               <section className="space-y-12 pt-12 border-t border-white/5">
                 <div className="text-center space-y-4">
                   <h3 className="text-2xl font-bold text-white">{t.tech_stack}</h3>
-                  <p className="text-slate-400">Built with modern, scalable, and high-performance tools.</p>
+                  <p className="text-slate-400">{t.tech_stack_subtitle}</p>
                 </div>
 
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
@@ -1313,7 +1374,7 @@ function App() {
                     </div>
                     <div>
                       <h4 className="font-bold text-white text-sm">React 18</h4>
-                      <p className="text-[10px] text-slate-500 uppercase tracking-widest mt-1">Frontend UI</p>
+                      <p className="text-[10px] text-slate-500 uppercase tracking-widest mt-1">{t.frontend_ui}</p>
                     </div>
                   </div>
 
@@ -1323,7 +1384,7 @@ function App() {
                     </div>
                     <div>
                       <h4 className="font-bold text-white text-sm">FastAPI</h4>
-                      <p className="text-[10px] text-slate-500 uppercase tracking-widest mt-1">AI Backend</p>
+                      <p className="text-[10px] text-slate-500 uppercase tracking-widest mt-1">{t.ai_backend}</p>
                     </div>
                   </div>
 
@@ -1333,7 +1394,7 @@ function App() {
                     </div>
                     <div>
                       <h4 className="font-bold text-white text-sm">TensorFlow</h4>
-                      <p className="text-[10px] text-slate-500 uppercase tracking-widest mt-1">Neural Engine</p>
+                      <p className="text-[10px] text-slate-500 uppercase tracking-widest mt-1">{t.neural_engine}</p>
                     </div>
                   </div>
 
@@ -1343,7 +1404,7 @@ function App() {
                     </div>
                     <div>
                       <h4 className="font-bold text-white text-sm">Docker</h4>
-                      <p className="text-[10px] text-slate-500 uppercase tracking-widest mt-1">Container</p>
+                      <p className="text-[10px] text-slate-500 uppercase tracking-widest mt-1">{t.container_tech}</p>
                     </div>
                   </div>
                 </div>
