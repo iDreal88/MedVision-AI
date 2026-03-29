@@ -174,7 +174,7 @@ function App() {
       container_tech: "容器化技術",
       clahe_desc: "對比度受限自適應直方圖均衡法 (CLAHE) 用於增強乳房攝影中微鈣化點和結構失真的可見性。傳統的直方圖均衡法往往會過度放大均勻區域的噪聲；CLAHE 通過局部裁剪限制了這種對比度增強。",
       gradcam_desc: "梯度加權類激活映射 (Grad-CAM) 利用流向最終卷積層的任何目標概念的梯度，生成粗略的定位圖，突顯影像中對預測該概念至關重要的區域。",
-      rag_desc: "Our system doesn't just predict; it references. Retrieval-Augmented Generation (RAG) pulls relevant clinical context from a medical knowledge base based on the specific anatomical findings detected by the CNN. This ensures our reports are grounded in clinical literature.",
+      rag_desc: "我們的系統不僅僅是預測，它還會引用參考。檢索增強生成 (RAG) 根據 CNN 檢測到的特定解剖學發現，從醫學知識庫中提取相關的臨床背景，確保我們的報告有臨床文獻支持。",
     },
     zs: {
       diagnosis: "诊断",
@@ -238,7 +238,7 @@ function App() {
       log_subtitle: "执行神经诊断的会话历史。",
       clahe_desc: "对比度受限自适应直方图均衡法 (CLAHE) 用于增强乳腺摄影中微钙化点和结构失真的可见性。传统的直方图均衡法往往会过度放大均匀区域的噪声；CLAHE 通过局部裁剪限制了这种对比度增强。",
       gradcam_desc: "梯度加权类激活映射 (Grad-CAM) 利用流向最终卷积层的任何目标概念的梯度，生成粗略的定位图，突显影像中对预测该概念至关重要的区域。",
-      rag_desc: "我们的系统不仅仅是预测，它还会引用参考。检索增强生成 (RAG) 根据 CNN 检测到的特定解剖学发现，从医学知识库中提取相关的临床背景，确保报告有临床文献支持。",
+      rag_desc: "我们的系统不仅仅是预测，它还会引用参考。检索增强生成 (RAG) 根据 CNN 检测到的特定解剖学发现，从医学知识库中提取相关的临床背景，确保我们的报告有临床文献支持。",
     },
     es: {
       diagnosis: "Diagnóstico",
