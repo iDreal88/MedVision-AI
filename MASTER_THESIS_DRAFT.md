@@ -1,153 +1,64 @@
-# MASTER’S THESIS
-## REAL-TIME BREAST CANCER DIAGNOSIS SYSTEM USING CLAHE-ENHANCED DEEP LEARNING AND CLOUD DEPLOYMENT VIA MEDVISION-AI
+# 國立金門大學
+## 資訊工程學系碩士班
+### 碩士論文
 
-**Written to fulfil part of the academic requirements to obtain a Master’s degree in Computer Science.**
+**基於對比度受限自適應直方圖均衡化影像增強深度學習與醫視智能雲端部署之即時乳癌診斷系統**
 
-**BY**
-**SHI-HAN HUANG (黃世漢)**
-**Advisor: Dr. HSI-CHIEH LEE (李錫捷)**
+**Real-Time Breast Cancer Diagnosis System Using Clahe-Enhanced Deep Learning and Cloud Deployment via MedVision-AI**
 
-**DEPARTMENT OF COMPUTER SCIENCE AND INFORMATION ENGINEERING**
-**NATIONAL QUEMOY UNIVERSITY**
-**KINMEN, TAIWAN**
-**2026**
+**研 究 生：Shi-Han Huang (黃世漢)**
+**指導教授：李錫捷 博士**
 
----
-
-# 碩士論文
-## 基於 CLAHE 增強深度學與 MEDVISION-AI 雲端部署之即時乳癌診斷系統
-
-**撰寫本論文係為部分履行學術要求，以取得電腦科學碩士學位。**
-
-**作者: 黃世漢（SHI-HAN HUANG）**
-**指導教授：李錫捷 博士（Dr. HSI-CHIEH LEE）**
-
-**國立金門大學電腦科學與資訊工程學系**
-**台灣金門**
-**2026 年**
+**中華民國一一五年六月**
 
 ---
 
-## ABSTRACT
-Breast cancer continues to be a primary contributor to female mortality worldwide, highlighting the critical imperative for high-precision, automated diagnostic frameworks. This research presents a comprehensive investigation into the classification of breast malignancies using an integrated approach that combines traditional machine learning, represented by K-Nearest Neighbors (K-NN), with advanced deep learning architectures, including VGG16, VGG19, and ResNet50. Utilizing a large-scale Mammogram (DDSM/Mendeley) dataset consisting of over 10,430 samples, this study establishes a benchmark for diagnostic accuracy and clinical interpretability. The core innovation lies in a multi-stage preprocessing pipeline featuring Contrast Limited Adaptive Histogram Equalization (CLAHE), which was specifically optimized to reveal subtle micro-calcifications within dense glandular tissue—a common challenge in traditional mammography screening. Experimental results indicate that while the optimized K-NN model achieved a robust accuracy of 96%, the deep learning ensembles significantly outperformed traditional methods, with the CNN + CLAHE pipeline reaching a peak accuracy of 97.84%. To address the systemic "Black Box" challenge in medical AI, this research integrates Gradient-weighted Class Activation Mapping (Grad-CAM) to provide radiologists with precise visual "evidence" for each classification. Furthermore, the findings were successfully transitioned from laboratory-scale experiments in Google Colab to a production-grade cloud ecosystem via the Google Antigravity IDE. The final deployment on the MedVision-AI platform features a custom-built Retrieval-Augmented Generation (RAG) engine, which synthesizes model confidence with established clinical guidelines to generate automated pathology reports. These results demonstrate that a cloud-integrated, explainable AI framework can significantly bridge the accessibility gap in modern diagnostics, providing reliable and scalable support for clinicians in both urban hospitals and resource-limited environments.
+## 摘	要
 
-**Keywords**: Breast Cancer Diagnosis; Deep Learning; Contrast Limited Adaptive Histogram Equalization (CLAHE); Explainable AI (XAI); Grad-CAM; Retrieval-Augmented Generation (RAG); MedVision-AI; Google Antigravity; VGG16; ResNet50.
-
----
-
-## 摘要
 乳腺癌仍然是全球女性死亡的主要原因之一，這凸顯了對高精度、自動化診斷框架的迫切需求。本研究對乳腺惡性腫瘤的分類進行了全面調查，採用了一種結合傳統機器學習（以 K-Nearest Neighbors, K-NN 為代表）與先進深度學習架構（包括 VGG16、VGG19 和 ResNet50）的整合方法。利用包含超過 10,430 個樣本的大型乳房攝影 (DDSM/Mendeley) 數據集，本研究建立了診斷準確性和臨床解釋性的基準。核心創新在於採用 限制對比度自適應直方圖均衡化 (CLAHE) 的多階段預處理流程，該流程專門針對顯現緻密腺體組織中的微小鈣化點進行了優化，這是傳統乳房攝影篩查中的共同挑戰。實驗結果顯示，雖然優化的 K-NN 模型達到了 96% 的穩定準確度，但深度學習集成模型顯著優於傳統方法，其中 CNN + CLAHE 流程達到了 97.84% 的峰值準確度。為了應對醫療 AI 中系統性的「黑盒子」挑戰，本研究整合了 梯度加權類激活映射 (Grad-CAM)，為放射科醫師提供每次分類的精確視覺「證據」。此外，研究成果成功從 Google Colab 的實驗室規模過渡到基於 Google Antigravity IDE 的生產級雲端生態系統。最終部署的 MedVision-AI 平台包含一個客製化的 檢索增強生成 (RAG) 引擎，該引擎將模型置信度與既定的臨床指南相結合，生成自動化病理報告。這些結果證明，雲端整合、可解釋的 AI 框架可以顯著彌合現代診斷中的可及性差距，為城市醫院和資源受限環境中的臨床醫生提供可靠且可擴展的支持。
 
 **關鍵詞**： 乳腺癌診斷；深度學習；限制對比度自適應直方圖均衡化 (CLAHE)；可解釋人工智慧 (XAI)；Grad-CAM；檢索增強生成 (RAG)；MedVision-AI；Google Antigravity；VGG16；ResNet50。
 
 ---
 
-## ACKNOWLEDGMENTS
-First and foremost, I would like to express my deepest and most sincere gratitude to my advisor, Dr. Hsi-Chieh Lee (李錫捷 博士), for his invaluable guidance, unwavering patience, and continuous encouragement throughout the entire duration of this research. His profound expertise in Computer Science and his insightful suggestions have been pivotal in shaping the core methodology of this thesis. I am especially grateful for his mentorship, which has taught me not just how to develop AI models, but how to approach complex engineering challenges with academic rigor and clinical care. I would also like to thank the distinguished committee members for their time, consideration, and constructive feedback during my oral defense. I would also like to extend my heartfelt appreciation to the Department of Computer Science and Information Engineering at National Quemoy University (國立金門大學資訊工程學系) for providing a supportive and intellectually stimulating academic environment. My time in Kinmen has been a transformative experience, and I am grateful for the resources and facilities made available to me during my Master's Degree program. Finally, I dedicate this work to my family and friends, whose support, love, and belief in my abilities have been my greatest motivation. To my parents, thank you for your endless sacrifices and for always encouraging me to pursue higher education and meaningful innovation. This milestone is as much yours as it is mine.
+## ABSTRACT
+
+Breast cancer continues to be a primary contributor to female mortality worldwide, highlighting the critical imperative for high-precision, automated diagnostic frameworks. This research presents a comprehensive investigation into the classification of breast malignancies using an integrated approach that combines traditional machine learning, represented by K-Nearest Neighbors (K-NN), with advanced deep learning architectures, including VGG16, VGG19, and ResNet50. Utilizing a large-scale Mammogram (DDSM/Mendeley) dataset consisting of over 10,430 samples, this study establishes a benchmark for diagnostic accuracy and clinical interpretability. The core innovation lies in a multi-stage preprocessing pipeline featuring Contrast Limited Adaptive Histogram Equalization (CLAHE), which was specifically optimized to reveal subtle micro-calcifications within dense glandular tissue—a common challenge in traditional mammography screening. Experimental results indicate that while the optimized K-NN model achieved a robust accuracy of 96%, the deep learning ensembles significantly outperformed traditional methods, with the CNN + CLAHE pipeline reaching a peak accuracy of 97.84%. To address the systemic "Black Box" challenge in medical AI, this research integrates Gradient-weighted Class Activation Mapping (Grad-CAM) to provide radiologists with precise visual "evidence" for each classification. Furthermore, the findings were successfully transitioned from laboratory-scale experiments in Google Colab to a production-grade cloud ecosystem via the Google Antigravity IDE. The final deployment on the MedVision-AI platform features a custom-built Retrieval-Augmented Generation (RAG) engine, which synthesizes model confidence with established clinical guidelines to generate automated pathology reports. These results demonstrate that a cloud-integrated, explainable AI framework can significantly bridge the accessibility gap in modern diagnostics, providing reliable and scalable support for clinicians in both urban hospitals and resource-limited environments.
+
+**Keywords**: Breast Cancer Diagnosis; Deep Learning; Contrast Limited Adaptive Histogram Equalization (CLAHE); Explainable AI (XAI); Grad-CAM; Retrieval-Augmented Generation (RAG); MedVision-AI; Google Antigravity; VGG16; ResNet50.
+
+---
+
+## ACKNOWLEDGMENT
+
+First and foremost, I would like to express my deepest and most sincere gratitude to my advisor, Mr Prof. Hsi-Chieh Lee (李錫捷 博士), for his invaluable guidance, unwavering patience, and continuous encouragement throughout the entire duration of this research. His profound expertise in Computer Science and his insightful suggestions have been pivotal in shaping the core methodology of this thesis. I am especially grateful for his mentorship, which has taught me not just how to develop AI models, but how to approach complex engineering challenges with academic rigor and clinical care. I would also like to thank the distinguished committee members for their time, consideration, and constructive feedback during my oral defense. I would also like to extend my heartfelt appreciation to the Department of Computer Science and Information Engineering at National Quemoy University (國立金門大學資訊工程學系) for providing a supportive and intellectually stimulating academic environment. My time in Kinmen has been a transformative experience, and I am grateful for the resources and facilities made available to me during my Master's Degree program. Finally, I dedicate this work to my family and friends, whose support, love, and belief in my abilities have been my greatest motivation. To my parents, thank you for your endless sacrifices and for always encouraging me to pursue higher education and meaningful innovation. This milestone is as much yours as it is mine.
+
+**Kinmen, 21 June 2026**
+**黃世漢**
 
 ---
 
 ## TABLE OF CONTENTS
-ABSTRACT ......................................................................................................... viii
-摘要 ........................................................................................................................ ix
-ACKNOWLEDGMENTS ..................................................................................... x
-TABLE OF CONTENTS .................................................................................... xii
-LIST OF FIGURES ............................................................................................. xv
-LIST OF TABLES ............................................................................................ xviii
-LIST OF SEGMENTS ..................................................................................... xviii
-CHAPTER 1 INTRODUCTION ........................................................................ 20
-1.1 Background ................................................................................................ 20
-1.2 Motivation .................................................................................................. 20
-1.3 Problem Statement ..................................................................................... 20
-1.4 Objectives and Goals ................................................................................. 20
-1.5 Contributions ............................................................................................. 20
-CHAPTER 2 LITERATURE REVIEW ............................................................ 20
-2.1 Related Literature ...................................................................................... 20
-2.1.1 K-Nearest Neighbors (KNN) ................................................................ 21
-2.1.2 Convolutional Neural Networks (CNNs) ......................................... 21
-2.1.3 CNN + CLAHE Integration .............................................................. 21
-2.1.4 ResNet50 and Multi-Class Classification ......................................... 21
-2.1.5 Synthesis and Research Gap ............................................................. 21
-2.2 Comparative Analysis with Existing Literature ......................................... 20
-2.2.1 K-Nearest Neighbors (KNN) Comparison ....................................... 21
-2.2.2 Convolutional Neural Networks (CNN) Comparison ...................... 21
-2.2.3 Synthesis of Comparative Findings .................................................. 21
-2.3 Theoretical Framework .............................................................................. 20
-2.3.1 K-Nearest Neighbors (KNN) ............................................................ 21
-2.3.2 Convolutional Neural Networks (CNN) ........................................... 21
-2.3.3 Integrated Diagnostic Enhancement (CLAHE) ................................ 21
-2.3.4 Cloud-Based System Realization (MedVision-AI) .......................... 21
-CHAPTER 3 METHODOLOGY ....................................................................... 20
-3.1 Data Collection .......................................................................................... 20
-3.1.1 Data Collection Description .............................................................. 21
-3.1.2 Dataset Details .................................................................................. 21
-3.1.3 Data Collection Process .................................................................... 21
-3.1.3 Data Collection Process .................................................................   21
-3.1.4 Data Labeling and Annotation .......................................................... 21
-3.2 Preprocessing ............................................................................................. 20
-3.2.1 Image Standardization (Grayscale and Resizing) ............................. 21
-3.2.2 Enhancement (Histogram Equalization) ........................................... 21
-3.2.3 Normalization and Splitting .............................................................. 21
-3.3 Model Selection and Design ...................................................................... 20
-3.3.1 K-Nearest Neighbors (KNN) ............................................................ 21
-3.3.2 Convolutional Neural Networks (CNN) ........................................... 21
-3.4 System Architecture Diagram .................................................................   20
-3.5 AI Model Diagram ..................................................................................... 20
-CHAPTER 4 IMPLEMENTATION .................................................................. 20
-4.1 Development Environment: Google Antigravity ....................................... 20
-4.2 Algorithmic Implementation: K-Nearest Neighbors (KNN) ..................... 20
-4.2.1 KNN Training and Hyperparameter Tuning ..................................... 21
-4.2.2 Feature Standardization .................................................................... 21
-4.3 Deep Learning Implementation: CNN (VGG16 & VGG19) ..................... 20
-4.3.1 Architectural Design (VGG16/VGG19) ........................................... 21
-4.3.2 Training Regime and Callbacks ........................................................ 21
-4.4 Technical Implementation Results ............................................................. 20
-4.5 Backend and API Realization (FastAPI) ................................................... 20
-4.6 Frontend Engineering (React, Vite, Tailwind CSS) .................................. 20
-CHAPTER 5 RESULTS ...................................................................................... 20
-5.1 K-Nearest Neighbors (KNN) Benchmarks ................................................. 20
-5.2 Convolutional Neural Networks (CNN) Benchmarks ................................ 20
-5.2.1 VGG16 Results ................................................................................. 21
-5.2.2 VGG19 and ResNet50 Comparisons ................................................ 21
-5.3 CNN + CLAHE: Integrated System Performance ..................................... 20
-5.4 Benchmarking and Statistical Synthesis .................................................... 20
-5.5 Cross-Platform Validation: GPU vs. CPU ............................................... 20
-5.6 Comparative Accuracy Visualization ........................................................ 20
-5.7 Synthesis of Results ................................................................................... 20
-CHAPTER 6 CONCLUSION ............................................................................. 20
-6.1 Summary of Findings and The Solution .................................................... 20
-6.2 Limitations and Future Work ..................................................................... 20
-REFERENCES .................................................................................................... 20
-APPENDICES ...................................................................................................... 20
+
+- **CHINESE ABSTRACT** ................................. I
+- **ENGLISH ABSTRACT** ................................ II
+- **ACKNOWLEDGMENT** ................................. III
+- **TABLE OF CONTENTS** ............................... IV
+- **LIST OF FIGURES** ................................ VII
+- **LIST OF TABLES** .................................. IX
+- **LIST OF ALGORITHMS** ............................... X
+- **CHAPTER 1 INTRODUCTION** .......................... 11
+- **CHAPTER 2 LITERATURE REVIEW** .................... 16
+- **CHAPTER 3 METHODOLOGY** .......................... 26
+- **CHAPTER 4 IMPLEMENTATION** ....................... 32
+- **CHAPTER 5 RESULTS** .............................. 45
+- **CHAPTER 6 CONCLUSION** ........................... 57
+- **REFERENCES** ...................................... 60
+- **APPENDICES** ...................................... 62
 
 ---
 
-## LIST OF FIGURES
-Figure 1.1 The Hierarchy of Machine Learning and Deep Learning. ............. 20
-Figure 2.1 Comparison Model of KNN ........................................................... 20
-Figure 2.2 Comparison Model of CNN ........................................................... 20
-Figure 3.1 The Grayscale Conversion ............................................................. 20
-Figure 3.2 System Architecture Diagram ........................................................ 20
-Figure 3.3 AI Model Diagram.. ....................................................................... 20
-Figure 4.1 K Value Plot for Maximum Accuracy.. ......................................... 20
-Figure 4.2 VGG16 Build the Model ................................................................ 20
-Figure 4.3 VGG19 Build the Model ................................................................ 20
-Figure 4.4 VGG16 Compile, Callbacks, Learning Rate, Training & Evaluate the Model ............................................................................................................... 20
-Figure 4.5 VGG19 Compile, Callbacks, Learning Rate, Training & Evaluate the Model ............................................................................................................... 20
-Figure 5.1 Confusion Matrix of KNN Model .................................................. 20
-Figure 5.2 Confusion Matrix of VGG16 ......................................................... 20
-Figure 5.3 Confusion Matrix of VGG19 ......................................................... 20
-Figure 5.4 ResNet50 Performance Accuracy .................................................. 20
-Figure 5.5 CNN + CLAHE Performance Accuracy ........................................ 20
-
----
-
-## LIST OF TABLES
-Table 5.1 Comparative Analysis Between All Models .................................... 20
-
----
-
-## CHAPTER 1: INTRODUCTION
+## CHAPTER 1 INTRODUCTION
 
 ### 1.1 Background
 Breast cancer is one of the most prevalent and life-threatening diseases affecting women worldwide, posing a significant global health challenge. According to global cancer statistics recently published by the World Health Organization (WHO), it accounts for approximately 24.5% of all cancer cases among women, making it the most commonly diagnosed malignancy in this demographic. The burden of breast cancer is not confined to any single region; its impact is evident in both developed and developing countries. However, disparities in healthcare access and diagnostic tools often result in delayed diagnoses, particularly in underprivileged regions, contributing to higher mortality rates in such areas compared to metropolitan centers.
@@ -156,7 +67,7 @@ Recent estimates indicate that, between 2023 and 2024, the United States alone i
 
 A visual representation of the relationship between machine learning and deep learning, highlighting the key algorithms used in this study, is shown in Figure 1.1.
 
-Figure 1.1 The Hierarchy of Machine Learning and Deep Learning.
+**Figure 1.1 The Hierarchy of Machine Learning and Deep Learning.**
 
 ### 1.2 Motivation
 Traditional mammography remains the gold-standard modality for screening due to its ability to detect abnormalities at a pre-clinical stage. However, the interpretation of digital mammograms is a complex and time-consuming task, requiring highly experienced radiologists and often leading to variations in diagnostic accuracy. This complexity presents a compelling case for employing automated image classification techniques which can assist clinicians in identifying and evaluating potential malignancies more efficiently.
@@ -166,42 +77,42 @@ This study is motivated by the need to bridge the "accessibility gap" in medical
 ### 1.3 Problem Statement
 Despite significant advancements in imaging technology, traditional methods for detecting breast cancer via manual mammogram interpretation continue to suffer from several systemic limitations that hinder effective clinical outcomes. The primary challenges identified in this study that necessitate the development of an automated framework are as follows:
 
-1. High Diagnostic Variability: The interpretation of mammographic images can vary significantly among radiologists based on their unique training, years of experience, and daily fatigue levels. This subjectivity often leads to inconsistent diagnoses and a higher risk of potential false positives or false negatives, which can cause either unnecessary patient anxiety or missed opportunities for early intervention.
-2. Time-Consuming Analysis and Latency: Manual assessment of multi-view mammograms requires considerable time and a high level of expertise. This creates a bottleneck in the diagnostic workflow, resulting in latency between initial imaging and final pathology results. Such delays can significantly postpone the commencement of potentially life-saving treatments.
-3. Resource and Infrastructure Constraints: In low-income and resource-constrained settings, access to skilled radiologists and advanced diagnostic tools is severely limited, creating a critical gap in early detection capabilities. Furthermore, high-end diagnostic software is often localized to expensive laboratory hardware, making it inaccessible to the very clinics that face these resource limitations.
-4. The "Black Box" Interpretability Problem: Many contemporary deep learning models suffer from a lack of transparency and explainability in their decision-making processes. Clinicians are often hesitant to trust AI results without a clear understanding of the evidence behind a classification.
+1. **High Diagnostic Variability**: The interpretation of mammographic images can vary significantly among radiologists based on their unique training, years of experience, and daily fatigue levels. This subjectivity often leads to inconsistent diagnoses and a higher risk of potential false positives or false negatives, which can cause either unnecessary patient anxiety or missed opportunities for early intervention.
+2. **Time-Consuming Analysis and Latency**: Manual assessment of multi-view mammograms requires considerable time and a high level of expertise. This creates a bottleneck in the diagnostic workflow, resulting in latency between initial imaging and final pathology results. Such delays can significantly postpone the commencement of potentially life-saving treatments.
+3. **Resource and Infrastructure Constraints**: In low-income and resource-constrained settings, access to skilled radiologists and advanced diagnostic tools is severely limited, creating a critical gap in early detection capabilities. Furthermore, high-end diagnostic software is often localized to expensive laboratory hardware, making it inaccessible to the very clinics that face these resource limitations.
+4. **The "Black Box" Interpretability Problem**: Many contemporary deep learning models suffer from a lack of transparency and explainability in their decision-making processes. Clinicians are often hesitant to trust AI results without a clear understanding of the evidence behind a classification.
 
 These multi-faceted challenges necessitate the development of automated systems capable of delivering consistent and accurate results. A reliable machine learning-based system can address these gaps, enhancing both accessibility and diagnostic precision (Abunasser et al., 2023). This research specifically addresses the "accessibility gap" by developing a cloud-integrated solution. By utilizing the Google Antigravity IDE to optimize complex architectures like VGG16 and ResNet50, and deploying the final model via the MedVision-AI web platform, this study provides a tool that can be accessed from any location with basic internet connectivity, effectively mitigating the constraints of local hardware and specialized personnel.
 
 ### 1.4 Objectives and Goals
-1. Image Optimization: Implementing CLAHE for localized contrast specifically for high-density mammogram tissue.
-2. Comparative Analysis: Benchmarking K-NN vs. deep CNNs for robust performance.
-3. Real-time Deployment: Porting researcher code to the Google Antigravity IDE for production-grade robustness.
-4. Explainability Display: Providing Grad-CAM heatmaps and RAG clinical reports based on WHO guidelines.
+1. **Image Optimization**: Implementing CLAHE for localized contrast specifically for high-density mammogram tissue (Zuiderveld, 1994).
+2. **Comparative Analysis**: Benchmarking K-NN vs. deep CNNs for robust performance.
+3. **Real-time Deployment**: Porting researcher code to the Google Antigravity IDE for production-grade robustness.
+4. **Explainability Display**: Providing Grad-CAM heatmaps (Selvaraju et al., 2017) and RAG clinical reports based on WHO guidelines.
 
 ### 1.5 Contributions
 The primary contributions of this thesis toward the field of medical imaging and computer-aided diagnosis (CAD) are summarized as follows:
-1. Advancement in Algorithmic Understanding: This study provides a comprehensive benchmark between K-Nearest Neighbors (KNN) and Convolutional Neural Network (CNN) architectures. By analyzing both traditional and deep learning approaches on the same 10,430-sample dataset, this research advances the understanding of how hierarchical feature extraction (CNN) compared to proximity-based classification (KNN) performs in the specific context of multi-layered mammography.
-2. Model Selection and Resource Guidelines: A significant contribution of this work is the development of a guideline for selecting the most appropriate diagnostic model based on clinical dataset characteristics and available computational resources. This provides a roadmap for practitioners to balance the high accuracy of deep learning with the lower computational overhead of traditional machine learning, depending on the infrastructure of the medical facility.
-3. Real-world Automated Diagnostic Solution: This research contributes to the ongoing global efforts to develop automated, accurate, and efficient diagnostic tools. By realizing the MedVision-AI platform, this study transforms laboratory experiments into a production-grade, cloud-integrated tool. This demonstrates a scalable solution for reducing breast cancer-related mortality by providing clinicians with real-time, explainable (via Grad-CAM), and grounded (via RAG) diagnostic support that mitigates the technical barriers of local hardware constraints.
+1. **Advancement in Algorithmic Understanding**: This study provides a comprehensive benchmark between K-Nearest Neighbors (KNN) and Convolutional Neural Network (CNN) architectures. By analyzing both traditional and deep learning approaches on the same 10,430-sample dataset, this research advances the understanding of how hierarchical feature extraction (CNN) compared to proximity-based classification (KNN) performs in the specific context of multi-layered mammography.
+2. **Model Selection and Resource Guidelines**: A significant contribution of this work is the development of a guideline for selecting the most appropriate diagnostic model based on clinical dataset characteristics and available computational resources. This provides a roadmap for practitioners to balance the high accuracy of deep learning with the lower computational overhead of traditional machine learning, depending on the infrastructure of the medical facility.
+3. **Real-world Automated Diagnostic Solution**: This research contributes to the ongoing global efforts to develop automated, accurate, and efficient diagnostic tools. By realizing the MedVision-AI platform, this study transforms laboratory experiments into a production-grade, cloud-integrated tool. This demonstrates a scalable solution for reducing breast cancer-related mortality by providing clinicians with real-time, explainable (via Grad-CAM), and grounded (via RAG) diagnostic support that mitigates the technical barriers of local hardware constraints.
 
 ---
 
-## CHAPTER 2: LITERATURE REVIEW
+## CHAPTER 2 LITERATURE REVIEW
 
 ### 2.1 Related Literature
 
 #### 2.1.1 K-Nearest Neighbors (KNN)
-Previous research highlights both the unique strengths and inherent limitations of the K-Nearest Neighbors (KNN) algorithm for breast cancer classification. Vaira Suganthi et al. (2020) conducted extensive benchmarking and demonstrated that KNN achieved significant success across multiple datasets, reaching an accuracy of 92.54% on the MIAS dataset, 96.47% on the DDSM dataset, and 92.75% on various MD datasets. A primary advantage of KNN in a clinical setting is its high interpretability, as it classifies new cases based on direct proximity to known historical outcomes. However, as noted in the literature, KNN often struggles with large-scale and high-dimensional datasets compared to modern deep learning models, which can more effectively manage the pixel density and structural complexity of high-resolution digital mammography.
+Previous research highlights both the unique strengths and inherent limitations of the K-Nearest Neighbors (KNN) algorithm for breast cancer classification. Vaira Suganthi et al. (2020) conducted extensive benchmarking and demonstrated that KNN achieved significant success across multiple datasets, reaching an accuracy of 92.54% on the MIAS dataset (Suckling et al., 1994), 96.47% on the DDSM dataset (Heath et al., 2000), and 92.75% on various MD datasets. A primary advantage of KNN in a clinical setting is its high interpretability, as it classifies new cases based on direct proximity to known historical outcomes. However, as noted in the literature, KNN often struggles with large-scale and high-dimensional datasets compared to modern deep learning models, which can more effectively manage the pixel density and structural complexity of high-resolution digital mammography.
 
 #### 2.1.2 Convolutional Neural Networks (CNNs)
-Deep learning models, specifically Convolutional Neural Networks (CNNs), have consistently outperformed traditional machine learning algorithms in the domain of automated breast cancer detection. Kamal Kamal et al. (2023) performed a comparative study of the VGG16, VGG19, and ResNet50 architectures, reporting validation accuracies of 92%, 93%, and 95%, respectively, when applied to CLAHE-processed mammogram images. The superior performance of the ResNet50 model in their study stems from its implementation of residual learning, allowing the model to learn deep hierarchical features without the degradation typical of standard feed-forward networks. Furthermore, Arevalo et al. (2016) emphasized that the strategic integration of preprocessing techniques, such as resizing and contrast alignment, is essential for enhancing CNN accuracy to levels exceeding 94%.
+Deep learning models, specifically Convolutional Neural Networks (CNNs), have consistently outperformed traditional machine learning algorithms in the domain of automated breast cancer detection. Kamal Kamal et al. (2023) performed a comparative study of the VGG16, VGG19 (Simonyan and Zisserman, 2014), and ResNet50 architectures (He et al., 2016), reporting validation accuracies of 92%, 93%, and 95%, respectively, when applied to CLAHE-processed mammogram images. The superior performance of the ResNet50 model in their study stems from its implementation of residual learning, allowing the model to learn deep hierarchical features without the degradation typical of standard feed-forward networks. Furthermore, Arevalo et al. (2016) emphasized that the strategic integration of preprocessing techniques, such as resizing and contrast alignment, is essential for enhancing CNN accuracy to levels exceeding 94%.
 
 #### 2.1.3 CNN + CLAHE Integration
-The importance of contrast management in medical imaging was further validated by Mishra et al. (2021), who combined CNNs with Contrast Limited Adaptive Histogram Equalization (CLAHE). This specific approach was designed to enhance localized image contrast, thereby improving the CNN’s ability to distinguish subtle morphological differences between benign and malignant lesions. Their results conclusively showed that integrating a CLAHE preprocessing layer significantly boosted classification accuracy and signal detection, demonstrating the high potential of this method for automated diagnostic support in real-world clinical settings.
+The importance of contrast management in medical imaging was further validated by Mishra et al. (2021), who combined CNNs with Contrast Limited Adaptive Histogram Equalization (CLAHE) (Zuiderveld, 1994). This specific approach was designed to enhance localized image contrast, thereby improving the CNN’s ability to distinguish subtle morphological differences between benign and malignant lesions. Their results conclusively showed that integrating a CLAHE preprocessing layer significantly boosted classification accuracy and signal detection, demonstrating the high potential of this method for automated diagnostic support in real-world clinical settings.
 
 #### 2.1.4 ResNet50 and Multi-Class Classification
-Expanding beyond binary classification, Sunil Kumar et al. (2023) explored the utility of the ResNet50 model for multi-class breast cancer identification. Their research focused on classifying mass regions into four distinct pathologically significant categories: ductal carcinoma, inflammatory, triple-negative, and invasive cancer. By integrating advanced image processing techniques such as noise reduction and localized segmentation, their system achieved a classification accuracy of 90.6%. This research underscores the potential for deep learning models to not only detect cancer but also facilitate personalized treatment strategies by identifying specific cancer subtypes.
+Expanding beyond binary classification, Sunil Kumar et al. (2023) explored the utility of the ResNet50 model for multi-class breast cancer identification (He et al., 2016). Their research focused on classifying mass regions into four distinct pathologically significant categories: ductal carcinoma, inflammatory, triple-negative, and invasive cancer. By integrating advanced image processing techniques such as noise reduction and localized segmentation, their system achieved a classification accuracy of 90.6%. This research underscores the potential for deep learning models to not only detect cancer but also facilitate personalized treatment strategies by identifying specific cancer subtypes.
 
 #### 2.1.5 Synthesis and Research Gap
 While the aforementioned studies establish the high efficacy of CNNs and CLAHE in laboratory settings, there remains a critical "real-world gap" in transitioning these high-performing models from offline development environments (like Google Colab) to real-time, accessible clinical tools. This research specifically addresses this gap. By achieving a superior accuracy of 97.84% using a fine-tuned VGG16+CLAHE pipeline and porting the entire architecture to the Google Antigravity IDE for cloud optimization, this study offers a tangible bridge between theoretical research and clinical implementation. The culmination of this work is the MedVision-AI platform, which provides a production-ready deployment of the theoretical advancements found in current literature.
@@ -211,27 +122,33 @@ This section provides a detailed benchmark of the current research against estab
 
 #### 2.2.1 K-Nearest Neighbors (KNN) Comparison
 A direct comparison was conducted between the KNN model developed in this study and the results reported in the IET research paper by Suganthi et al. (2020).
-1. Accuracy Trends:
-• Proposed Model: Our model demonstrates a clear inverse relationship between classification accuracy and the K-value. The highest accuracy was achieved at a lower K-value (K=3, reaching ~96%), with a visible decline in precision as the value of K increased. This indicates a high sensitivity to local data structures and a precise boundary definition.
-• Literature Models: These reported varying accuracy levels across multiple datasets (DDSM: ~96.47%, MIAS: ~92.54%, MD: ~92.75%). While the literature shows consistent performance across different data sources, it lacks the detailed hyperparameter tuning observed in this study.
-2. Strengths and Weaknesses:
-The proposed model excels in localized fine-tuning, providing a detailed exploration of optimal K-value selection as visualized in the experimental results (Figure 2.1). However, the literature models offer broader multi-dataset benchmarking, which provides a more generalized view of KNN performance across different imaging hardware.
-3. Conclusion:
-Our KNN model excels in detailed optimization but lacks the multi-dataset benchmarking evident in broader literature. The other research provides dataset variety but lacks the rigorous parameter optimization performed within this study's framework.
 
-Figure 2.1 Comparison Model of KNN.
+1. **Accuracy Trends**:
+   - **Proposed Model**: Our model demonstrates a clear inverse relationship between classification accuracy and the K-value. The highest accuracy was achieved at a lower K-value (K=3, reaching ~96%), with a visible decline in precision as the value of K increased. This indicates a high sensitivity to local data structures and a precise boundary definition.
+   - **Literature Models**: These reported varying accuracy levels across multiple datasets (DDSM: ~96.47%, MIAS: ~92.54%, MD: ~92.75%). While the literature shows consistent performance across different data sources, it lacks the detailed hyperparameter tuning observed in this study.
+
+2. **Strengths and Weaknesses**:
+   - The proposed model excels in localized fine-tuning, providing a detailed exploration of optimal K-value selection as visualized in the experimental results (Figure 2.1). However, the literature models offer broader multi-dataset benchmarking, which provides a more generalized view of KNN performance across different imaging hardware.
+
+3. **Conclusion**:
+   - Our KNN model excels in detailed optimization but lacks the multi-dataset benchmarking evident in broader literature. The other research provides dataset variety but lacks the rigorous parameter optimization performed within this study's framework.
+
+**Figure 2.1 Comparison Model of KNN.**
 
 #### 2.2.2 Convolutional Neural Networks (CNN) Comparison
 The performance of the fine-tuned VGG16 and VGG19 architectures in this study is compared against the findings from Research Square by Kamal et al. (2023).
-1. Accuracy Trends:
-• Proposed Model: Both VGG16 and VGG19 exhibited high training and validation accuracies exceeding 97%. Notably, VGG19 showed marginally better validation stability over epochs compared to VGG16, suggesting superior feature abstraction for high-density mammogram patches.
-• Literature Models: The benchmarked models in previous literature reported lower validation accuracies (VGG16: ~90-92%, VGG19: ~93%). While the literature included ResNet50 (peaking at ~95%), the peak accuracy of the VGG-based pipeline in this study (97.51%) significantly outperforms the baseline.
-2. Strengths and Weaknesses:
-This study provides deeper insights into training and validation trends, showing strong convergence with minimal overfitting. While the literature offers a broader architectural scope by including ResNet50, this research demonstrates that with proper fine-tuning and the integration of the Google Antigravity IDE for model optimization, VGG architectures can exceed the performance of deeper models reported in earlier studies.
-3. Conclusion:
-Our CNN models provide deeper insights into training and validation trends for VGG architectures, as illustrated in Figure 2.2. Corresponding research extends to broader architecture comparisons and preprocessing impacts, offering a comprehensive overview of general CNN performance but lacking the high-peak accuracy achieved in our pipeline.
 
-Figure 2.2 Comparison Model of CNN.
+1. **Accuracy Trends**:
+   - **Proposed Model**: Both VGG16 and VGG19 exhibited high training and validation accuracies exceeding 97%. Notably, VGG19 showed marginally better validation stability over epochs compared to VGG16, suggesting superior feature abstraction for high-density mammogram patches.
+   - **Literature Models**: The benchmarked models in previous literature reported lower validation accuracies (VGG16: ~90-92%, VGG19: ~93%). While the literature included ResNet50 (peaking at ~95%), the peak accuracy of the VGG-based pipeline in this study (97.51%) significantly outperforms the baseline.
+
+2. **Strengths and Weaknesses**:
+   - This study provides deeper insights into training and validation trends, showing strong convergence with minimal overfitting. While the literature offers a broader architectural scope by including ResNet50, this research demonstrates that with proper fine-tuning and the integration of the Google Antigravity IDE for model optimization, VGG architectures can exceed the performance of deeper models reported in earlier studies.
+
+3. **Conclusion**:
+   - Our CNN models provide deeper insights into training and validation trends for VGG architectures, as illustrated in Figure 2.2. Corresponding research extends to broader architecture comparisons and preprocessing impacts, offering a comprehensive overview of general CNN performance but lacking the high-peak accuracy achieved in our pipeline.
+
+**Figure 2.2 Comparison Model of CNN.**
 
 #### 2.2.3 Synthesis of Comparative Findings
 The primary distinction of this research lies in its optimization depth and deployment capability. While existing literature provides a broad overview of different architectures and datasets, this study achieves a higher peak accuracy (97.84% with CLAHE) and bridges the critical gap between theoretical research and practical application via the MedVision-AI platform. This transition to a live, cloud-integrated environment represents a significant advancement over the offline experimental results found in current literature.
@@ -250,20 +167,20 @@ The framework incorporates Contrast Limited Adaptive Histogram Equalization (CLA
 
 #### 2.3.4 Cloud-Based System Realization (MedVision-AI)
 The theoretical journey concludes with the transition from local experimentation to a global cloud-based architecture.
-1. Google Antigravity IDE: Acts as the high-performance computing environment required to optimize these deep architectures and manage the containerized dependencies of the FastAPI backend.
-2. MedVision-AI Deployment: Represents the practical realization of "Inference-as-a-Service." In this model, the theoretical architectures are served via a standard web interface, decoupling the need for expensive local GPU hardware from the diagnostic process. This provides real-time, non-invasive diagnostic support to any clinician with a web browser, successfully bridging the gap between theoretical AI and accessible healthcare.
+1. **Google Antigravity IDE**: Acts as the high-performance computing environment required to optimize these deep architectures and manage the containerized dependencies of the FastAPI backend.
+2. **MedVision-AI Deployment**: Represents the practical realization of "Inference-as-a-Service." In this model, the theoretical architectures are served via a standard web interface, decoupling the need for expensive local GPU hardware from the diagnostic process. This provides real-time, non-invasive diagnostic support to any clinician with a web browser, successfully bridging the gap between theoretical AI and accessible healthcare.
 
 #### 2.3.5 Explainable AI (XAI) and Grad-CAM Theory
 To overcome the "Black Box" nature of deep learning in clinical settings, this framework incorporates Gradient-weighted Class Activation Mapping (Grad-CAM). The theoretical principle involves leveraging the gradients of any target class (e.g., "Cancer") flowing into the final convolutional layer of the network. By producing a localization map that highlights the most important regions in the image for making the prediction, Grad-CAM allows radiologists to verify the model's decision-making process against their own morphological expertise.
 
 #### 2.3.6 Retrieval-Augmented Generation (RAG) for Clinical Compliance
-Medical practice requires more than binary results; it demands descriptive documentation. This study utilizes RAG to bridge the gap between classification scores and clinical reporting. 
-- **Generative Backbone**: The system integrates the **Gemini-1.5-Flash** large language model (LLM) as the generative engine, selected for its high context window and low latency for real-time clinical synthesis.
-- **Workflow**: RAG operates by retrieving authoritative medical templates and WHO guidelines using the **Sentence-Transformers (all-MiniLM-L6-v2)** embedding model. It ensures that the final output is a grounded, medically-compliant report rather than a non-descriptive numeric score.
+Medical practice requires more than binary results, it demands descriptive documentation. This study utilizes RAG to bridge the gap between classification scores and clinical reporting.
+1. **Generative Backbone**: The system integrates the Gemini-1.5-Flash large language model (LLM) as the generative engine, selected for its high context window and low latency for real-time clinical synthesis.
+2. **Workflow**: RAG operates by retrieving authoritative medical templates and WHO guidelines using the Sentence-Transformers (all-MiniLM-L6-v2) embedding model. It ensures that the final output is a grounded, medically compliant report rather than a non-descriptive numeric score.
 
 ---
 
-## CHAPTER 3: METHODOLOGY
+## CHAPTER 3 METHODOLOGY
 
 ### 3.1 Data Collection
 
@@ -284,25 +201,28 @@ To ensure reliability for machine learning tasks, the labels "Cancer" and "Non-C
 #### 3.2.1 Image Standardization (Grayscale and Resizing)
 All images were converted to grayscale to simplify processing and focus on texture/intensity gradients as illustrated in Figure 3.1. Subsequently, images were resized to a standard size of 128 x 128 pixels to ensure compatibility with convolutional neural network architectures.
 
-Figure 3.1 The Grayscale Conversion.
+**Figure 3.1 The Grayscale Conversion.**
 
 #### 3.2.2 Enhancement (Histogram Equalization)
 We applied contrast enhancement techniques to improve image quality and visibility. Specifically, CLAHE was integrated to improve the detection of subtle malignant features within dense breast tissue.
 
+#### 3.2.3 Normalization and Splitting
+We applied contrast enhancement techniques to improve image quality and visibility. Specifically, CLAHE was integrated to improve the detection of subtle malignant features within dense breast tissue.
+
 #### 3.2.4 The Mathematical Foundation of CLAHE
-To ensure the reproducibility of our preprocessing pipeline, we define the mathematical transformation used in Contrast Limited Adaptive Histogram Equalization. Unlike standard AHE, CLAHE limits the amplification by clipping the histogram at a predefined value before computing the Cumulative Distribution Function (CDF).
-The transformation function $T$ for a pixel intensity $i$ is defined as:
+To ensure the reproducibility of our preprocessing pipeline, we define the mathematical transformation used in Contrast Limited Adaptive Histogram Equalization. Unlike standard AHE, CLAHE limits the amplification by clipping the histogram at a predefined value before computing the Cumulative Distribution Function (CDF). The transformation function $T$ for a pixel intensity $i$ is defined as:
+
 $$
-T(i) = (L-1) \sum_{j=0}^{i} P_{clipped}(j)
+T(i) = (L - 1) \sum_{j=0}^{i} P_{clipped}(j)
 $$
-where $L$ is the number of gray levels, and $P_{clipped}(j)$ is the probability density of the intensity $j$ after the clipping process:
+
+Where $L$ is the number of gray levels, and $P_{clipped}(j)$ is the probability density of the intensity $j$ after the clipping process:
+
 $$
 P_{clipped}(j) = \frac{n_j + \beta}{N + \beta \cdot L}
 $$
-In this equation, $n_j$ represents the pixel count for intensity $j$, $N$ is the total number of pixels in the local tile, and $\beta$ is a redistribution factor that prevents over-enhancement in flat regions. This localized control allows the MedVision-AI models to maintain a high Signal-to-Noise Ratio (SNR) in high-density mammogram patches.
 
-#### 3.2.3 Normalization and Splitting
-We applied contrast enhancement techniques to improve image quality and visibility. Specifically, CLAHE was integrated to improve the detection of subtle malignant features within dense breast tissue. (Repeated content from source PDF extraction).
+In this equation, $n_j$ represents the pixel count for intensity $j$, $N$ is the total number of pixels in the local tile, and $\beta$ is a redistribution factor that prevents over-enhancement in flat regions. This localized control allows the MedVision-AI models to maintain a high Signal-to-Noise Ratio (SNR) in high-density mammogram patches.
 
 ### 3.3 Model Selection and Design
 
@@ -315,72 +235,77 @@ We utilized fine-tuned VGG16 and VGG19 architectures. Training was conducted for
 ### 3.4 System Architecture Diagram
 Figure 3.2 provides a comprehensive visual representation of the system architecture. It outlines the entire workflow, from the initial input of mammogram images through unified preprocessing, to the dual-classification paths (KNN and CNN) and final output layers.
 
-Figure 3.2 System Architecture Diagram.
+**Figure 3.2 System Architecture Diagram.**
 
 ### 3.5 AI Model Diagram
 Figure 3.3 illustrates the key components and their interactions within the AI model. This hybrid approach leverages the interpretability of KNN and the powerful feature extraction capabilities of CNNs to improve the accuracy and robustness of breast cancer classification.
 
-Figure 3.3 AI Model Diagram.
+**Figure 3.3 AI Model Diagram.**
 
 ### 3.6 Data Augmentation and Synthetic Dataset Expansion
 To further enhance the generalizability of the MedVision-AI framework and prevent overfitting on the 10,430-sample dataset, this research implemented a robust data augmentation pipeline.
-- **Transformation Matrix**: Each mammogram patch underwent random rotation (up to 20 degrees), horizontal flipping, and brightness adjustment.
-- **Technical Goal**: This synthetic expansion ensures that the CNN models learn the invariant morphological characteristics of malicious tissue clusters, rather than memorizing specific pixel orientations. By tripling the effective training variety, we significantly improved the model's performance on previously unseen clinical data.
+1. **Transformation Matrix**: Each mammogram patch underwent random rotation (up to 20 degrees), horizontal flipping, and brightness adjustment.
+2. **Technical Goal**: This synthetic expansion ensures that the CNN models learn the invariant morphological characteristics of malicious tissue clusters, rather than memorizing specific pixel orientations. By tripling the effective training variety, we significantly improved the model's performance on previously unseen clinical data.
+
 
 ---
 
-## CHAPTER 4: IMPLEMENTATION
+## CHAPTER 4 IMPLEMENTATION
 
 ### 4.1 Development Environment: Google Antigravity
-The transition from a laboratory environment (Google Colab) to a production-ready system was facilitated by the Google Antigravity IDE. This high-performance computing environment allowed for the seamless integration of traditional machine learning (Scikit-Learn) and deep learning (TensorFlow/Keras) within a unified, containerized workspace. By utilizing Antigravity’s cloud infrastructure, we were able to manage high-dimensional mammography tensors and maintain low-latency connections between the FastAPI backend and the React frontend.
+The transition from a laboratory environment (Google Colab) to a production-ready system was facilitated by the Google Antigravity IDE. This high-performance computing environment allowed for the seamless integration of traditional machine learning (Scikit-Learn) and deep learning (TensorFlow (Abadi et al., 2015) and Keras (Chollet et al., 2015)) within a unified, containerized workspace. By utilizing Antigravity’s cloud infrastructure, we were able to manage high-dimensional mammography tensors and maintain low-latency connections between the FastAPI backend and the React frontend.
 
 ### 4.2 Algorithmic Implementation: K-Nearest Neighbors (KNN)
 The KNN branch provides the system with a baseline for interpretability. The implementation focused on optimizing the relationship between localized data structure and classification accuracy.
 
 #### 4.2.1 KNN Training and Hyperparameter Tuning
 As shown in Figure 4.1, the KNN model was implemented using the KNeighborsClassifier from the Scikit-Learn library. To identify the point of maximum performance, a Grid Search was conducted over a range of K-values (1 to 40).
-1. Optimization Result: The analysis revealed a clear relationship where accuracy initially increased with the K-value, reaching a peak at K=3, and subsequently declined as the value of K increased.
-2. Performance: After hyperparameter optimization, the KNN model achieved a robust accuracy range of 95.30%.
+1. **Optimization Result**: The analysis revealed a clear relationship where accuracy initially increased with the K-value, reaching a peak at K=3, and subsequently declined as the value of K increased.
+2. **Performance**: After hyperparameter optimization, the KNN model achieved a robust accuracy range of 95.30%.
 
-**Algorithm 4-1: Implementation KNN (K-Nearest Neighbors)**
+Implementation of KNN shown in Algorithm 4.1.
+
+**Algorithm 4.1: Implementation KNN (K-Nearest Neighbors)**
 ```text
 1: Preparation(train_features, test_features, validation_features)
-2:    return train_normalization, test_normalization, validation_normalization
+2: return train_normalization, test_normalization, validation_normalization
 3: for k from 1 to 40 do
-4:    KNN <- KNeighborsClassifier(n_neighbors <- k, metric <- 'euclidean')
-5:    Score <- CrossValidate(KNN, train_normalization)
-6:    if Score > maxScore then
-7:       maxScore <- Score
-8:       bestK <- k
+4: KNN <- KNeighborsClassifier(n_neighbors <- k, metric <- 'euclidean')
+5: Score <- CrossValidate(KNN, train_normalization)
+6: if Score > maxScore then
+7: maxScore <- Score
+8: bestK <- k
 9: Model <- KNeighborsClassifier(n_neighbors <- bestK)
 10: Model.Fit(train_normalization, train_labels)
 11: Model.Evaluate(test_normalization)
 ```
 
-Figure 4.1 K Value Plot for Maximum Accuracy.
+**Figure 4.1 K Value Plot for Maximum Accuracy.**
 
 #### 4.2.2 Feature Standardization
 Prior to distance calculation, all features were standardized. This ensured that every intensity pixel and HOG gradient contributed equally to the Euclidean distance metric, preventing bias from high-intensity artifacts in the mammogram.
 
 ### 4.3 Deep Learning Implementation: CNN (VGG16 & VGG19)
-The deep learning component utilizes a transfer learning approach to extract high-level morphological features from the mammogram imagery.
+The deep learning component utilizes a transfer learning approach (Simonyan and Zisserman, 2014) to extract high-level morphological features from the mammogram imagery.
 
 #### 4.3.1 Architectural Design (VGG16/VGG19)
-The models were built using VGG16 and VGG19 as base architectures, initialized with ImageNet weights. To adapt these for mammography, several custom modifications were implemented as illustrated in Figure 4.2 and Figure 4.3:
-1. 3-Channel Conversion: Grayscale images were converted into 3-channel tensors (128, 128, 3) for compatibility with the pre-trained weights.
-2. Regularization Layers: To prevent overfitting on medical tissue patterns, L2 Regularization (0.001) and Dropout (ranging from 0.3 to 0.4) were integrated after the Global Average Pooling and intermediate Dense layers (512, 256, 128 units).
-3. Output Layer: A final Dense layer with a Softmax activation function generates the binary probabilities for the Cancer/Non-Cancer prediction.
+The models were built using VGG16 and VGG19 (Simonyan and Zisserman, 2014) as base architectures, initialized with ImageNet weights. To adapt these for mammography, several custom modifications were implemented as illustrated in Figure 4.2 and Figure 4.3:
+1. **3-Channel Conversion**: Grayscale images were converted into 3-channel tensors (128, 128, 3) for compatibility with the pre-trained weights.
+2. **Regularization Layers**: To prevent overfitting on medical tissue patterns, L2 Regularization (0.001) and Dropout (Srivastava et al., 2014) (ranging from 0.3 to 0.4) were integrated after the Global Average Pooling and intermediate Dense layers (512, 256, 128 units).
+3. **Output Layer**: A final Dense layer with a Softmax activation function generates the binary probabilities for the Cancer/Non-Cancer prediction using the Adam Optimizer (Kingma and Ba, 2014).
 
-Figure 4.2 VGG16 Build the Model.
-Figure 4.3 VGG19 Build the Model.
+**Figure 4.2 VGG16 Build the Model.**
+**Figure 4.3 VGG19 Build the Model.**
 
-**Algorithm 4-2: Implementation VGG16**
+Implementation of VGG16 shown in Algorithm 4.2.
+
+**Algorithm 4.2: Implementation VGG16**
 ```text
 1: Preparation(train_features, test_features, validation_features)
-2:    return train_normalization, test_normalization, validation_normalization
+2: return train_normalization, test_normalization, validation_normalization
 3: VGG16 <- load(weights <- ImageNet)
 4: for each VGG16.Layers do
-5:    layersTrainable <- FALSE
+5: layersTrainable <- FALSE
 6: lastOutput <- VGG16.Layers[-1].output
 7: Output <- Flatten()(lastOutput)
 8: Output <- Dense(512, activation <- ReLU)(Output)
@@ -392,13 +317,15 @@ Figure 4.3 VGG19 Build the Model.
 14: Model.Evaluate(test_normalization)
 ```
 
-**Algorithm 4-3: Implementation VGG19**
+Implementation of VGG19 shown in Algorithm 4.3.
+
+**Algorithm 4.3: Implementation VGG19**
 ```text
 1: Preparation(train_features, test_features, validation_features)
-2:    return train_normalization, test_normalization, validation_normalization
+2: return train_normalization, test_normalization, validation_normalization
 3: VGG19 <- load(weights <- ImageNet)
 4: for each VGG19.Layers do
-5:    layersTrainable <- FALSE
+5: layersTrainable <- FALSE
 6: lastOutput <- VGG19.Layers[-1].output
 7: Output <- Flatten()(lastOutput)
 8: Output <- Dense(128, activation <- ReLU)(Output)
@@ -411,29 +338,31 @@ Figure 4.3 VGG19 Build the Model.
 
 #### 4.3.2 Training Regime and Callbacks
 The CNN models were trained using the SGD optimizer (Learning Rate: 0.001, Momentum: 0.9). To ensure stable convergence, the following callbacks were implemented:
-1. EarlyStopping: Monitoring val_loss with a patience of 5 epochs to restore the best weights automatically.
-2. ReduceLROnPlateau: Dynamically reducing the learning rate by a factor of 0.5 if the validation loss stagnated for 3 epochs.
-3. Epoch Training: The models were fine-tuned for 25 epochs with a batch size of 32.
+1. **EarlyStopping**: Monitoring val_loss with a patience of 5 epochs to restore the best weights automatically.
+2. **ReduceLROnPlateau**: Dynamically reducing the learning rate by a factor of 0.5 if the validation loss stagnated for 3 epochs.
+3. **Epoch Training**: The models were fine-tuned for 25 epochs with a batch size of 32.
 
 ### 4.4 Technical Implementation Results
 The implementation yielded high-performance results across both architectures:
-1. VGG16 Performance: Achieved a peak classification accuracy of 97.51% on the testing set.
-2. VGG19 Performance: Achieved a slightly lower but robust accuracy of 96.69%.
-3. Convergence: As seen in the training and validation curves (Figure 4.4 and Figure 4.5), the models exhibited strong convergence with minimal divergence between training and validation metrics, confirming the effectiveness of the implemented dropout and regularization strategies.
+1. **VGG16 Performance**: Achieved a peak classification accuracy of 97.51% on the testing set.
+2. **VGG19 Performance**: Achieved a slightly lower but robust accuracy of 96.69%.
+3. **Convergence**: As seen in the training and validation curves (Figure 4.4 and Figure 4.5), the models exhibited strong convergence with minimal divergence between training and validation metrics, confirming the effectiveness of the implemented dropout and regularization strategies.
 
-Figure 4.4 VGG16 Compile, Callbacks, Learning Rate, Training & Evaluate the Model.
-Figure 4.5 VGG19 Compile, Callbacks, Learning Rate, Training & Evaluate the Model.
+**Figure 4.4 VGG16 Compile, Callbacks, Learning Rate, Training & Evaluate the Model.**
+**Figure 4.5 VGG19 Compile, Callbacks, Learning Rate, Training & Evaluate the Model.**
 
-### 4.4 Deep Residual Architecture Implementation: ResNet50
+### 4.5 Deep Residual Architecture Implementation: ResNet50
 ResNet50 was implemented to benchmark the performance of residual connections in high-density mammogram patches.
 
-**Algorithm 4-4: Implementation ResNet50**
+Implementation of ResNet50 shown in Algorithm 4.4.
+
+**Algorithm 4.4: Implementation ResNet50**
 ```text
 1: Preparation(train_features, test_features, validation_features)
-2:    return train_normalization, test_normalization, validation_normalization
+2: return train_normalization, test_normalization, validation_normalization
 3: ResNet50 <- load(weights <- ImageNet)
 4: for each ResNet50.Layers do
-5:    layersTrainable <- FALSE
+5: layersTrainable <- FALSE
 6: lastOutput <- ResNet50.Layers[-1].output
 7: Output <- GlobalAveragePooling2D()(lastOutput)
 8: Output <- Dense(256, activation <- ReLU)(Output)
@@ -444,10 +373,12 @@ ResNet50 was implemented to benchmark the performance of residual connections in
 13: Model.Evaluate(test_normalization)
 ```
 
-### 4.5 Proposed Hybrid Implementation: CNN + CLAHE
-The peak performance pipeline integrates specialized contrast enhancement before model execution.
+### 4.6 Proposed Hybrid Implementation: CNN + CLAHE
+The peak performance pipeline integrates specialized contrast enhancement (Zuiderveld, 1994) before model execution.
 
-**Algorithm 4-5: Implementation CNN + CLAHE**
+Implementation of CNN + CLAHE shown in Algorithm 4.5.
+
+**Algorithm 4.5: Implementation CNN + CLAHE**
 ```text
 1: Input: Raw Mammogram Data
 2: Apply CLAHE(Input, TileGridSize <- (8,8), ClipLimit <- 2.0)
@@ -465,177 +396,169 @@ The peak performance pipeline integrates specialized contrast enhancement before
 14: Model.Evaluate(test_enhanced)
 ```
 
-### 4.5 Backend and API Realization (FastAPI)
-The final step of the implementation involved serving the trained models through a FastAPI backend. This "Inference-as-a-Service" model allows the MedVision-AI platform to process uploaded mammograms in real-time.
-1. Model Loading: Efficient management of weight files in RAM.
-2. Inference Logic: Pre-validation of image quality and dual-model execution.
-3. Explainability: Integration of Grad-CAM heatmaps to provide visual evidence for AI-driven diagnostic decisions.
-4. RAG Engine Layer: Integration of similarity search with WHO classification guidelines.
+### 4.7 Backend and API Realization (FastAPI)
+The final step of the implementation involved serving the trained models through a FastAPI backend (Ramírez, 2018). This "Inference-as-a-Service" model allows the MedVision-AI platform to process uploaded mammograms in real-time.
+1. **Model Loading**: Efficient management of weight files in RAM.
+2. **Inference Logic**: Pre-validation of image quality and dual-model execution.
+3. **Explainability**: Integration of Grad-CAM heatmaps to provide visual evidence for AI-driven diagnostic decisions.
+4. **RAG Engine Layer**: Integration of similarity search with WHO classification guidelines.
 
-### 4.6 Frontend Engineering (React, Vite, Tailwind CSS, i18n)
+### 4.8 Frontend Engineering (React, Vite, Tailwind CSS)
 The clinician interface was built with a modern glassmorphism aesthetic to provide a professional clinical environment.
-1. Real-time Feedback: Dynamic display of model confidence scores.
-2. Interactive Heatmap: Overlaying Grad-CAM findings atop original images.
-3. Clinical Reporting: Display of grounded reports synthesized by the RAG.
-4. **Multi-language Support (i18n)**: To ensure global accessibility, the platform includes a native internationalization layer supporting **English, Traditional Chinese, Bahasa Indonesia, Japanese, and Korean**. This feature allows clinicians in diverse geographical regions (specifically bridging the user’s background between Taiwan and Indonesia) to interact with the neural engine in their native language.
-5. **Accuracy Comparison Engine**: A dedicated dashboard renders a data-driven comparison between our in-house results and established literature benchmarks (as defined in Table 5.1), providing a visual representation of our pipeline’s performance superiority.
+1. **Real-time Feedback**: Dynamic display of model confidence scores.
+2. **Interactive Heatmap**: Overlaying Grad-CAM findings atop original images.
+3. **Clinical Reporting**: Display of grounded reports synthesized by the RAG.
+4. **Multi-language Support**: To ensure global accessibility, the platform includes a native internationalization layer supporting English, Traditional Chinese, Simplified Chinese, Bahasa Indonesia, Korean, Japanese, Spanish, France, and German. This feature allows clinicians in diverse geographical regions (specifically bridging the user's background between Taiwan and Indonesia) to interact with the neural engine in their native language.
+5. **Accuracy Comparison Engine**: A dedicated dashboard renders a data-driven comparison between our in-house results and established literature benchmarks, providing a visual representation of our pipeline's performance superiority.
 
-### 4.7 Advanced XAI Engineering: Grad-CAM Realization
-The implementation of Grad-CAM in MedVision-AI focuses on capturing the fine-grained localization of malignant features. Using the TensorFlow GradientTape API, we track the activations of the `block5_conv3` layer in the VGG16 model. By calculating the global average pooling of the gradients for the "Cancer" class, we generate weights that are used to create a heatmap. This heatmap is upsampled to the original 128x128 image size and overlaid using a JET colormap, allowing radiologists to see exactly where the model detected micro-calcifications or architectural distortions.
+### 4.9 Advanced XAI Engineering: Grad-CAM Realization
+The implementation of Grad-CAM in MedVision-AI focuses on capturing the fine-grained localization of malignant features (Selvaraju et al., 2017). Using the TensorFlow GradientTape API, we track the activations of the block5_conv3 layer in the VGG16 model. By calculating the global average pooling of the gradients for the "Cancer" class, we generate weights that are used to create a heatmap. This heatmap is upsampled to the original 128x128 image size and overlaid using a JET colormap, allowing radiologists to see exactly where the model detected micro-calcifications or architectural distortions (Samek et al., 2017).
 
-### 4.8 Clinical Reporting Engine: RAG Implementation
+### 4.10 Clinical Reporting Engine: RAG Implementation
 To ensure that MedVision-AI serves as a full-cycle diagnostic tool, a RAG engine was implemented within the FastAPI backend.
-- **Workflow**: Upon completion of the CNN inference, the system calculates a proximity score against a vector-indexed knowledge base of WHO-standard diagnostic templates.
-- **Synthesis**: The engine combines the model’s numerical confidence (e.g., 97.84%) with retrieved clinical phrasing to generate a draft report that discusses the visual evidence found in the XAI layer.
+1. **Workflow**: Upon completion of the CNN inference, the system calculates a proximity score against a vector-indexed knowledge base of WHO-standard diagnostic templates.
+2. **Synthesis**: The engine combines the model’s numerical confidence (e.g., 97.84%) with retrieved clinical phrasing to generate a draft report that discusses the visual evidence found in the XAI layer.
 
-### 4.9 Cloud Platform Engineering: FastAPI & React Deployment
-The final architecture is a production-grade cloud ecosystem. The FastAPI backend manages model weight loading in RAM for low-inference latency (average 450ms), while the React frontend provides a responsive experience for clinicians using mobile devices or desktop workstations. This "Inference-as-a-Service" model ensures that high-precision diagnostics are accessible without the need for local GPU infrastructure. The complete configuration hub and diagnosis portal are illustrated in **Figure 4.6** and **Figure 4.7**, showing the real-time interaction between the clinician and the neural engine.
+### 4.11 Cloud Platform Engineering: FastAPI & React Deployment
+The final architecture is a production-grade cloud ecosystem. The FastAPI backend manages model weight loading in RAM for low-inference latency (average 450ms), while the React frontend provides a responsive experience for clinicians using mobile devices or desktop workstations. This "Inference-as-a-Service" model ensures that high-precision diagnostics are accessible without the need for local GPU infrastructure. The complete configuration hub and diagnosis portal are illustrated in Figure 4.6 and Figure 4.7, showing the real-time interaction between the clinician and the neural engine.
 
-The preprocessing pipeline, which optimizes the visual quality of raw mammography data, is visualized in **Figure 4.8**. Following this, the explainable AI layer generates a localized activation map, as seen in **Figure 4.9**, to identify the specific clusters that influenced the "Cancer" vs. "Normal" classification.
+**Figure 4.6 Model Configuration Hub.**
+**Figure 4.7 Diagnosis Pipeline Portal.**
 
-Furthermore, the integration of clinical context is handled through the **Diagnosis Intelligence** dashboard (see **Figure 4.10**) and the **RAG-Enhanced** workflow (see **Figure 4.11**). The entire technological ecosystem used to build this platform is summarized in **Figure 4.12**.
+The preprocessing pipeline, which optimizes the visual quality of raw mammography data, is visualized in Figure 4.8. Following this, the explainable AI layer generates a localized activation map, as seen in Figure 4.9, to identify the specific clusters that influenced the "Cancer" vs. "Normal" classification.
 
-Figure 4.6: MedVision-AI Model Configuration Interface — showing the selection of neural architectures including VGG, ResNet, and CNN+CLAHE.
-![Figure 4.6: Model Configuration Hub]
+**Figure 4.8 CLAHE Optimization.**
+**Figure 4.9 Grad-CAM XAI Visual.**
 
-Figure 4.7: Automated Diagnosis Pipeline — the real-time upload and execution portal for mammographic inference.
-![Figure 4.7: Diagnosis Pipeline Portal]
+Furthermore, the integration of clinical context is handled through the Diagnosis Intelligence dashboard (see Figure 4.10) and the RAG-Enhanced workflow (see Figure 4.11). The entire technological ecosystem used to build this platform is summarized in Figure 4.12.
 
-Figure 4.8: Multi-Stage Image Preprocessing Visualization — original mammogram vs. contrast-enhanced patch.
-![Figure 4.8: Preprocessing UI]
+**Figure 4.10 Intelligence Insights Dashboard.**
+**Figure 4.11 RAG-Enhanced Workflow.**
+**Figure 4.12 Tech Stack Overview.**
 
-Figure 4.9: Explainable AI (XAI) Activation Mapping — visual analysis of localized malignant clusters using Grad-CAM.
-![Figure 4.9: Grad-CAM XAI Visual]
-
-Figure 4.10: Diagnosis Intelligence Dashboard — comprehensive breakdown of case information and model confidence.
-![Figure 4.10: Intelligence Insights Dashboard]
-
-Figure 4.11: RAG-Enhanced BIPADS Reporting Workflow — demonstrating the architectural integration of RAG within the diagnosis loop.
-![Figure 4.11: RAG-Enhanced Workflow]
-
-Figure 4.12: MedVision-AI Production Technology Stack — detailing the React 18 frontend and FastAPI backend integration.
-![Figure 4.12: Tech Stack Overview]
 
 ---
 
-## CHAPTER 5: RESULTS
+## CHAPTER 5 RESULTS
 
 ### 5.1 K-Nearest Neighbors (KNN) Benchmarks
 The KNN model served as the foundational baseline for this research. Through systematic hyperparameter tuning, we identified that the model achieved its maximum performance at K=3.
-1. Performance Metrics: The optimized KNN model reached a classification accuracy of 95.30%.
-2. Confusion Matrix Analysis: As illustrated in Figure 5.1, the model correctly identified 1,706 non-cancer cases and 282 cancer cases. However, it exhibited 72 false negatives. This suggests that while KNN is highly interpretable and effective for localized geometric features (HOG), its sensitivity to high-dimensional noise inherently limits its performance compared to deep learning architectures.
-3. Literature Context: Our result of 95.30% is highly competitive compared to Suganthi et al. (2020), who reported 92.54% on the MIAS dataset, proving our preprocessing pipeline added significant value to the classical model.
+1. **Performance Metrics**: The optimized KNN model reached a classification accuracy of 95.30%.
+2. **Confusion Matrix Analysis**: As illustrated in Figure 5.1, the model correctly identified 1,706 non-cancer cases and 282 cancer cases. However, it exhibited 72 false negatives. This suggests that while KNN is highly interpretable and effective for localized geometric features (HOG), its sensitivity to high-dimensional noise inherently limits its performance compared to deep learning architectures.
+3. **Literature Context**: Our result of 95.30% is highly competitive compared to Suganthi et al. (2020), who reported 92.54% on the MIAS dataset, proving our preprocessing pipeline added significant value to the classical model.
 
-Figure 5.1 Confusion Matrix of KNN Model.
+**Figure 5.1 Confusion Matrix of KNN Model.**
 
 ### 5.2 Convolutional Neural Networks (CNN) Benchmarks
 The deeper architectural branches (VGG16 and VGG19) significantly outperformed the classical baseline, demonstrating the superior feature-abstraction power of convolutional filters.
 
 #### 5.2.1 VGG16 Results
 VGG16 emerged as the most reliable standalone architecture in our study.
-1. Accuracy: Achieved a peak accuracy of 97.51% on the testing set.
-2. Matrix Breakdown: The model demonstrated a significantly higher True Positive rate compared to KNN (Figure 5.2), indicating superior detection of malignant morphological patterns.
-3. Convergence: Training curves showed a steady increase in validation accuracy with consistent loss reduction over 25 epochs, suggesting that the implemented dropout and weight initialization effectively mitigated overfitting.
+1. **Accuracy**: Achieved a peak accuracy of 97.51% on the testing set.
+2. **Matrix Breakdown**: The model demonstrated a significantly higher True Positive rate compared to KNN (Figure 5.2), indicating superior detection of malignant morphological patterns.
+3. **Convergence**: Training curves showed a steady increase in validation accuracy with consistent loss reduction over 25 epochs, suggesting that the implemented dropout and weight initialization effectively mitigated overfitting.
 
-Figure 5.2 Confusion Matrix of VGG16.
+**Figure 5.2 Confusion Matrix of VGG16.**
 
 #### 5.2.2 VGG19 and ResNet50 Comparisons
-1. VGG19: Achieved an accuracy of 96.69%. While robust, the slightly lower performance compared to VGG16 may be attributed to the "redundancy" of deeper layers for the specific texture of 128x128 mammography patches. As shown in Figure 5.3 the Confusion Matrix for VGG19.
-Figure 5.3 Confusion Matrix for VGG19.
-2. ResNet50: As shown in Figure 5.4, the ResNet50 implementation reached 95.01%. Although ResNet is a deeper architecture, our experiments indicate that for mammography classification within a cloud-integrated environment, the fine-tuning depth of VGG16 provided better generalization.
+1. **VGG19**: Achieved an accuracy of 96.69%. While robust, the slightly lower performance compared to VGG16 may be attributed to the "redundancy" of deeper layers for the specific texture of 128x128 mammography patches. As shown in Figure 5.3 the Confusion Matrix for VGG19.
+2. **ResNet50**: As shown in Figure 5.4, the ResNet50 implementation reached 95.01%. Although ResNet is a deeper architecture, our experiments indicate that for mammography classification within a cloud-integrated environment, the fine-tuning depth of VGG16 provided better generalization.
 
-Figure 5.4 ResNet50 Performance Accuracy.
+**Figure 5.3 Confusion Matrix of VGG19.**
+**Figure 5.4 ResNet50 Performance Accuracy.**
 
 ### 5.3 CNN + CLAHE: Integrated System Performance
 The integration of specialized preprocessing significantly boosted the diagnostic precision of the system.
-1. The 97.84% Milestone: By integrating CLAHE into the VGG16 pipeline, we achieved a peak classification accuracy of 97.84% (Figure 5.5).
-Figure 5.5 CNN + CLAHE Performance Accuracy.
-2. Technical Reasoning: CLAHE effectively narrowed the gap between training and validation loss by making subtle descriptors—such as micro-calcifications and architectural distortions—more visually distinct for the convolutional filters. This result confirms our hypothesis that image enhancement is a critical theoretical bridge to high-accuracy medical AI.
+1. **The 97.84% Milestone**: By integrating CLAHE into the VGG16 pipeline, we achieved a peak classification accuracy of 97.84% (Figure 5.5).
+2. **Technical Reasoning**: CLAHE effectively narrowed the gap between training and validation loss by making subtle descriptors—such as micro-calcifications and architectural distortions—more visually distinct for the convolutional filters. This result confirms our hypothesis that image enhancement is a critical theoretical bridge to high-accuracy medical AI.
+
+**Figure 5.5 CNN + CLAHE Performance Accuracy.**
 
 ### 5.4 Benchmarking and Statistical Synthesis
 The following table summarizes the performance of our framework against established benchmarks in the academic field.
 
-Table 5.1: Comparative Analysis Between All Models.
+**Table 5.1 Comparative Analysis Between All Models.**
 
-| Model | Architecture | This Study Accuracy (%) | Literature Benchmark (%) | Citation Source |
-| :--- | :--- | :--- | :--- | :--- |
-| KNN | Classical | 95.30% | 92.54% | Suganthi et al. (2020) |
-| VGG16 | CNN | 97.51% | 92.00% | Kamal et al. (2023) |
-| VGG19 | CNN | 96.69% | 93.00% | Kamal et al. (2023) |
-| ResNet50 | ResNet | 95.01% | 95.00% | Kamal et al. (2023) |
-| CNN + CLAHE | Hybrid | 97.84% | 94.00% | Arevalo et al. (2016) |
-
-- **AUC Performance**: Our VGG16+CLAHE pipeline achieved an Area Under the Curve (AUC) of **0.991**, indicating a near-perfect diagnostic capability. This high AUC score demonstrates that the model is exceptionally reliable at distinguishing malignant lesions from dense, benign glandular tissue, even in complex mammographic cases.
+| Model Architecture | This Study Accuracy (%) | Literature Benchmark (%) | Citation Source |
+| :--- | :--- | :--- | :--- |
+| KNN | 95.30% | 92.54% | Suganthi et al. (2020) |
+| VGG16 | 97.51% | 92.00% | Kamal et al. (2023) |
+| VGG19 | 96.69% | 93.00% | Kamal et al. (2023) |
+| ResNet50 | 95.01% | 95.00% | Kamal et al. (2023) |
+| CNN + CLAHE | 97.84% | 94.00% | Arevalo et al. (2016) |
 
 ### 5.5 Cross-Platform Validation: Local GPU vs. Server CPU
-
-To ensure the robustness and reproducibility of the developed models, a comparative study was conducted between the primary development environment (Macbook M-Series GPU) and the high-performance computing environment (DGX Spark Server CPU). 
+To ensure the robustness and reproducibility of the developed models, a comparative study was conducted between the primary development environment (Macbook M-Series GPU) and the high-performance computing environment (DGX Spark Server CPU).
 
 #### 5.5.1 Side-by-Side Accuracy Comparison
-The hardware comparison for diagnostic accuracy is summarized in Table 5.2.
+The following table presents the accuracy results across both environments.
 
-Table 5.2: Hardware Accuracy Comparison (Macbook GPU vs. DGX Spark CPU)
+**Table 5.2 Hardware Accuracy Comparison (Macbook GPU vs. DGX Spark CPU).**
 
-| Model Architecture | Macbook GPU (Local) | DGX Spark Server (CPU) | Variation |
-| :--- | :---: | :---: | :---: |
-| KNN (Baseline) | 95.30% | 95.30% | 0.00% |
-| VGG16 | 97.51% | **98.18%** | +0.67% |
-| VGG19 | 96.69% | **97.56%** | +0.87% |
-| CNN + CLAHE (Proposed) | **97.84%** | 96.16% | -1.68% |
-| ResNet50 | **95.01%** | 93.43% | -1.58% |
+| Model Architecture | Macbook Pro M2 (GPU) | DGX Spark Server (CPU) | Variation |
+| :--- | :--- | :--- | :--- |
+| VGG16 | 97.51% | 98.18% | +0.67% |
+| VGG19 | 96.69% | 97.56% | +0.87% |
+| ResNet50 | 95.01% | 93.43% | -1.68% |
+| CNN + CLAHE | 97.84% | 96.16% | -1.58% |
 
 #### 5.5.2 Cross-Platform Inference Latency Analysis
-
 A key metric for the "Real-Time" component of the MedVision-AI system is the inference latency—the time taken to generate a diagnosis for a single image.
 
-Table 5.3: Inference Latency and Memory Comparison (Consumer GPU vs. Server CPU)
+**Table 5.3 Inference Latency Comparison (Consumer GPU vs. Server CPU).**
 
-| Model Architecture | Macbook M-Series (GPU) | DGX Spark Server (CPU) | Peak Memory (MB) | Efficiency Gain |
-| :--- | :---: | :---: | :---: | :---: |
-| KNN (Baseline) | ~35ms | 120ms | 45MB | Local GPU (3.4x) |
+| Model Architecture | Macbook Pro M2 (GPU) | DGX Spark Server (CPU) | Peak Memory (MB) | Efficiency Gain |
+| :--- | :--- | :--- | :--- | :--- |
 | VGG16 | ~75ms | 450ms | 185MB | Local GPU (6.0x) |
 | VGG19 | ~110ms | 510ms | 202MB | Local GPU (4.6x) |
-| CNN + CLAHE | ~85ms | 450ms | 190MB | Local GPU (5.2x) |
 | ResNet50 | ~140ms | 580ms | 210MB | Local GPU (4.1x) |
+| CNN + CLAHE | ~85ms | 450ms | 190MB | Local GPU (5.2x) |
 
 *Note: Estimates for Macbook performance are based on localized Metal API acceleration.*
 
-The analysis confirms that while the **DGX Spark Server** is superior for massive parallel training, the **Macbook GPU** (Environment A) provides lower latency for individual diagnostic requests due to the high bandwidth of unified memory and dedicated GPU cores. This finding supports the system's "Cloud-Hybrid" potential, where local devices handle immediate inference while the cloud handles deep architectural validation.
+The analysis confirms that while the DGX Spark Server is superior for massive parallel training, the Macbook GPU (Environment A) provides lower latency for individual diagnostic requests due to the high bandwidth of unified memory and dedicated GPU cores. This finding supports the system's "Cloud-Hybrid" potential, where local devices handle immediate inference while the cloud handles deep architectural validation.
 
 #### 5.5.3 Cross-Platform Training Efficiency Analysis
-
 In addition to diagnostic accuracy and inference speed, this study evaluated the training efficiency of both environments. The average time required to train 25 epochs for each model was measured to assess the impact of hardware acceleration (Metal GPU vs. Enterprise CPU).
 
-Table 5.4: Training Time Comparison (Total Training Duration for 25 Epochs)
+**Table 5.4 Training Time Comparison (Total Training Duration for 25 Epochs).**
 
-| Model Architecture | DGX Spark Server (CPU) | Macbook Pro M2 2022 (GPU) | Speedup Factor |
-| :--- | :---: | :---: | :---: |
-| VGG19 | ~4.5 Hours | **~18.7 Minutes** | 14.4x |
-| VGG16 | ~4.2 Hours | **~16.6 Minutes** | 15.1x |
-| ResNet50 | ~2.1 Hours | **~25.0 Minutes** | 5.0x |
-| CNN + CLAHE | ~50.0 Minutes | **~6.2 Minutes** | 8.1x |
+| Model Architecture | Macbook Pro M2 (GPU) | DGX Spark Server (CPU) | Speedup Factor |
+| :--- | :--- | :--- | :--- |
+| VGG16 | ~16.6 Minutes | ~4.2 Hours | 15.1x |
+| VGG19 | ~18.7 Minutes | ~4.5 Hours | 14.4x |
+| ResNet50 | ~25.0 Minutes | ~2.1 Hours | 5.0x |
+| CNN + CLAHE | ~6.2 Minutes | ~50.0 Minutes | 8.1x |
 
 *Note: DGX training times are derived from actual server training logs (averaging 380s-790s per epoch for VGG models).*
 
-The results demonstrate a massive efficiency gain when using the **Macbook Pro M2 2022 GPU** compared to the **DGX Spark Server CPU**. While the DGX server features high-performance enterprise components, the lack of GPU-specific kernel acceleration in the CPU environment results in training times that are 5x to 15x slower than a dedicated consumer-grade GPU. This confirms that for rapid prototyping and fine-tuning medical imaging models, localized GPU environments provide a significant development advantage.
-#### 5.5.4 Analysis of Hardware Influence
-1. **Performance Gains in Standard Architectures:** Standard pre-trained architectures like VGG16 and VGG19 exhibited a slight performance increase on the DGX Spark Server. This suggests that the server-grade hardware may benefit from different floating-point precision (FP32) handling on the CPU or different library optimizations during the training phase.
-2. **Robustness of the Proposed Pipeline:** While the CNN + CLAHE pipeline achieved its absolute peak of 97.84% on the local GPU, it remained highly effective on the DGX server with an accuracy of 96.16%. The variation is normal due to variations in randomized weight initialization and hardware-specific tensor management.
+The results demonstrate a massive efficiency gain when using the Macbook Pro M2 2022 GPU compared to the DGX Spark Server CPU. While the DGX server features high-performance enterprise components, the lack of GPU-specific kernel acceleration in the CPU environment results in training times that are 5x to 15x slower than a dedicated consumer-grade GPU. This confirms that for rapid prototyping and fine-tuning medical imaging models, localized GPU environments provide a significant development advantage.
 
-3. **Conclusion on Reliability:** Maintaining a consistency of >95% accuracy across entirely different processing architectures (Consumer GPU vs. Enterprise CPU) confirms the reliability of the MedVision-AI engine for diverse healthcare infrastructures.
+#### 5.5.4 Analysis of Hardware Influence
+1. **Performance Gains in Standard Architectures**: Standard pre-trained architectures like VGG16 and VGG19 exhibited a slight performance increase on the DGX Spark Server. This suggests that the server-grade hardware may benefit from different floating-point precision (FP32) handling on the CPU or different library optimizations during the training phase.
+2. **Robustness of the Proposed Pipeline**: While the CNN + CLAHE pipeline achieved its absolute peak of 97.84% on the local GPU, it remained highly effective on the DGX server with an accuracy of 96.16%. The variation is normal due to variations in randomized weight initialization and hardware-specific tensor management.
+3. **Conclusion on Reliability**: Maintaining a consistency of >95% accuracy across entirely different processing architectures (Consumer GPU vs. Enterprise CPU) confirms the reliability of the MedVision-AI engine for diverse healthcare infrastructures.
 
 ### 5.6 Comparative Accuracy Visualization
-To address the professor's requirement for clear graphical benchmarking, the MedVision-AI dashboard features a comparative accuracy chart (see **Figure 5.6**). This visualization illustrates how our fine-tuned models—specifically the CNN+CLAHE pipeline—consistently outperform benchmarks reported in existing literature.
+To address the graphical benchmarking, the MedVision-AI dashboard features a comparative accuracy chart (see Figure 5.6). This visualization illustrates how our fine-tuned models—specifically the CNN+CLAHE pipeline—consistently outperform benchmarks reported in existing literature.
 
-Figure 5.6: Comparative Accuracy Chart — benchmarking MedVision-AI models against Literature Benchmarks.
-![Figure 5.6: Comparative Accuracy Chart]
+**Figure 5.6 Performance Dashboard Benchmarks.**
+
+The detailed metrics and interpretation for each architecture are broken down in Figure 5.7.
+
+**Figure 5.7 Metrics Interpretation.**
+
+Beyond real-time analysis, the system maintains clinical accountability through a session history found in the Analysis Log (Figure 5.8). Finally, the system's end-to-end utility is demonstrated by the Automated Pathology Report (PDF) export, as illustrated in Figure 5.9.
+
+**Figure 5.8 Diagnosis Session History.**
+**Figure 5.9 PDF Pathology Report Sample.**
 
 ### 5.7 Synthesis of Results
 As evidenced by the benchmarks, our MedVision-AI framework consistently outperforms previous literature. The primary takeaway from these experiments is that while CNN architectures are powerful, their ultimate clinical utility is unlocked only when combined with rigorous preprocessing (CLAHE) and cloud-optimized hyperparameter tuning. This multi-layered approach ensures that the system is not just an experimental prototype, but a viable diagnostic tool for real-world clinical implementation.
 
 ---
 
-## CHAPTER 6: CONCLUSION
+## CHAPTER 6 CONCLUSION
 
 ### 6.1 Summary of Findings and The Solution
 This research successfully developed a hybrid KNN-CNN framework, culminating in the MedVision-AI platform, specifically designed to address the critical challenges of automated breast cancer diagnosis. Through our experimental analysis, we confirmed that while both models are highly effective, the deep feature extraction capabilities of CNN architectures (VGG16 and VGG19) consistently outperform traditional KNN baselines—reaching a peak accuracy of 97.84% with CLAHE.
@@ -644,20 +567,22 @@ The core "Solution" presented in this thesis lies in the synergy between interpr
 
 ### 6.2 Limitations and Future Work
 While the current framework provides a robust solution, several avenues for further enhancement remain. Future research will focus on:
-1. Architectural Evolution: Incorporating next-generation architectures such as EfficientNet, ResNet-V2, and Vision Transformers (ViTs) to explore further improvements in classification precision and computational efficiency.
-2. Adaptive Preprocessing: Exploring dynamic and adaptive contrast enhancement techniques that can automatically adjust to the specific pixel distribution of different imaging hardware.
-3. Multimodal Integration: Enhancing the RAG (Retrieval-Augmented Generation) reporting layer to include multimodal clinical data, such as patient history and genomic markers, for a more holistic diagnostic profile.
+1. **Architectural Evolution**: Incorporating next-generation architectures such as EfficientNet, ResNet-V2, and Vision Transformers (ViTs) to explore further improvements in classification precision and computational efficiency.
+2. **Adaptive Preprocessing**: Exploring dynamic and adaptive contrast enhancement techniques that can automatically adjust to the specific pixel distribution of different imaging hardware.
+3. **Multimodal Integration**: Enhancing the RAG (Retrieval-Augmented Generation) reporting layer to include multimodal clinical data, such as patient history and genomic markers, for a more holistic diagnostic profile.
 
 In conclusion, the MedVision-AI framework proves that the integration of deep learning, cloud computing, and rigorous image preprocessing represents a significant advancement in the global fight against breast cancer.
 
 ### 6.3 Ethical Implications and Human-AI Collaboration
 This research concludes with a critical reflection on the ethical deployment of AI in oncology. The goal of MedVision-AI is not to replace the radiologist, but to empower them with a "second pair of eyes."
-- **Institutional Trust**: By providing Grad-CAM heatmaps, we address the legal and moral requirement for transparency in medical decisions. The visual evidence allows for "Human-in-the-Loop" validation, ensuring that AI-driven insights are verified by human expertise before clinical action is taken.
-- **Global Equity**: The cloud-integrated nature of this framework ensures that high-quality cancer diagnostics are no longer restricted to wealthy urban centers. This study demonstrates that through the democratic use of cloud computing (Google Antigravity), we can provide equitable health outcomes for women in resource-limited regions, successfully fulfilling the broader mission of National Quemoy University to support global public health.
+1. **Institutional Trust**: By providing Grad-CAM heatmaps, we address the legal and moral requirement for transparency in medical decisions. The visual evidence allows for "Human-in-the-Loop" validation, ensuring that AI-driven insights are verified by human expertise before clinical action is taken.
+2. **Global Equity**: The cloud-integrated nature of this framework ensures that high-quality cancer diagnostics are no longer restricted to wealthy urban centers. This study demonstrates that through the democratic use of cloud computing (Google Antigravity), we can provide equitable health outcomes for women in resource-limited regions, successfully fulfilling the broader mission of National Quemoy University to support global public health.
+
 
 ---
 
 ## REFERENCES
+
 [1] World Health Organization (WHO), “Breast Cancer,” 2024.
 [2] A. K. Barzan et al., "Mammogram Mastery: A Robust Dataset for Breast Cancer Detection," Mendeley Data, Apr. 2024.
 [3] Z. Zhu et al., "A Survey of Convolutional Neural Networks in Breast Cancer," CMES, vol. 136, 2022.
@@ -670,12 +595,25 @@ This research concludes with a critical reflection on the ethical deployment of 
 [10] S. Saranya and S. Vijayarani, "Breast Cancer Classification Using Hybrid Features and Deep Neural Networks," Research Square, May 2023.
 [11] M. Mishra, M. H. Kolekar, and S. Sengupta, "Deep Learning for Breast Cancer Classification: Enhanced Tangent Function," *arXiv preprint arXiv:2108.04663*, 2021.
 [12] T. S. Kumar, G. Sridhar, D. Manju, P. Subhash, and G. Nagaraju, "Breast Cancer Classification Using ResNet50," Journal of Electrical Systems, 2023.
+[13] K. Simonyan and A. Zisserman, "Very Deep Convolutional Networks for Large-Scale Image Recognition," arXiv preprint arXiv:1409.1556, 2014. (Foundational VGG Paper)
+[14] K. He, X. Zhang, S. Ren, and J. Sun, "Deep Residual Learning for Image Recognition," Proceedings of the IEEE conference on computer vision and pattern recognition, 2016. (Foundational ResNet Paper)
+[15] R. R. Selvaraju et al., "Grad-CAM: Visual Explanations from Deep Networks via Gradient-based Localization," Proceedings of the IEEE international conference on computer vision, 2017. (Foundational Grad-CAM Paper)
+[16] K. Zuiderveld, "Contrast Limited Adaptive Histogram Equalization," Graphics Gems IV, 1994. (Original CLAHE Source)
+[17] J. Suckling et al., "The Mammographic Image Analysis Society Digital Mammogram Database," Exerpta Medica. International Congress Series, vol. 1069, 1994. (MIAS Dataset Origin)
+[18] M. Heath et al., "The Digital Database for Screening Mammography," Proceedings of the 5th International Workshop on Digital Mammography, 2000. (DDSM Dataset Reference)
+[19] M. Abadi et al., "TensorFlow: Large-Scale Machine Learning on Heterogeneous Systems," 2015.
+[20] F. Chollet et al., "Keras," 2015. [Online]. Available: https://keras.io
+[21] S. Ramírez, "FastAPI," 2018. [Online]. Available: https://github.com/tiangolo/fastapi
+[22] W. Samek, T. Wiegand, and K. R. Müller, "Explainable Artificial Intelligence: Understanding, Visualizing and Interpreting Deep Learning Models," arXiv preprint arXiv:1708.08296, 2017.
+[23] N. Srivastava et al., "Dropout: A Simple Way to Prevent Neural Networks from Overfitting," Journal of Machine Learning Research, vol. 15, no. 1, 2014.
+[24] S. Ioffe and C. Szegedy, "Batch Normalization: Accelerating Deep Network Training by Reducing Internal Covariate Shift," International Conference on Machine Learning, 2015.
+[25] D. P. Kingma and J. Ba, "Adam: A Method for Stochastic Optimization," arXiv preprint arXiv:1412.6980, 2014. (Standard AI Optimizer Reference)
 
 ---
 
 ## APPENDICES
 
-### APPENDIX A: AI Model Core Implementation (Python)
+### APPENDIX A AI Model Core Implementation (Python)
 The following code snippet illustrates the Grad-CAM (Explainable AI) implementation within the MedVision-AI framework.
 
 ```python
@@ -687,7 +625,7 @@ def make_gradcam_heatmap(img_array, model, last_conv_layer_name, pred_index=None
     # First, we create a model that maps the input image to the activations
     # of the last conv layer as well as the output predictions
     grad_model = tf.keras.models.Model(
-        [model.inputs],
+        [model.inputs], 
         [model.get_layer(last_conv_layer_name).output, model.output]
     )
     # Then, we compute the gradient of the top predicted class for our input image
@@ -714,8 +652,8 @@ def make_gradcam_heatmap(img_array, model, last_conv_layer_name, pred_index=None
     return heatmap.numpy()
 ```
 
-### APPENDIX B: Backend API Services (FastAPI)
-MedVision-AI utilizes a low-latency FastAPI backend to provide Inference-as-a-Service.
+### APPENDIX B Backend API Services (FastAPI)
+MedVision-AI utilizes a low-latency FastAPI backend to provide Inference-as-a Service.
 
 ```python
 from fastapi import FastAPI, UploadFile, File
@@ -732,12 +670,16 @@ async def predict_mammogram(file: UploadFile = File(...)):
     # 1. Read and preprocess the image
     contents = await file.read()
     processed_image = preprocess_image(contents) # Custom resize/CLAHE
+    
     # 2. Dual-path inference (CNN)
     prediction = model.predict(processed_image)
+    
     # 3. Generate XAI Evidence
     heatmap = make_gradcam_heatmap(processed_image, model, "block5_conv3")
+    
     # 4. Trigger RAG Report
     clinical_report = rag_engine.generate(prediction)
+    
     return {
         "diagnosis": "Malignant" if prediction > 0.5 else "Benign",
         "confidence": float(prediction),
@@ -746,7 +688,7 @@ async def predict_mammogram(file: UploadFile = File(...)):
     }
 ```
 
-### APPENDIX C: Frontend Component Architecture (React/JSX)
+### APPENDIX C Frontend Component Architecture (React/JSX)
 The clinician interface provides a visual dashboard for diagnostic validation.
 
 ```jsx
@@ -759,6 +701,7 @@ const DiagnosisDashboard = () => {
     const handleDiagnosis = async () => {
         const formData = new FormData();
         formData.append("file", image);
+        
         const response = await fetch("/api/v1/predict", {
             method: "POST",
             body: formData
@@ -772,11 +715,12 @@ const DiagnosisDashboard = () => {
             <h1>MedVision-AI Portal</h1>
             <input type="file" onChange={(e) => setImage(e.target.files[0])} />
             <button onClick={handleDiagnosis}>Begin Automated Diagnosis</button>
+            
             {result && (
                 <div className="flex gap-4">
                     <img src={URL.createObjectURL(image)} alt="Original" />
                     <img src={result.xai_overlay_url} alt="XAI Heatmap" />
-                    <p className="clinical-report">{result.report}</p>
+                    <p className="clinical report">{result.report}</p>
                 </div>
             )}
         </div>
@@ -784,7 +728,7 @@ const DiagnosisDashboard = () => {
 };
 ```
 
-### APPENDIX D: Data Preprocessing Utilities (Python/OpenCV)
+### APPENDIX D Data Preprocessing Utilities (Python/OpenCV)
 The core image enhancement module for the MedVision-AI pipeline.
 
 ```python
@@ -806,7 +750,7 @@ def apply_medvision_enhancement(input_image_path, target_size=(128, 128)):
     return np.expand_dims(final_tensor, axis=0)
 ```
 
-### APPENDIX E: Vector Similarity Search for RAG (FAISS/Sentence-Transformers)
+### APPENDIX E Vector Similarity Search for RAG (FAISS/Sentence-Transformers)
 Implementation of the clinical knowledge retrieval layer.
 
 ```python
@@ -829,7 +773,7 @@ class ClinicalRAG:
         return f"MedVision-AI Analysis: {self.templates[I[0][0]]}. Confidence Score: {confidence*100}%"
 ```
 
-### APPENDIX F: Tailwind CSS Interface Configuration
+### APPENDIX F Tailwind CSS Interface Configuration
 Glassmorphism styling used in the React Frontend.
 
 ```javascript
@@ -855,7 +799,9 @@ module.exports = {
 
 ---
 
-## AUTHORS’ BACKGROUND
+## Authors’ Background
+
 **Shi-Han Huang** is currently pursuing a Master’s degree in the Department of Computer Science and Information Engineering at National Quemoy University (NQU), Taiwan. He earned his Bachelor degree in Computer Science and Information Engineering from Ciputra University, Surabaya, Indonesia, in 2024. During his undergraduate studies, he completed an internship at the Apple Developer Academy @ UC, where he gained hands-on experience in innovative software development. His current research focuses on the application of Artificial Intelligence in Medical Imaging, with a particular interest in developing intelligent systems to support medical diagnostics.
 
 **Dr. Hsi-Chieh Lee** is a Professor of the Department of Computer Science and Information Engineering at National Quemoy University (NQU) in Taiwan. He has Ph.D. degrees in the Department of Computer Science and the Department of Engineering Management from the University of Missouri-Rolla, USA. He also got an M.S. in Computer Science from the same institution and a B.S. in Mathematics from National Taiwan University. Dr. Lee has a wide range of research interests in artificial intelligence, biomedical informatics, renewable energy informatics, digital humanities, and high-performance computing. In addition, throughout his career, he has had many academic and administrative roles, which include time as Dean of the Academic Affairs, the College of Humanities and Arts, and the College of Health and Nursing at NQU. He also served as a professor and department chair at Yuan Ze University. In 2023, he was nominated as a full member of SIGMA XI, the Scientific Research Honor Society.
+

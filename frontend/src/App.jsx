@@ -15,7 +15,9 @@ import {
   ScanHeart,
   Globe,
   ChevronDown,
-  X
+  X,
+  Stethoscope,
+  Sparkles
 } from 'lucide-react';
 
 const API_BASE = import.meta.env.VITE_API_URL;
@@ -117,6 +119,10 @@ function App() {
       clahe_desc: "Contrast Limited Adaptive Histogram Equalization (CLAHE) is used to enhance the visibility of micro-calcifications and architectural distortions in mammograms. Classic histogram equalization often over-amplifies noise in homogeneous regions; CLAHE limits this contrast enhancement through local clipping.",
       gradcam_desc: "Gradient-weighted Class Activation Mapping (Grad-CAM) uses the gradients of any target concept flowing into the final convolutional layer to produce a coarse localization map highlighting the important regions in the image for predicting the concept.",
       rag_desc: "Our system doesn't just predict; it references. Retrieval-Augmented Generation (RAG) pulls relevant clinical context from a medical knowledge base based on the specific anatomical findings detected by the CNN. This ensures our reports are grounded in clinical literature.",
+      agent_consultation: "MedVision-Agent Research",
+      consult_agent: "Consult Senior Researcher",
+      agent_analyzing: "Orchestrating Gemini 3 Flash...",
+      agent_synthesis: "AI Clinical Synthesis",
     },
     zh: {
       diagnosis: "診斷",
@@ -744,6 +750,29 @@ function App() {
     }
   };
 
+  const [agentReport, setAgentReport] = useState(null);
+  const [agentLoading, setAgentLoading] = useState(false);
+
+  const fetchAgentResearch = async () => {
+    if (!result) return;
+    setAgentLoading(true);
+    try {
+      const formData = new FormData();
+      formData.append('label', result.label);
+      formData.append('confidence', result.confidence);
+      formData.append('model_name', selectedModel);
+      formData.append('technical_summary', result.report);
+
+      const resp = await axios.post(`${API_BASE}/agent-research`, formData);
+      setAgentReport(resp.data.agent_report);
+    } catch (err) {
+      console.error("Agent Research Failure", err);
+      setError("Agent consultation failed. Please check backend connection.");
+    } finally {
+      setAgentLoading(false);
+    }
+  };
+
   const handleFileChange = (e) => {
     const f = e.target.files[0];
     if (f) {
@@ -1136,6 +1165,69 @@ function App() {
                             {t.download}
                           </button>
                         </div>
+
+                        {/* MedVision-Agent Call-to-Action */}
+                        {!agentReport && !agentLoading && (
+                          <motion.div 
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            className="p-8 rounded-[40px] bg-gradient-to-br from-brand-primary/20 via-brand-secondary/10 to-transparent border border-white/10 text-center space-y-6 relative overflow-hidden group"
+                          >
+                            <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-5 pointer-events-none" />
+                            <div className="relative">
+                              <div className="w-16 h-16 bg-white/10 rounded-3xl mx-auto flex items-center justify-center mb-4 group-hover:rotate-6 transition-transform">
+                                <Stethoscope className="w-8 h-8 text-brand-primary" />
+                              </div>
+                              <h3 className="text-xl font-bold text-white mb-2">{t.agent_consultation}</h3>
+                              <p className="text-xs text-slate-400 max-w-sm mx-auto leading-relaxed">
+                                Deploy our autonomous **Gemini 3 Flash** agent to cross-reference these findings with current clinical oncology standards and RAG knowledge.
+                              </p>
+                              <button
+                                onClick={fetchAgentResearch}
+                                className="mt-8 px-8 py-3.5 rounded-2xl bg-white text-black font-black text-xs uppercase tracking-[0.2em] shadow-2xl hover:scale-105 active:scale-95 transition-all flex items-center gap-2 mx-auto"
+                              >
+                                <Sparkles className="w-4 h-4 fill-current" />
+                                {t.consult_agent}
+                              </button>
+                            </div>
+                          </motion.div>
+                        )}
+
+                        {agentLoading && (
+                          <div className="p-12 glass rounded-[40px] border border-brand-primary/30 flex flex-col items-center justify-center gap-6 animate-pulse">
+                            <div className="relative">
+                               <div className="w-16 h-16 border-4 border-brand-primary/20 border-t-brand-primary rounded-full animate-spin" />
+                               <Brain className="absolute inset-0 m-auto w-6 h-6 text-brand-primary animate-pulse" />
+                            </div>
+                            <p className="text-xs font-black uppercase tracking-[0.3em] text-brand-primary">{t.agent_analyzing}</p>
+                          </div>
+                        )}
+
+                        {agentReport && (
+                          <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            className="p-8 rounded-[40px] bg-white/[0.02] border border-brand-primary/40 shadow-2xl shadow-brand-primary/10 relative overflow-hidden"
+                          >
+                            <div className="absolute top-0 right-0 p-8 flex items-center gap-2">
+                               <div className="px-2 py-1 rounded bg-brand-primary/20 border border-brand-primary/30 text-[8px] font-black text-brand-primary uppercase tracking-widest">Experimental</div>
+                               <Brain className="w-6 h-6 text-brand-primary/20" />
+                            </div>
+                            <div className="flex items-center gap-3 mb-8">
+                               <div className="w-10 h-10 rounded-xl bg-brand-primary/10 flex items-center justify-center">
+                                  <Sparkles className="w-5 h-5 text-brand-primary" />
+                               </div>
+                               <h4 className="text-xl font-black text-white uppercase tracking-tighter">{t.agent_synthesis}</h4>
+                            </div>
+                            <div className="prose prose-invert prose-sm max-w-none">
+                               {agentReport.split('\n\n').map((para, i) => (
+                                 <p key={i} className="text-slate-300 text-xs leading-relaxed mb-4 last:mb-0">
+                                   {renderFormattedText(para)}
+                                 </p>
+                               ))}
+                            </div>
+                          </motion.div>
+                        )}
 
                         <div className="grid gap-4">
                           {(() => {
