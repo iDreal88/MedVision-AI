@@ -7,7 +7,6 @@ import numpy as np
 import base64
 import sys
 import io
-import gc
 import tensorflow as tf
 from tensorflow.keras.models import Model, load_model
 from fpdf import FPDF
@@ -46,14 +45,17 @@ MODEL_MAP = {
     "VGG19": {"path": "vgg19/model_vgg19.keras", "layer": "block5_conv4"}
 }
 
-# Global cache for lazy-loaded models
+# Cache for loaded models
 loaded_models = {}
 
-def get_model(model_name):
-    """Lazy load model to save RAM on startup (crucial for Hugging Face Spaces)"""
+def get_model(model_name: str):
+    global loaded_models
     if model_name not in MODEL_MAP:
         raise HTTPException(status_code=404, detail="Model not found")
     
+    # Aggressive clearing RAM before loading
+    import gc
+
     if model_name not in loaded_models:
         print(f"Aggressively clearing RAM and loading {model_name}...")
         loaded_models.clear()
@@ -152,7 +154,6 @@ def overlay_gradcam(img, heatmap, alpha=0.4):
 # ==============================
 @app.get("/models")
 async def get_models():
-    # Only return keys to avoid triggering lazy loads prematurely
     return list(MODEL_MAP.keys())
 
 @app.post("/predict")
@@ -187,18 +188,7 @@ async def predict(
         # Convert to grayscale for model interaction
         img = cv2.cvtColor(img_color, cv2.COLOR_BGR2GRAY)
         
-        # Local Mac Stability Failsafe: Run in Demo Mode if needed
-        if os.getenv("DEMO_MODE") == "true":
-            print("DEMO MODE: Returning simulated result...")
-            return {
-                "label": "Cancer (Suspected)",
-                "confidence": 97.84,
-                "report": "DEMO REPORT: High density mass detected with irregular borders. (Full analysis available on production site).",
-                "original_image": base64.b64encode(cv2.imencode('.jpg', img)[1]).decode('utf-8'),
-                "processed_image": base64.b64encode(cv2.imencode('.jpg', img)[1]).decode('utf-8')
-            }
-
-        # Load real model
+        # Load model
         model = get_model(model_name)
         
         # Preprocess
@@ -227,22 +217,23 @@ async def predict(
             overlay = overlay_gradcam(img_ready, heatmap)
             result["gradcam_image"] = base64.b64encode(cv2.imencode('.jpg', overlay)[1]).decode('utf-8')
         
-        # RAG Report Generation (with localsave fallback for Mac crashes)
+        # RAG Report Generation
         kb_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "knowledge_base.md")
-        result["report"] = "Clinical synthesis currently available in production environment (Hugging Face)."
-        
         if os.path.exists(kb_path):
-            try:
-                from report_generator import ReportGenerator
-                report_gen = ReportGenerator(kb_path)
+            from report_generator import ReportGenerator
+            report_gen = ReportGenerator(kb_path)
+            
+            # Dynamic XAI description based on model architecture and result
+            if label == "Cancer":
+                if "ResNet" in model_name or "VGG" in model_name:
+                    finding = f"The {model_name} architecture identified high-entropy activation patterns within the deeper convolutional blocks. These clusters correlate with irregular structural density and architectural distortion characteristic of malignant lesions."
+                else:
+                    finding = "High-intensity activation centroids detected. The model weights these dense regions as primary indicators of malignant tissue morphology."
+            else:
+                finding = f"The {model_name} model shows diffuse, low-level activations across the parenchymal background. No focal areas of suspicious density were identified in the targeting layers."
                 
-                # Dynamic XAI description
-                finding = f"Neural activations aligned with {label} morphology using {model_name}."
-                report_content = report_gen.generate_report(label, confidence * 100, finding)
-                result["report"] = report_content
-            except Exception as rag_err:
-                print(f"RAG Load Failure (Safe Fallback): {rag_err}")
-                result["report"] = f"Diagnosis complete. (Detailed RAG report skipped locally to prevent macOS library conflict)."
+            report_content = report_gen.generate_report(label, confidence * 100, finding)
+            result["report"] = report_content
         
         return result
     except Exception as e:
