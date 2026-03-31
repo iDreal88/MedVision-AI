@@ -1,6 +1,6 @@
 from fastapi import FastAPI, UploadFile, File, Form, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import Response, StreamingResponse
+from fastapi.responses import JSONResponse
 import os
 import cv2
 import numpy as np
@@ -62,12 +62,37 @@ def apply_clahe(img):
     img_c = clahe.apply(img)
     return img_c / 255.0
 
+def generate_gradcam(model, img_array, layer_name, pred_index=None):
+    try:
+        grad_model = tf.keras.models.Model(
+            [model.inputs], [model.get_layer(layer_name).output, model.output]
+        )
+        with tf.GradientTape() as tape:
+            last_conv_layer_output, preds = grad_model(img_array)
+            if pred_index is None:
+                pred_index = tf.argmax(preds[0])
+            class_channel = preds[:, pred_index]
+
+        grads = tape.gradient(class_channel, last_conv_layer_output)
+        pooled_grads = tf.reduce_mean(grads, axis=(0, 1, 2))
+        last_conv_layer_output = last_conv_layer_output[0]
+        heatmap = last_conv_layer_output @ pooled_grads[..., tf.newaxis]
+        heatmap = tf.squeeze(heatmap)
+        heatmap = tf.maximum(heatmap, 0) / tf.reduce_max(heatmap)
+        return heatmap.numpy()
+    except:
+        return None
+
 # ==============================
 # ENDPOINTS
 # ==============================
 @app.get("/")
 def read_root():
     return {"status": "PRODUCTION_LIVE", "agent_engine": "GEMINI_3_FLASH"}
+
+@app.get("/models")
+def list_models():
+    return list(MODEL_MAP.keys())
 
 @app.post("/predict")
 async def predict(file: UploadFile = File(...), model_name: str = Form(...)):
@@ -78,22 +103,42 @@ async def predict(file: UploadFile = File(...), model_name: str = Form(...)):
         if img_color is None:
             raise HTTPException(status_code=400, detail="Invalid Image")
 
-        img = cv2.cvtColor(img_color, cv2.COLOR_BGR2GRAY)
+        img_gray = cv2.cvtColor(img_color, cv2.COLOR_BGR2GRAY)
         model = get_model(model_name)
         
-        img_processed = cv2.resize(img, (128, 128))
-        img_ready = apply_clahe(img_processed)
-        img_input = img_ready.reshape(1, 128, 128, 1)
+        # Preprocessing
+        img_resized = cv2.resize(img_gray, (128, 128))
+        img_clahe = apply_clahe(img_resized)
+        img_input = img_clahe.reshape(1, 128, 128, 1)
 
+        # Inference
         prediction = model.predict(img_input)
         pred_class = int(np.argmax(prediction[0]))
         confidence = float(prediction[0][pred_class])
         label = "Cancer" if pred_class == 1 else "Non-Cancer"
 
+        # Grad-CAM
+        heatmap = generate_gradcam(model, img_input, MODEL_MAP[model_name]["layer"], pred_class)
+        
+        # Prepare Images for JSON
+        _, buffer_proc = cv2.imencode('.jpg', (img_clahe * 255).astype(np.uint8))
+        proc_base64 = base64.b64encode(buffer_proc).decode('utf-8')
+
+        gradcam_base64 = None
+        if heatmap is not None:
+            heatmap_resized = cv2.resize(heatmap, (128, 128))
+            heatmap_color = cv2.applyColorMap(np.uint8(255 * heatmap_resized), cv2.COLORMAP_JET)
+            img_bg = cv2.cvtColor((img_clahe * 255).astype(np.uint8), cv2.COLOR_GRAY2BGR)
+            cam_img = cv2.addWeighted(img_bg, 0.6, heatmap_color, 0.4, 0)
+            _, buffer_cam = cv2.imencode('.jpg', cam_img)
+            gradcam_base64 = base64.b64encode(buffer_cam).decode('utf-8')
+
         return {
             "label": label,
             "confidence": confidence * 100,
-            "report": f"Automated diagnosis completed using {model_name}. Final classification: {label}."
+            "processed_image": proc_base64,
+            "gradcam_image": gradcam_base64,
+            "report": f"## Patient/Case Information\n- AI Diagnosis: {label}\n- Statistical Confidence: {confidence*100:.2f}%\n- Methodology: {model_name}\n\n## Summary and Discussion\nThe {model_name} architecture has identified patterns consistent with {label.lower()} tissue. Visual markers on the heatmap indicate high architectural focus on specific clusters."
         }
     except Exception as e:
         print(traceback.format_exc())
@@ -106,9 +151,6 @@ async def agent_research(
     model_name: str = Form(...),
     technical_summary: str = Form(...)
 ):
-    """
-    Exposes the MedVision-Agent's research capabilities to the frontend.
-    """
     try:
         api_key = os.getenv("GEMINI_API_KEY")
         if not api_key:
@@ -118,7 +160,6 @@ async def agent_research(
         genai.configure(api_key=api_key)
         model = genai.GenerativeModel("gemini-3-flash-preview")
 
-        # Load Knowledge Base text
         kb_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "knowledge_base.md")
         kb_context = ""
         if os.path.exists(kb_path):
@@ -127,20 +168,10 @@ async def agent_research(
 
         prompt = f"""
         Role: Senior Resident Oncologist & AI Researcher.
-        
-        System Findings:
-        - Deep Learning Label: {label}
-        - Statistical Confidence: {confidence:.2f}%
-        - Model Identity: {model_name}
-        - Technical Summary: {technical_summary}
-        
-        Medical Context (Knowledge Base Reference):
-        \"\"\"{kb_context}\"\"\"
-        
-        Your Task:
-        1. Synthesize a professional clinical research report in English.
-        2. Correlate the AI findings with the provided medical context (e.g., BI-RADS criteria).
-        3. Discuss the relevance of the CNN+CLAHE approach for these specific markers.
+        Findings: {label} ({confidence:.2f}%), Model: {model_name}
+        Context: {kb_context}
+        Technical Summary: {technical_summary}
+        Task: Provide a clinical oncology synthesis correlating these AI findings with standard BI-RADS criteria.
         """
         
         response = model.generate_content(prompt)
