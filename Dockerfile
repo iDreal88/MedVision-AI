@@ -1,7 +1,5 @@
-# Build timestamp: 2023-10-27
 # Use a slim Python 3.11 image
-# Final Production Build for Master Thesis - MedVision-Agent v2
-FROM python:3.9-slim
+FROM python:3.11-slim
 
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE=1
@@ -25,8 +23,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy project files
 COPY . .
 
-# Expose the standard Hugging Face Space port
-EXPOSE 7860
+# Expose the port
+EXPOSE 8000
 
 # Run the application
-CMD uvicorn api.main:app --host 0.0.0.0 --port 7860 --proxy-headers
+CMD uvicorn api.main:app --host 0.0.0.0 --port $PORT --proxy-headers
