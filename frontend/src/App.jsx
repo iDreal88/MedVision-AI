@@ -767,7 +767,8 @@ function App() {
       setAgentReport(resp.data.agent_report);
     } catch (err) {
       console.error("Agent Research Failure", err);
-      setError("Agent consultation failed. Please check backend connection.");
+      const backendDetail = err.response?.data?.detail;
+      setError(backendDetail || "Agent consultation failed. Please check if GEMINI_API_KEY is missing on Railway.app project settings.");
     } finally {
       setAgentLoading(false);
     }
