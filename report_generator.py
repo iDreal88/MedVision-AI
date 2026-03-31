@@ -33,7 +33,7 @@ The following insights were retrieved from the medical knowledge base based on t
 ## Summary and Discussion
 The deep learning ensemble has classified this case as **{prediction_label}** with a confidence score of **{confidence:.2f}%**. 
 
-In {prediction_label.lower()} cases, the model typically prioritizes { "speculated margins and high-density irregular masses" if prediction_label == "Cancer" else "well-defined circumscribed boundaries and uniform tissue texture" }. 
+In {prediction_label.lower()} cases, the model typically prioritizes { "spiculated margins and high-density irregular masses" if prediction_label == "Cancer" else "well-defined circumscribed boundaries and uniform tissue texture" }. 
 
 The retrieved clinical context suggests that { "a BI-RADS 4 or 5 assessment might be considered, warranting further pathological correlation or biopsy" if prediction_label == "Cancer" else "this presentation aligns with BI-RADS 2 or 3, suggesting benign findings or a low-risk probably benign condition" }.
 
