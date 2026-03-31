@@ -13,7 +13,7 @@ Breast lesions are generally classified into two categories:
 ## Explainable AI (Grad-CAM) Interpretation
 - **High Heatmap Intensity (Red)**: Indicates the regions that most strongly influenced the model's prediction.
 - **Benign Patterns**: Focus on smooth, regular structures or areas with no significant density.
-- **Malignant Patterns**: Focus on dense, irregular masses or areas with speculated margins.
+- **Malignant Patterns**: Focus on dense, irregular masses or areas with spiculated margins.
 
 ## Diagnostic Recommendations
 - **BI-RADS 0**: Incomplete, needs further imaging.
