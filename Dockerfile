@@ -1,5 +1,7 @@
+# Build timestamp: 2023-10-27
 # Use a slim Python 3.11 image
-FROM python:3.11-slim
+# Final Production Build for Master Thesis - MedVision-Agent v2
+FROM python:3.9-slim
 
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE=1
