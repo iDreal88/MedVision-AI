@@ -89,68 +89,99 @@ def apply_clahe(img):
 
 def make_gradcam_heatmap(img_tensor, model, last_conv_layer_name):
     try:
-        # Find base model if nested (ResNet/VGG)
-        base_model = None
-        base_layer_idx = -1
+        # Find the functional path to the target layer
+        path_to_layer = []
+        found = False
         for i, layer in enumerate(model.layers):
-            if isinstance(layer, Model):
-                base_model = layer
-                base_layer_idx = i
+            if layer.name == last_conv_layer_name:
+                path_to_layer = [(model, i)]
+                found = True
                 break
+            if isinstance(layer, Model):
+                try:
+                    # Check if layer is in submodel
+                    sub_idx = -1
+                    for j, sl in enumerate(layer.layers):
+                        if sl.name == last_conv_layer_name:
+                            sub_idx = j
+                            break
+                    if sub_idx != -1:
+                        path_to_layer = [(model, i), (layer, sub_idx)]
+                        found = True
+                        break
+                except:
+                    continue
         
+        if not found:
+            print(f"DEBUG: Layer {last_conv_layer_name} not found in model.")
+            return None
+
         with tf.GradientTape() as tape:
-            if base_model:
-                # Sub-model for base architecture (VGG/ResNet)
-                internal_grad_model = Model(
-                    inputs=[base_model.input],
-                    outputs=[base_model.get_layer(last_conv_layer_name).output, base_model.output]
-                )
-                # 1. Forward through adapter (e.g. grayscale to RGB layer)
-                x = model.layers[0](img_tensor)
-                # 2. Forward through base model to get conv output and base output
-                conv_outputs, base_output = internal_grad_model(x)
-                # 3. Forward through top layers except the last one to get penultimate features
-                x = base_output
-                for i in range(base_layer_idx + 1, len(model.layers) - 1):
-                    x = model.layers[i](x)
+            # 1. Forward through the model up to the target layer to get conv_outputs
+            # We MUST do this inside the tape so gradients can be tracked back to it
+            x = img_tensor
+            if len(path_to_layer) == 1:
+                # Target is at top level (e.g. CNN+CLAHE)
+                m, idx = path_to_layer[0]
+                for i in range(idx + 1):
+                    x = m.layers[i](x)
+                conv_outputs = x # Gradient target
+                
+                # Continue forwarding through the rest of the model (except last layer)
+                for i in range(idx + 1, len(m.layers) - 1):
+                    x = m.layers[i](x)
             else:
-                # Simple Sequential model logic (CNN+CLAHE)
-                grad_model = Model(
-                    inputs=[model.inputs],
-                    outputs=[model.get_layer(last_conv_layer_name).output]
-                )
-                conv_outputs = grad_model(img_tensor)
-                # Forward through all layers except the last one
-                x = img_tensor
-                for i in range(len(model.layers) - 1):
-                    x = model.layers[i](x)
-            
-            # 4. Final logit calculation (Manual Dense multiplication)
-            # This avoids Softmax saturation at 100% confidence
+                # Target is nested (e.g. VGG/ResNet)
+                m1, idx1 = path_to_layer[0] # Top model, base_model_idx
+                m2, idx2 = path_to_layer[1] # Base model, target_layer_idx
+                
+                # Forward to base model
+                for i in range(idx1):
+                    x = m1.layers[i](x)
+                
+                # Inside base model up to target
+                for i in range(idx2 + 1):
+                    x = m2.layers[i](x)
+                conv_outputs = x # Gradient target
+                
+                # Rest of base model
+                for i in range(idx2 + 1, len(m2.layers)):
+                    x = m2.layers[i](x)
+                
+                # Rest of top model (except last layer)
+                for i in range(idx1 + 1, len(m1.layers) - 1):
+                    x = m1.layers[i](x)
+
+            # 2. Calculate Logits manually from the penultimate activation
+            # This bypasses Softmax saturation for robust gradients
             last_layer = model.layers[-1]
             logits = tf.matmul(x, last_layer.weights[0]) + last_layer.weights[1]
             
-            # 5. Select score for the predicted class
-            # class_index = tf.argmax(model(img_tensor)[0])
-            # For efficiency, we can use the argmax of logits which is the same
+            # 3. Define loss based on the predicted class
+            # Use argmax of logits to find predicted class
             class_index = tf.argmax(logits[0])
             loss = logits[:, class_index]
-            
-        # Calculate gradients and pool them
+
+        # 4. Extract gradients of the loss w.r.t. the convolutional outputs
         grads = tape.gradient(loss, conv_outputs)
-        pooled_grads = tf.reduce_mean(grads, axis=(0, 1, 2))
         
-        # Weight the feature map with gradients
+        if grads is None:
+            print(f"DEBUG: Gradients are None for {last_conv_layer_name}")
+            return None
+
+        # 5. Global average pooling and heatmap generation
+        pooled_grads = tf.reduce_mean(grads, axis=(0, 1, 2))
         conv_outputs = conv_outputs[0]
         heatmap = tf.reduce_sum(conv_outputs * pooled_grads, axis=-1)
         
-        # ReLU and Normalization
+        # 6. Normalize the heatmap
         heatmap = tf.maximum(heatmap, 0)
         max_val = tf.reduce_max(heatmap)
         if max_val == 0:
             max_val = 1e-8
         heatmap /= max_val
         return heatmap.numpy()
+        
     except Exception as e:
         print(f"Grad-CAM Error: {traceback.format_exc()}")
         return None
