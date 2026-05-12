@@ -171,14 +171,30 @@ def make_gradcam_heatmap(img_tensor, model, last_conv_layer_name):
 
         # 5. Global average pooling and heatmap generation
         pooled_grads = tf.reduce_mean(grads, axis=(0, 1, 2))
-        conv_outputs = conv_outputs[0]
-        heatmap = tf.reduce_sum(conv_outputs * pooled_grads, axis=-1)
+        conv_outputs_val = conv_outputs[0]
+        heatmap = tf.reduce_sum(conv_outputs_val * pooled_grads, axis=-1)
         
         # 6. Normalize the heatmap
         heatmap = tf.maximum(heatmap, 0)
         max_val = tf.reduce_max(heatmap)
+        
+        # ROBUST FALLBACK: If heatmap is empty (common in 100% confidence/saturated cases)
+        # we fallback to a weighted activation map or raw saliency to ensure the user 
+        # always sees the focus area.
+        if max_val < 1e-12:
+            # Fallback 1: Use absolute gradients (ignore ReLU to see negative contributions)
+            heatmap = tf.reduce_sum(tf.abs(conv_outputs_val * pooled_grads), axis=-1)
+            max_val = tf.reduce_max(heatmap)
+            
+            if max_val < 1e-12:
+                # Fallback 2: If gradients are completely gone, show raw activations of the target layer
+                # This shows "what features were found" even if the gradient is zero
+                heatmap = tf.reduce_mean(conv_outputs_val, axis=-1)
+                max_val = tf.reduce_max(heatmap)
+
         if max_val == 0:
             max_val = 1e-8
+            
         heatmap /= max_val
         return heatmap.numpy()
         
