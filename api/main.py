@@ -98,47 +98,59 @@ def make_gradcam_heatmap(img_tensor, model, last_conv_layer_name):
                 base_layer_idx = i
                 break
         
-        if base_model:
-            internal_grad_model = Model(
-                inputs=[base_model.input],
-                outputs=[base_model.get_layer(last_conv_layer_name).output, base_model.output]
-            )
-            
-            with tf.GradientTape() as tape:
+        with tf.GradientTape() as tape:
+            if base_model:
+                # Sub-model for base architecture (VGG/ResNet)
+                internal_grad_model = Model(
+                    inputs=[base_model.input],
+                    outputs=[base_model.get_layer(last_conv_layer_name).output, base_model.output]
+                )
+                # 1. Forward through adapter (e.g. grayscale to RGB layer)
                 x = model.layers[0](img_tensor)
+                # 2. Forward through base model to get conv output and base output
                 conv_outputs, base_output = internal_grad_model(x)
+                # 3. Forward through top layers except the last one to get penultimate features
                 x = base_output
-                for i in range(base_layer_idx + 1, len(model.layers)):
+                for i in range(base_layer_idx + 1, len(model.layers) - 1):
                     x = model.layers[i](x)
-                
-                predictions = x
-                class_index = tf.argmax(predictions[0])
-                loss = predictions[:, class_index]
+            else:
+                # Simple Sequential model logic (CNN+CLAHE)
+                grad_model = Model(
+                    inputs=[model.inputs],
+                    outputs=[model.get_layer(last_conv_layer_name).output]
+                )
+                conv_outputs = grad_model(img_tensor)
+                # Forward through all layers except the last one
+                x = img_tensor
+                for i in range(len(model.layers) - 1):
+                    x = model.layers[i](x)
             
-            grads = tape.gradient(loss, conv_outputs)
-            pooled_grads = tf.reduce_mean(grads, axis=(0, 1, 2))
-            conv_outputs = conv_outputs[0]
-            heatmap = tf.reduce_sum(conv_outputs * pooled_grads, axis=-1)
-            heatmap = tf.maximum(heatmap, 0)
-            heatmap /= (tf.reduce_max(heatmap) + 1e-8)
-            return heatmap.numpy()
-        else:
-            grad_model = Model(
-                inputs=[model.inputs],
-                outputs=[model.get_layer(last_conv_layer_name).output, model.output]
-            )
-            with tf.GradientTape() as tape:
-                conv_outputs, predictions = grad_model(img_tensor)
-                class_index = tf.argmax(predictions[0])
-                loss = predictions[:, class_index]
+            # 4. Final logit calculation (Manual Dense multiplication)
+            # This avoids Softmax saturation at 100% confidence
+            last_layer = model.layers[-1]
+            logits = tf.matmul(x, last_layer.weights[0]) + last_layer.weights[1]
             
-            grads = tape.gradient(loss, conv_outputs)
-            pooled_grads = tf.reduce_mean(grads, axis=(0, 1, 2))
-            conv_outputs = conv_outputs[0]
-            heatmap = tf.reduce_sum(conv_outputs * pooled_grads, axis=-1)
-            heatmap = tf.maximum(heatmap, 0)
-            heatmap /= (tf.reduce_max(heatmap) + 1e-8)
-            return heatmap.numpy()
+            # 5. Select score for the predicted class
+            # class_index = tf.argmax(model(img_tensor)[0])
+            # For efficiency, we can use the argmax of logits which is the same
+            class_index = tf.argmax(logits[0])
+            loss = logits[:, class_index]
+            
+        # Calculate gradients and pool them
+        grads = tape.gradient(loss, conv_outputs)
+        pooled_grads = tf.reduce_mean(grads, axis=(0, 1, 2))
+        
+        # Weight the feature map with gradients
+        conv_outputs = conv_outputs[0]
+        heatmap = tf.reduce_sum(conv_outputs * pooled_grads, axis=-1)
+        
+        # ReLU and Normalization
+        heatmap = tf.maximum(heatmap, 0)
+        max_val = tf.reduce_max(heatmap)
+        if max_val == 0:
+            max_val = 1e-8
+        heatmap /= max_val
+        return heatmap.numpy()
     except Exception as e:
         print(f"Grad-CAM Error: {traceback.format_exc()}")
         return None
