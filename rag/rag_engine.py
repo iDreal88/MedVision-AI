@@ -48,7 +48,7 @@ class RAGEngine:
 
 if __name__ == "__main__":
     # Test the engine
-    kb_path = 'knowledge_base.md'
+    kb_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'docs', 'knowledge_base.md')
     if os.path.exists(kb_path):
         engine = RAGEngine(kb_path)
         test_query = "What are the characteristics of malignant tumors?"

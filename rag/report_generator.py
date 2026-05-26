@@ -1,5 +1,5 @@
 import os
-from rag_engine import RAGEngine
+from .rag_engine import RAGEngine
 
 class ReportGenerator:
     def __init__(self, knowledge_base_path):
@@ -49,7 +49,7 @@ The retrieved clinical context suggests that { "a BI-RADS 4 or 5 assessment migh
 
 if __name__ == "__main__":
     # Test report generation
-    kb_path = 'knowledge_base.md'
+    kb_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'docs', 'knowledge_base.md')
     if os.path.exists(kb_path):
         gen = ReportGenerator(kb_path)
         gen.generate_report(

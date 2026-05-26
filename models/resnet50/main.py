@@ -13,7 +13,7 @@ from tensorflow.keras.callbacks import EarlyStopping, ReduceLROnPlateau
 from tensorflow.keras.regularizers import l2
 from tensorflow.keras.optimizers import Adam, SGD
 from tensorflow.keras.applications import ResNet50
-from report_generator import ReportGenerator
+from rag.report_generator import ReportGenerator
 
 
 # ==============================
@@ -342,10 +342,7 @@ def main():
             reports_output_dir = os.path.join(OUTPUT_DIR, 'reports')
             os.makedirs(reports_output_dir, exist_ok=True)
             
-            kb_path = os.path.join(os.path.dirname(__file__), 'knowledge_base.md')
-            if not os.path.exists(kb_path):
-                # Fallback if working directory is different
-                kb_path = 'knowledge_base.md'
+            kb_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), 'docs', 'knowledge_base.md')
                 
             report_gen = ReportGenerator(kb_path)
             

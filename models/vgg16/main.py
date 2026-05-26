@@ -15,7 +15,7 @@ from tensorflow.keras.regularizers import l2
 from tensorflow.keras.optimizers import SGD
 # pyrefly: ignore [missing-import]
 from tensorflow.keras.applications import VGG16
-from report_generator import ReportGenerator
+from rag.report_generator import ReportGenerator
 
 # ==============================
 # CONFIGURATION
@@ -324,7 +324,7 @@ def main():
     # 9. RAG + LLM Report Generation
     print("Generating AI-Assisted Diagnosis Reports...")
     try:
-        report_gen = ReportGenerator(os.path.join(os.path.dirname(__file__), 'knowledge_base.md'))
+        report_gen = ReportGenerator(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), 'docs', 'knowledge_base.md'))
         report_output_dir = os.path.join(OUTPUT_DIR, 'reports')
         os.makedirs(report_output_dir, exist_ok=True)
         

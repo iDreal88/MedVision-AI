@@ -287,12 +287,12 @@ async def predict(
             result["gradcam_image"] = base64.b64encode(cv2.imencode('.jpg', overlay)[1]).decode('utf-8')
         
         # RAG Report Generation (with localsave fallback for Mac crashes)
-        kb_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "knowledge_base.md")
+        kb_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "docs", "knowledge_base.md")
         result["report"] = "Clinical synthesis currently available in production environment (Hugging Face)."
         
         if os.path.exists(kb_path):
             try:
-                from report_generator import ReportGenerator
+                from rag.report_generator import ReportGenerator
                 report_gen = ReportGenerator(kb_path)
                 
                 # Dynamic XAI description

@@ -13,7 +13,7 @@ from tensorflow.keras.callbacks import EarlyStopping, ReduceLROnPlateau
 from tensorflow.keras.regularizers import l2
 from tensorflow.keras.optimizers import SGD
 from tensorflow.keras.applications import VGG19
-from report_generator import ReportGenerator
+from rag.report_generator import ReportGenerator
 
 # ==============================
 # CONFIGURATION
@@ -320,7 +320,7 @@ def main():
 
                 # --- RAG + LLM Report Generation ---
                 print(f"Generating AI-Assisted Report for image {i}...")
-                report_gen = ReportGenerator('knowledge_base.md')
+                report_gen = ReportGenerator(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), 'docs', 'knowledge_base.md'))
                 report_path = os.path.join(gradcam_output_dir, f'report_{i}.md')
                 
                 # Confidence and findings
