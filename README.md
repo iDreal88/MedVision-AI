@@ -78,10 +78,10 @@ The backend handles image preprocessing, neural network inference (VGG/ResNet), 
 
 4.  **Verify Model Files:**
     Ensure the following `.keras` files are present in their respective directories:
-    - `cnn+clahe/model_cnn_clahe.keras`
-    - `resnet50/model_resnet50.keras`
-    - `vgg16/model_vgg16.keras`
-    - `vgg19/model_vgg19.keras`
+    - `models/cnn_clahe/model_cnn_clahe.keras`
+    - `models/resnet50/model_resnet50.keras`
+    - `models/vgg16/model_vgg16.keras`
+    - `models/vgg19/model_vgg19.keras`
 
 5.  **Start the API server:**
     ```bash
@@ -119,7 +119,7 @@ The frontend provides the clinical dashboard, real-time feedback, and interactiv
 
 *   **/api**: FastAPI scripts and backend logic.
 *   **/frontend**: React source code and UI components.
-*   **/cnn+clahe, /resnet50, ...**: Pre-trained model weights.
+*   **/models**: Organized directories containing pre-trained model weights and scripts.
 *   **/notebooks**: Experimental analysis and visualization code.
 *   **rag_engine.py**: Core logic for the Retrieval-Augmented Generation system.
 *   **report_generator.py**: Module for synthesizing medical pathology reports.

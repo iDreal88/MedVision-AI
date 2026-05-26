@@ -40,10 +40,10 @@ app.add_middleware(
 # MODEL CONFIG
 # ==============================
 MODEL_MAP = {
-    "CNN+CLAHE": {"path": "cnn+clahe/model_cnn_clahe.keras", "layer": "conv_idx_2"},
-    "ResNet50": {"path": "resnet50/model_resnet50.keras", "layer": "conv5_block3_out"},
-    "VGG16": {"path": "vgg16/model_vgg16.keras", "layer": "block5_conv3"},
-    "VGG19": {"path": "vgg19/model_vgg19.keras", "layer": "block5_conv4"}
+    "CNN+CLAHE": {"path": "models/cnn_clahe/model_cnn_clahe.keras", "layer": "conv_idx_2"},
+    "ResNet50": {"path": "models/resnet50/model_resnet50.keras", "layer": "conv5_block3_out"},
+    "VGG16": {"path": "models/vgg16/model_vgg16.keras", "layer": "block5_conv3"},
+    "VGG19": {"path": "models/vgg19/model_vgg19.keras", "layer": "block5_conv4"}
 }
 
 # Global cache for lazy-loaded models

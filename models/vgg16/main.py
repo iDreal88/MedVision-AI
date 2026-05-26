@@ -8,10 +8,12 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report, confusion_matrix
 from tensorflow.keras.models import Sequential, Model
 from tensorflow.keras.layers import Input, Conv2D, Dense, Dropout, GlobalAveragePooling2D
+# pyrefly: ignore [missing-import]
 from tensorflow.keras.utils import to_categorical
 from tensorflow.keras.callbacks import EarlyStopping, ReduceLROnPlateau
 from tensorflow.keras.regularizers import l2
 from tensorflow.keras.optimizers import SGD
+# pyrefly: ignore [missing-import]
 from tensorflow.keras.applications import VGG16
 from report_generator import ReportGenerator
 
@@ -337,8 +339,10 @@ def main():
                 h_summary = "Uniform or low-level activation across the stroma, no localized high-intensity malignancy indicators found."
                 
             report = report_gen.generate_report(
+                # pyrefly: ignore [unexpected-keyword]
                 prediction=y_pred_cls[i],
                 confidence=pred_score,
+                # pyrefly: ignore [unexpected-keyword]
                 heatmap_summary=h_summary
             )
             

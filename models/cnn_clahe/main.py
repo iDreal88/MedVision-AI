@@ -8,6 +8,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report, confusion_matrix
 from tensorflow.keras.models import Sequential, Model
 from tensorflow.keras.layers import Input, Conv2D, Dense, Dropout, MaxPooling2D, Flatten, BatchNormalization
+# pyrefly: ignore [missing-import]
 from tensorflow.keras.utils import to_categorical
 from tensorflow.keras.callbacks import EarlyStopping, ReduceLROnPlateau
 from tensorflow.keras.regularizers import l2
@@ -141,6 +142,7 @@ def apply_clahe(images):
 def build_model():
     print("Building Custom CNN model...")
     cnn_model = Sequential([
+        # pyrefly: ignore [unexpected-keyword]
         Conv2D(32, (3, 3), activation='relu', padding='same', input_shape=(128, 128, 1), name='conv_idx_0'),
         BatchNormalization(),
         MaxPooling2D(pool_size=(2, 2)),
