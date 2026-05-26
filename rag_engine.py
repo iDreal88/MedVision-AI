@@ -33,7 +33,7 @@ class RAGEngine:
 
         # Use FAISS for indexing
         self.index = faiss.IndexFlatL2(dimension)
-        self.index.add(np.array(embeddings).astype('float32'))
+        self.index.add(embeddings)
         print(f"Indexed {len(self.chunks)} chunks from knowledge base.")
 
     def search(self, query, top_k=2):
@@ -41,7 +41,7 @@ class RAGEngine:
             return "No knowledge base indexed."
 
         query_embedding = self.model.encode([query])
-        distances, indices = self.index.search(np.array(query_embedding).astype('float32'), top_k)
+        distances, indices = self.index.search(query_embedding, top_k)
 
         results = [self.chunks[idx] for idx in indices[0] if idx != -1]
         return "\n\n".join(results)
