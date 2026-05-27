@@ -1193,8 +1193,9 @@ function App() {
                                     </p>
                                   ))}
                                 </div>
-                              </motion.div>
-                            ));
+                                </motion.div>
+                              );
+                            });
                           })()}
                         </div>
 
