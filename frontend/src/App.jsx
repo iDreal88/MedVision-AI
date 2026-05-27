@@ -1155,31 +1155,32 @@ function App() {
                             });
                             if (currentSection) sections.push(currentSection);
 
-                            const iconMap = {
-                              "Patient/Case Information": <Activity className="w-5 h-5 text-emerald-400" />,
-                              "Explainable AI (XAI) Findings": <Zap className="w-5 h-5 text-brand-primary" />,
-                              "Clinical Context (Retrieved via RAG)": <Brain className="w-5 h-5 text-brand-secondary" />,
-                              "Summary and Discussion": <CheckCircle2 className="w-5 h-5 text-blue-400" />
-                            };
+                            const icons = [
+                              <Activity className="w-5 h-5 text-emerald-400" />,
+                              <Zap className="w-5 h-5 text-brand-primary" />,
+                              <Brain className="w-5 h-5 text-brand-secondary" />,
+                              <CheckCircle2 className="w-5 h-5 text-blue-400" />
+                            ];
 
-
-                            return sections.map((sec, idx) => (
-                              <motion.div
-                                key={idx}
-                                initial={{ opacity: 0, y: 10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.1 * idx }}
-                                className="p-6 rounded-3xl glass border border-white/5 hover:border-white/10 transition-colors group relative overflow-hidden"
-                              >
-                                <div className="absolute top-0 right-0 p-4 opacity-[0.03] group-hover:opacity-[0.07] transition-opacity">
-                                  {iconMap[sec.title.trim()] || <FileText className="w-12 h-12" />}
-                                </div>
-                                <div className="flex items-center gap-3 mb-4">
-                                  <div className="p-2 rounded-lg bg-white/5 border border-white/10">
-                                    {iconMap[sec.title.trim()] || <FileText className="w-4 h-4 text-slate-400" />}
+                            return sections.map((sec, idx) => {
+                              const icon = icons[idx % icons.length];
+                              return (
+                                <motion.div
+                                  key={idx}
+                                  initial={{ opacity: 0, y: 10 }}
+                                  animate={{ opacity: 1, y: 0 }}
+                                  transition={{ delay: 0.1 * idx }}
+                                  className="p-6 rounded-3xl glass border border-white/5 hover:border-white/10 transition-colors group relative overflow-hidden"
+                                >
+                                  <div className="absolute top-0 right-0 p-4 opacity-[0.03] group-hover:opacity-[0.07] transition-opacity">
+                                    {icon}
                                   </div>
-                                  <h4 className="font-bold text-slate-200 text-sm tracking-wide">{sec.title}</h4>
-                                </div>
+                                  <div className="flex items-center gap-3 mb-4">
+                                    <div className="p-2 rounded-lg bg-white/5 border border-white/10">
+                                      {icon}
+                                    </div>
+                                    <h4 className="font-bold text-slate-200 text-sm tracking-wide">{sec.title}</h4>
+                                  </div>
                                 <div className="space-y-3 px-1">
                                   {sec.content.map((c, i) => (
                                     <p key={i} className="text-slate-400 text-xs leading-relaxed">
