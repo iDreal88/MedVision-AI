@@ -217,7 +217,8 @@ async def get_models():
 @app.post("/predict")
 async def predict(
     file: UploadFile = File(...),
-    model_name: str = Form(...)
+    model_name: str = Form(...),
+    language: str = Form("en")
 ):
     try:
         # Read image
@@ -297,7 +298,7 @@ async def predict(
                 
                 # Dynamic XAI description
                 finding = f"Neural activations aligned with {label} morphology using {model_name}."
-                report_content = report_gen.generate_report(label, confidence * 100, finding)
+                report_content = report_gen.generate_report(label, confidence * 100, finding, language=language)
                 result["report"] = report_content
             except Exception as rag_err:
                 print(f"RAG Load Failure (Safe Fallback): {rag_err}")

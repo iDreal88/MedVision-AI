@@ -761,6 +761,7 @@ function App() {
     const formData = new FormData();
     formData.append('file', file);
     formData.append('model_name', selectedModel);
+    formData.append('language', language);
 
     try {
       const resp = await axios.post(`${API_BASE}/predict`, formData);
