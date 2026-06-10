@@ -32,6 +32,7 @@ function App() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [language, setLanguage] = useState('en'); // 'en', 'zh', 'id', 'ko', 'ja'
   const [langMenuOpen, setLangMenuOpen] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
 
   const nativeDisplayMap = {
     en: "English",
@@ -753,6 +754,27 @@ function App() {
     }
   };
 
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (e) => {
+    e.preventDefault();
+    setIsDragging(false);
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    setIsDragging(false);
+    const f = e.dataTransfer.files[0];
+    if (f && f.type.startsWith('image/')) {
+      setFile(f);
+      setPreview(URL.createObjectURL(f));
+      setResult(null);
+    }
+  };
+
   const runDiagnosis = async () => {
     if (!file) return;
     setLoading(true);
@@ -961,7 +983,10 @@ function App() {
                     <h2 className="text-lg font-semibold text-white">{t.mammogram_upload}</h2>
                   </div>
                   <label
-                    className={`flex flex-col items-center justify-center h-48 md:h-64 border-2 border-dashed rounded-[32px] transition-all duration-500 cursor-pointer group ${preview ? 'border-brand-secondary/50 bg-brand-secondary/5' : 'border-white/10 hover:border-white/20 bg-white/[0.02]'
+                    onDragOver={handleDragOver}
+                    onDragLeave={handleDragLeave}
+                    onDrop={handleDrop}
+                    className={`flex flex-col items-center justify-center h-48 md:h-64 border-2 border-dashed rounded-[32px] transition-all duration-500 cursor-pointer group ${isDragging ? 'border-brand-primary bg-brand-primary/10' : preview ? 'border-brand-secondary/50 bg-brand-secondary/5' : 'border-white/10 hover:border-white/20 bg-white/[0.02]'
                       }`}
                   >
                     {preview ? (
