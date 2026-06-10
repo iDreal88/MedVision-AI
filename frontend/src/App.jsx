@@ -1390,6 +1390,7 @@ function App() {
                       src="/illustrations/clahe.png"
                       alt="CLAHE Process Visualization"
                       className="w-full h-full object-cover rounded-2xl shadow-2xl border border-white/5"
+                      loading="lazy"
                     />
                   </div>
                 </section>
@@ -1400,6 +1401,7 @@ function App() {
                       src="/illustrations/gradcam.png"
                       alt="Grad-CAM Heatmap Generation"
                       className="w-full h-full object-cover rounded-2xl shadow-2xl border border-white/5"
+                      loading="lazy"
                     />
                   </div>
                   <div className="space-y-6 order-1 md:order-2">
@@ -1428,6 +1430,7 @@ function App() {
                       src="/illustrations/rag.png"
                       alt="RAG Architecture Diagram"
                       className="w-full h-full object-cover rounded-2xl shadow-2xl border border-white/5"
+                      loading="lazy"
                     />
                   </div>
                 </section>
